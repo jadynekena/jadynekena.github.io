@@ -197,7 +197,7 @@ function page_name(){
 
 function title_project(){
 	var name = page_name()
-	return '<h3 class="title mbr-section-title align-center mb-4 mbr-fonts-style display-2" id="title-section"><strong>'+name.toUpperCase()+'</strong></h2>'
+	return '<h1 class="title mbr-section-title align-center mb-4 mbr-fonts-style display-2" id="title-section"><strong>'+name.toUpperCase()+'</strong></h1>'
 }
 
 function titles(){
