@@ -138,6 +138,7 @@ function add_element(html, id_element, parent_element, position){
 }
 
 
+
 function main(){
 	var body = document.getElementsByTagName('body')[0]
 	add_element(navbar(), 'navbar-site', body, 1)
@@ -146,8 +147,48 @@ function main(){
 	titles()
 	contents()
 	come_and_go()
+	google_tag()
 
 }
+
+
+function google_tag(){
+	load_script_in_head(url_google_tag())
+	load_script_html_in_head(script_load_google_tag())
+}
+
+function load_script_in_head(script_url){
+
+	var s = document.createElement("script");
+	s.type = "text/javascript";
+	s.src = script_url;
+	return document.getElementsByTagName("head")[0].append(s);
+}
+
+function load_script_html_in_head(html){
+
+	var s = document.createElement("script");
+	s.type = "text/javascript";
+	s.innerHTML = html;
+	return document.getElementsByTagName("head")[0].append(s);
+}
+
+
+
+function url_google_tag(){
+	return 'https://www.googletagmanager.com/gtag/js?id=G-0NSWTSL9L5'
+}
+
+function script_load_google_tag(){
+	return `
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'G-0NSWTSL9L5');
+		`
+}
+
 
 
 function page_name(){
