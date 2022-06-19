@@ -26,8 +26,14 @@ function current_datas_name(nametable){
 	return '____' + nametable +'_element'
 }
 
+function is_local_host(){
+	return window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
+}
 
 async function insert_supabase(nametable,datas,upsert_mode){
+
+	if(is_local_host()) return ;
+
 	const { data, error } = await supabase
 		.from(nametable)
 		.insert(datas, { upsert: upsert_mode })
@@ -35,13 +41,16 @@ async function insert_supabase(nametable,datas,upsert_mode){
 	if(error!==null){
 		const verb = upsert_mode ? 'upsert' : 'insert'
 		console.error("Error "+verb+"ing into table " + nametable+ ":",error)
-		del_item(current_datas_name(nametable) +'_element')
+		del_item(current_datas_name(nametable) )
 	}else{
-		save_item(current_datas_name(nametable) +'_element',JSON.stringify(datas))
+		save_item(current_datas_name(nametable) ,JSON.stringify(data[0]))
 	}
 }
 
 async function update_supabase(nametable,datas,matches){
+
+	if(is_local_host()) return ;
+
 	const { data, error } = await supabase
 		.from(nametable)
 		.update(datas)
@@ -264,7 +273,7 @@ function dateDiffToString(a, b){
 function new_day_of_connection(){
 
 	var diff_date = dateDiffToString(new Date(get_item('date_premiere_visite')), new Date)
-	console.log({diff_date})
+	//console.log({diff_date})
 
 	//if the saved date doesn't exist THEN it's a new connection
 	//if the time elapsed is more than 30min OR 1h THEN it's a new connection
@@ -427,7 +436,7 @@ async function post_quit(e){
 	var confirmationMessage = "\o/";
 	await disconnect()
 	e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
-	return confirmationMessage;              // Gecko, WebKit, Chrome <34
+	return;              // Gecko, WebKit, Chrome <34
 
 
 
@@ -442,31 +451,59 @@ function come_and_go(){
 	// before leaving the website
 	window.addEventListener('beforeunload', post_quit)
 
+	//when clicking on any element of the document
+	document.addEventListener('mousedown', post_when_clicked, false)
+
+
 }
 
-function post_when_clicked(){
+
+async function post_when_clicked(e){
 	/*
-		> id_visite
-		> date_clic
-		> url_page_source
-		> tag
-		> contenu_clic (textContent, alt)
-		> lien (optionnel)
-		> id_element (optionnel)
+		> id_visite // session
+		> url_page_source // session
+		> tag // session
+		> contenu_clic : textContent, alt (optionnel) // session
+		> lien_clic (optionnel) // session
+		> id_element (optionnel) // session
 	*/
-	document.addEventListener('click', function(e){
-		var element = e.target
-		var tag_element = element.tagName
-		var textContent = element.id || element.textContent || element.alt;
 
-		if(textContent.trim().length > 0){
+	//e.preventDefault();
+	e.stopPropagation();
 
-			console.log({'textContent': textContent})
+	var element = e.target
+	var tag_element = element.tagName
+	
+	if(tag_element==='IMG' || tag_element==='INPUT'){
+		var textContent = element.alt || element.value || ''
+	}else{
+		var textContent = element.textContent || ''
+	}
+	
+	textContent = textContent.trim();
 
-		}
+	var a_clic = {
+		'id_visite':get_item('id_visite'),
+		'url_page_source':window.location.href,
+		'tag':element.tagName,
+		'contenu_clic': textContent || '',
+		'lien_clic': element.href || element.parentNode.href || element.src || '',
+		'id_element': element.id ||'',
+		'scrollY': window.scrollY
+			
+	}
+
+	if(a_clic['id_visite']){
+
+		console.log({a_clic})
+		await insert_supabase('clics',a_clic,false)
+
+	}
 
 
-	})
+	return true
+
+
 }
 
 
