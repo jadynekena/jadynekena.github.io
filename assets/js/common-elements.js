@@ -22,46 +22,30 @@ async function select_supabase(fields,nametable,options){
 	return data
 }
 
-function current_datas_name(nametable){
-	return '____' + nametable +'_element'
-}
-
 function is_local_host(){
 	return window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
 }
 
 async function insert_supabase(nametable,datas,upsert_mode){
 
-	if(is_local_host()) return ;
+	//if(is_local_host()) return ;
 
 	const { data, error } = await supabase
 		.from(nametable)
-		.insert(datas, { upsert: upsert_mode })
+		.insert(datas, { upsert: upsert_mode, returning: 'minimal' })
 
-	if(error!==null){
-		const verb = upsert_mode ? 'upsert' : 'insert'
-		console.error("Error "+verb+"ing into table " + nametable+ ":",error)
-		del_item(current_datas_name(nametable) )
-	}else{
-		save_item(current_datas_name(nametable) ,JSON.stringify(data[0]))
-	}
+
 }
 
 async function update_supabase(nametable,datas,matches){
 
-	if(is_local_host()) return ;
+	//if(is_local_host()) return ;
 
 	const { data, error } = await supabase
 		.from(nametable)
 		.update(datas)
 		.match(matches)
 
-	if(error!==null){
-		console.error("Error updating into table " + nametable+ ":",error)
-		del_item(current_datas_name(nametable) +'_element')
-	}else{
-		save_item(current_datas_name(nametable) +'_element',JSON.stringify(datas))
-	}
 }
 
 
@@ -293,10 +277,9 @@ async function visit_details(){
 		'ville':'',
 		'operateur':'',
 		'navigateur':navigator.appCodeName,
-		'resolution':window.screen.width +  ' x ' + window.screen.height,
+		'resolution':window.innerWidth +  ' x ' + window.innerHeight,
 		'systeme':navigator.oscpu,
-		/*'date_arrivee': get_item('date_premiere_visite'),*/
-		/*'date_depart':'',*/
+		/*'date_visite': get_item('date_premiere_visite'),*/
 		'timezone': '',
 		'utc_offset': '',
 		'url_visite': window.location.href
@@ -350,7 +333,7 @@ async function post_a_visit(){
 		//new day of connection for an already known user
 		}else if(new_day_of_connection()){
 
-			disconnect() //est_parti = true for the old one
+			//disconnect() //est_parti = true for the old one
 			refresh_client_datas() //get new datas for the client
 
 
@@ -363,7 +346,7 @@ async function post_a_visit(){
 
 		//upsert ONLY if datas are complete
 		if(a_visit.pays!==''){
-			console.log({a_visit})
+			//console.log({a_visit})
 			await insert_supabase('visites',a_visit,true) //doesn't do an update if user is recognized
 
 		}
@@ -415,13 +398,14 @@ function date_yyyy_MM_dd(the_date){
 }
 
 
+//inutile
 async function disconnect(){
 	var end_visit = {
 		'est_parti': true
 	}
 
 	var matches = {
-		'date_arrivee_sans_heure' : date_yyyy_MM_dd(new Date(get_item('date_premiere_visite'))),
+		'date_visite_sans_heure' : date_yyyy_MM_dd(new Date(get_item('date_premiere_visite'))),
 		'id_visite': get_item('id_visite'),
 		'adresse_ip': get_item('adresse_ip')
 	}
@@ -447,9 +431,6 @@ function come_and_go(){
 	// after landing OR very first accepting cookies via button
 	document.addEventListener('DOMContentLoaded', post_a_visit)
 	document.addEventListener('DOMContentLoaded', post_a_visit_by_cookies)
-
-	// before leaving the website
-	window.addEventListener('beforeunload', post_quit)
 
 	//when clicking on any element of the document
 	document.addEventListener('mousedown', post_when_clicked, false)
@@ -495,7 +476,7 @@ async function post_when_clicked(e){
 
 	if(a_clic['id_visite']){
 
-		console.log({a_clic})
+		//console.log({a_clic})
 		await insert_supabase('clics',a_clic,false)
 
 	}
