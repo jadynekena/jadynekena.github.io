@@ -1,5 +1,64 @@
+const { createClient } = supabase
+supabase = createClient(racine_data(),  apikey())
+
 function list_posts_linkedin(){
 	return ['6777136376266682369','6777861229898670081','6778585945819123712','6779673164571000832','6782194816580100097','6782919591560548352','6784731509396926464','6936941793640886272']
+}
+
+function racine_data(){
+	return 'https://kxdokvtvscvjuwzgmvei.supabase.co'
+}
+
+async function select_supabase(fields,nametable,options){
+	var {data,err} = await supabase
+		.from(nametable)
+		.select(fields)
+
+	if(err) console.error(err)
+
+	//options sous la forme {nom_champ_ref1: 'champ1' , valeur_champ_ref1: 'valeur1', nom_champ_ref2: 'champ2', valeur_champ_ref2: 'valeur2'}
+
+
+	return data
+}
+
+function current_datas_name(nametable){
+	return '____' + nametable +'_element'
+}
+
+
+async function insert_supabase(nametable,datas,upsert_mode){
+	const { data, error } = await supabase
+		.from(nametable)
+		.insert(datas, { upsert: upsert_mode })
+
+	if(error!==null){
+		const verb = upsert_mode ? 'upsert' : 'insert'
+		console.error("Error "+verb+"ing into table " + nametable+ ":",error)
+		del_item(current_datas_name(nametable) +'_element')
+	}else{
+		save_item(current_datas_name(nametable) +'_element',JSON.stringify(datas))
+	}
+}
+
+async function update_supabase(nametable,datas,matches){
+	const { data, error } = await supabase
+		.from(nametable)
+		.update(datas)
+		.match(matches)
+
+	if(error!==null){
+		console.error("Error updating into table " + nametable+ ":",error)
+		del_item(current_datas_name(nametable) +'_element')
+	}else{
+		save_item(current_datas_name(nametable) +'_element',JSON.stringify(datas))
+	}
+}
+
+
+
+function apikey(){
+	return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZG9rdnR2c2N2anV3emdtdmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU2MTk3MTQsImV4cCI6MTk3MTE5NTcxNH0.ViTcu3L79EkuvGvyDiSqwdpgJ0MQFbg8nL1vO0tTcDk'
 }
 
 function navbar(){
@@ -97,6 +156,7 @@ function main(){
 
 }
 
+
 function page_name(){
 	return document.title.split('|')[1].trim()
 }
@@ -108,7 +168,6 @@ function title_project(){
 
 function titles(){
 	if (location.pathname !== '/' && location.pathname !== '/index' && location.pathname !== '/index.html'){
-		console.log("mettre le titre")
 		add_element(title_project(), 'title-section', document.getElementById('page-content'), 1)
 	}
 }
@@ -181,36 +240,64 @@ function uuidv4() {
   );
 }
 
+function dateDiffToString(a, b){
+
+    // make checks to make sure a and b are not null
+    // and that they are date | integers types
+
+    diff = Math.abs(a - b);
+
+    ms = diff % 1000;
+    diff = (diff - ms) / 1000
+    ss = diff % 60;
+    diff = (diff - ss) / 60
+    mm = diff % 60;
+    diff = (diff - mm) / 60
+    hh = diff % 24;
+    days = (diff - hh) / 24
+
+    return {'d':days,'h':hh,'min': mm,'sec':ss,'ms':ms}
+
+}
+
 
 function new_day_of_connection(){
-	//if the saved date doesn't exist THEN it's a new connection
-	//if the abs(saved date - current date) > 1h THEN it's a new connection
 
-	return !get_item('date_premiere_visite') 
+	var diff_date = dateDiffToString(new Date(get_item('date_premiere_visite')), new Date)
+	console.log({diff_date})
+
+	//if the saved date doesn't exist THEN it's a new connection
+	//if the time elapsed is more than 30min OR 1h THEN it's a new connection
+	return !get_item('date_premiere_visite') || diff_date.h > 1 || diff_date.mm > 30 
 }
 
 async function visit_details(){
+
+	del_item('adresse_ip')
+
 	var body = document.getElementsByTagName('body')[0]
 	var res = {
 		'id_visite': get_item('id_visite'),
 		'adresse_ip':'',
-		'latitude':'',
-		'longitude':'',
 		'pays':'',
 		'region':'',
 		'ville':'',
 		'operateur':'',
 		'navigateur':navigator.appCodeName,
-		'resolution':body.offsetWidth +  ' x ' + body.offsetHeight,
+		'resolution':window.screen.width +  ' x ' + window.screen.height,
 		'systeme':navigator.oscpu,
-		'date_arrivee': get_item('date_premiere_visite'),
-		'date_depart':'',
+		/*'date_arrivee': get_item('date_premiere_visite'),*/
+		/*'date_depart':'',*/
 		'timezone': '',
-		'utc_offset': ''
+		'utc_offset': '',
+		'url_visite': window.location.href
 	}
 
 	try{
+
 		var client = await data_client()	
+		save_item('adresse_ip',client['ip'])
+
 		res['adresse_ip'] = client['ip']
 		res['latitude'] = client['latitude']
 		res['longitude'] = client['longitude']
@@ -221,7 +308,7 @@ async function visit_details(){
 		res['timezone'] = client['timezone']
 		res['utc_offset'] = client['utc_offset']
 	}catch(err){
-		console.err('Error on client',err)
+		console.error('Error on client',err)
 	}
 	
 
@@ -229,27 +316,48 @@ async function visit_details(){
 }
 
 
-async function post_datas(){
+function refresh_client_datas(){
 
-		
-
-		//check if very first visit of the day (+cookies ACCEPTED)
-		if(document.cookie.length === 0 || new_day_of_connection()){
-
-
-			console.log('very first connection')
-			save_item('id_visite',uuidv4())
-			save_item('date_premiere_visite',now_function())
+	save_item('id_visite',uuidv4())
+	save_item('date_premiere_visite',now_function())
+	console.log('very first connection (of the day)', get_item('id_visite'))
+}
 
 
-		//NOT first visit: cookies need to be accepted
+async function post_a_visit(){		
+
+		//if very first visit then NO COOKIE accepted and NO DATA SAVED AT ALL
+		if(document.cookie.length === 0 && !get_item('id_visite')){
+			
+			refresh_client_datas() //get new datas for the client
+
+
+		//if very first visit then NO COOKIE accepted and DATAS FROM LOADING are SAVED
+		}else if(document.cookie.length === 0 && get_item('id_visite')){
+			//nothing cause we keep the same datas
+
+
+		//----------------- COOKIES ACCEPTED FROM HERE ----------------- 
+		//new day of connection for an already known user
+		}else if(new_day_of_connection()){
+
+			disconnect() //est_parti = true for the old one
+			refresh_client_datas() //get new datas for the client
+
+
+		//NOT first visit: cookies are accepted, current user already known by server
 		}else{
-			console.log('user recognized')
+			console.log('user recognized',get_item('id_visite'))
 		}
 
 		var a_visit = await visit_details()
-		console.log(a_visit)
 
+		//upsert ONLY if datas are complete
+		if(a_visit.pays!==''){
+			console.log({a_visit})
+			await insert_supabase('visites',a_visit,true) //doesn't do an update if user is recognized
+
+		}
 
 }
 
@@ -284,20 +392,55 @@ function fetch_url(url, callback){
 	});
 }
 
-function post_datas_by_cookies(){
+function post_a_visit_by_cookies(){
 
 	var btn_cookie = document.getElementById('impliedsubmit')
-	if(btn_cookie) btn_cookie.addEventListener('mouseup', post_datas)
+	if(btn_cookie) btn_cookie.addEventListener('mouseup', post_a_visit)
 	
 	return btn_cookie
 }
 
+function date_yyyy_MM_dd(the_date){
+	const offset = the_date.getTimezoneOffset(); the_date = new Date(the_date.getTime() + (offset*60*1000));
+	return the_date.toISOString().split('T')[0]
+}
+
+
+async function disconnect(){
+	var end_visit = {
+		'est_parti': true
+	}
+
+	var matches = {
+		'date_arrivee_sans_heure' : date_yyyy_MM_dd(new Date(get_item('date_premiere_visite'))),
+		'id_visite': get_item('id_visite'),
+		'adresse_ip': get_item('adresse_ip')
+	}
+
+	console.log('disconnected to previous session')
+	//console.log(end_visit)
+	return await update_supabase('visites',end_visit,matches)
+}
+
+async function post_quit(e){
+
+	var confirmationMessage = "\o/";
+	await disconnect()
+	e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+	return confirmationMessage;              // Gecko, WebKit, Chrome <34
+
+
+
+}
 
 
 function come_and_go(){
-	// after first loading OR accepting cookies via button
-	document.addEventListener('DOMContentLoaded', post_datas)
-	document.addEventListener('DOMContentLoaded', post_datas_by_cookies)
+	// after landing OR very first accepting cookies via button
+	document.addEventListener('DOMContentLoaded', post_a_visit)
+	document.addEventListener('DOMContentLoaded', post_a_visit_by_cookies)
+
+	// before leaving the website
+	window.addEventListener('beforeunload', post_quit)
 
 }
 
