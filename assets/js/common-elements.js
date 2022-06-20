@@ -149,7 +149,6 @@ function main(){
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
 
-
 	titles()
 	contents()
 	come_and_go()
