@@ -7,40 +7,25 @@ function list_posts_linkedin(){
 }
 
 
+const ref_project_open = 'ouvertes'
+const ref_project_perso = 'personnel'
+const ref_project_auto = 'automatisations'
+const ref_project_linkedin = 'linkedin'
+
+
 //title card
-const list_title = ['Inspections sanitaires', 'Véhicules commercialisées', 'Aide au choix de formation ParcourSup']
-
-//content card
-const list_content = [`<strong>31183</strong>. C'est le nombre d'inspections sanitaires en France entre Juin 2020 et Juin 2021, et parmi tout ça, c'est*: <br>
-1- 94,4% de conclusions (très) satisfaisantes<br>
-2- En moyenne 2444 inspections par an <br>
-3- 2/3 dans le milieu de la restauration <br>
-4- très fréquentes au mois de Mars, notamment le Jeudi (probabilité à 30%)<br>
-5- dans le département du Lot-et-Garonne (47): 79% des inspections sont très satisfaisantes<br>
-6- dans le département des Yvelines (78): seulement 8.19% sont très satisfaisantes<br>
-7- 17 établissements inspectées 4fois (ou+) en 1 an<br>
-8- 117 établissements critiques, dont SEULEMENT 4 ont reçu une deuxième inspection plus tard.`,
-			
-
-			`Le nombre de modèles de véhicules commercialisés explose de façon exponentielle depuis 2005 : on en compte plus de 280 000 en 2014 📈.<br>
-
-1- 84% des émissions de CO2 en automobile sont issues de 5 marques.<br>
-2- L'émission de CO2 d'un véhicule dépend de 2 choses : sa consommation et son type de carburant, GPL étant le compromis.<br>
-3- Seulement 14 marques en ont commercialisé, et sur le podium on a Renault avec ses 64 modèles GPL (du moins de 2001 à 2014).<br>
-4- Les modèles de la marque Lamborghini consomment 2x plus que la moyenne, et produisent ainsi 2x plus de CO2, tout comme les modèles de Bentley et Ferrari.<br>
+const list_title = loc().includes(ref_project_open) ? ['Inspections sanitaires', 'Véhicules commercialisées', 'Aide au choix de formation ParcourSup'] : 		
+					loc().includes(ref_project_perso) ? ['Un projet Agile', 'Les mots de la Bible en anglais', 'Mon historique Youtube'] : []
 
 
-
-			`,
-
-
-			`At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.`]
 
 //id viz
-const list_id_viz = ['viz1655731628354','viz1655737537459','viz1655737600382']
+const list_id_viz = loc().includes(ref_project_open) ? ['viz1655731628354','viz1655737537459','viz1655737600382'] :
+					loc().includes(ref_project_perso) ? ['viz1655747869171','viz1655747945236','viz1655748303418'] : []
 
 //title online
-const list_title_viz = ['InspectionssanitairesAlimConfiance/Nombretotaldtablissementsinspects','Etudedesmodlesdevhiculescommercialiss/Conclusion','Parcoursup_16538279647500/ParcourSup2018-2021']
+const list_title_viz = loc().includes(ref_project_open) ? ['InspectionssanitairesAlimConfiance/Nombretotaldtablissementsinspects','Etudedesmodlesdevhiculescommercialiss/Conclusion','Parcoursup_16538279647500/ParcourSup2018-2021']:
+					loc().includes(ref_project_perso) ? ['Unprojetagile/Rsum','StudyingBible/Numberofwordsversesperbookname','Personalyoutubehistory/Viewsperhourthroughyears'] : []
 
 
 
@@ -82,9 +67,50 @@ vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';`
 
 
 
+
+
+//content card
 /*
-const list_redim_viz = Array(3).fill(`
-	`)*/
+const list_content = [`<strong>31183</strong>. C'est le nombre d'inspections sanitaires en France entre Juin 2020 et Juin 2021, et parmi tout ça, c'est*: <br>
+1- 94,4% de conclusions (très) satisfaisantes<br>
+2- En moyenne 2444 inspections par an <br>
+3- 2/3 dans le milieu de la restauration <br>
+4- très fréquentes au mois de Mars, notamment le Jeudi (probabilité à 30%)<br>
+5- dans le département du Lot-et-Garonne (47): 79% des inspections sont très satisfaisantes<br>
+6- dans le département des Yvelines (78): seulement 8.19% sont très satisfaisantes<br>
+7- 17 établissements inspectées 4fois (ou+) en 1 an<br>
+8- 117 établissements critiques, dont SEULEMENT 4 ont reçu une deuxième inspection plus tard.`,
+			
+
+			`Le nombre de modèles de véhicules commercialisés explose de façon exponentielle depuis 2005 : on en compte plus de 280 000 en 2014 📈.<br>
+
+1- 84% des émissions de CO2 en automobile sont issues de 5 marques.<br>
+2- L'émission de CO2 d'un véhicule dépend de 2 choses : sa consommation et son type de carburant, GPL étant le compromis.<br>
+3- Seulement 14 marques en ont commercialisé, et sur le podium on a Renault avec ses 64 modèles GPL (du moins de 2001 à 2014).<br>
+4- Les modèles de la marque Lamborghini consomment 2x plus que la moyenne, et produisent ainsi 2x plus de CO2, tout comme les modèles de Bentley et Ferrari.<br>
+
+
+
+			`,
+
+
+			`
+Choisir son cursus parcoursup, un vrai casse-tête...<br>
+Grâce aux données officielles de Parcoursup (et après avoir un peu nettoyé tout ça), j'ai mis en place une dataviz qui permet de visualiser 2 indicateurs :<br>
+1. Le nombre de candidatures moyen par an<br>
+2. Le taux d'admission moyen<br>
+On s'intéresse ici à 2 paramètres: l'intitulé de la formation (BTS, DUT, ...) et sa filière (Ecole d'architecture par exemple).<br>
+Dès que vous définissez un paramètre, l'autre se met à jour. Vous n'êtes pas obligé de renseigné les deux. Par défaut, ces paramètres sont sur la valeur (Tout).<br>
+			`]
+			*/
+
+
+
+
+
+
+
+
 
 function loc(){
 	return window.location.pathname+window.location.search
@@ -249,7 +275,7 @@ function main(){
 function parse_parameters(){
 	const urlParams = new URLSearchParams(window.location.search)
 
-	if (loc().includes('ouvertes')){
+	if (loc().includes(ref_project_open) || loc().includes(ref_project_perso)){
 		if(urlParams.get('id')) expand_card(urlParams.get('id'))	
 	}
 	
@@ -373,15 +399,19 @@ function title_project(){
 }
 
 function get_subtitle(page_name_str){
-	if(page_name_str.includes('ouvertes')){
+
+	if(page_name_str.includes(ref_project_open)){
 		return `Les <strong>données ouvertes (OpenData)</strong> sont des données accessibles à tous.
 		Elles sont généralement fournies par les organismes officiels, les ministères, et parfois même les entreprises et associations.`
 
-	}if(page_name_str.includes('personnel')){
+	}if(page_name_str.includes(ref_project_perso)){
+		return "J'ai récupéré mes données depuis différentes plateformes et j'ai découvert des indicateurs très intéressants sur mes activités."
+
+	}if(page_name_str.includes(ref_project_auto)){
 		return ""
 
-	//nothing on linkedin -> automatisations left (todo)
-	}if(!page_name_str.includes('linkedin')){
+	//nothing on linkedin
+	}if(!page_name_str.includes(ref_project_linkedin)){
 		return ""
 
 	}
@@ -550,7 +580,7 @@ function open_datas(){
 }
 
 function personal_datas(){
-	return loading()//big_section('')
+	return open_datas()//big_section('')
 }
 
 function automates(){
@@ -561,15 +591,16 @@ function automates(){
 function content_of(page_name_str){
 	page_name_str = page_name_str.toLowerCase().trim()
 	
-	if(page_name_str.includes('ouvertes')){
+	if(page_name_str.includes(ref_project_open)){
 		return open_datas()
 
-	}if(page_name_str.includes('personnel')){
+	}if(page_name_str.includes(ref_project_perso)){
 		return personal_datas()
 
-	}if(page_name_str.includes('automatisations')){
+	}if(page_name_str.includes(ref_project_auto)){
 		return automates()	
-	}if(page_name_str.includes('linkedin')){
+
+	}if(page_name_str.includes(ref_project_linkedin)){
 
 		var linkedin_posts = ''
 		var my_list = list_posts_linkedin().reverse()
@@ -913,7 +944,7 @@ async function post_when_clicked(e){
 
 	if(a_clic['id_visite']){
 
-		//console.log({a_clic})
+		console.log({a_clic})
 		await insert_supabase('clics',a_clic,false)
 
 	}
