@@ -1,10 +1,93 @@
 const { createClient } = supabase
-const loc = window.location.pathname+window.location.search
-const prefix = loc === '/' ||  loc === '/index' ? '/assets' : '../assets' 
+const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
 
 function list_posts_linkedin(){
 	return ['6777136376266682369','6777861229898670081','6778585945819123712','6779673164571000832','6782194816580100097','6782919591560548352','6784731509396926464','6936941793640886272', '6944551923622531072']
+}
+
+
+//title card
+const list_title = ['Inspections sanitaires', 'Véhicules commercialisées', 'Aide au choix de formation ParcourSup']
+
+//content card
+const list_content = [`<strong>31183</strong>. C'est le nombre d'inspections sanitaires en France entre Juin 2020 et Juin 2021, et parmi tout ça, c'est*: <br>
+1- 94,4% de conclusions (très) satisfaisantes<br>
+2- En moyenne 2444 inspections par an <br>
+3- 2/3 dans le milieu de la restauration <br>
+4- très fréquentes au mois de Mars, notamment le Jeudi (probabilité à 30%)<br>
+5- dans le département du Lot-et-Garonne (47): 79% des inspections sont très satisfaisantes<br>
+6- dans le département des Yvelines (78): seulement 8.19% sont très satisfaisantes<br>
+7- 17 établissements inspectées 4fois (ou+) en 1 an<br>
+8- 117 établissements critiques, dont SEULEMENT 4 ont reçu une deuxième inspection plus tard.`,
+			
+
+			`Le nombre de modèles de véhicules commercialisés explose de façon exponentielle depuis 2005 : on en compte plus de 280 000 en 2014 📈.<br>
+
+1- 84% des émissions de CO2 en automobile sont issues de 5 marques.<br>
+2- L'émission de CO2 d'un véhicule dépend de 2 choses : sa consommation et son type de carburant, GPL étant le compromis.<br>
+3- Seulement 14 marques en ont commercialisé, et sur le podium on a Renault avec ses 64 modèles GPL (du moins de 2001 à 2014).<br>
+4- Les modèles de la marque Lamborghini consomment 2x plus que la moyenne, et produisent ainsi 2x plus de CO2, tout comme les modèles de Bentley et Ferrari.<br>
+
+
+
+			`,
+
+
+			`At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.`]
+
+//id viz
+const list_id_viz = ['viz1655731628354','viz1655737537459','viz1655737600382']
+
+//title online
+const list_title_viz = ['InspectionssanitairesAlimConfiance/Nombretotaldtablissementsinspects','Etudedesmodlesdevhiculescommercialiss/Conclusion','Parcoursup_16538279647500/ParcourSup2018-2021']
+
+
+
+const list_redim_viz = [`vizElement.style.width = '100%';
+vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';`
+
+,
+
+
+`if (divElement.offsetWidth > 800) {
+    vizElement.style.width = '100%';
+    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+} else if (divElement.offsetWidth > 500) {
+    vizElement.style.width = '100%';
+    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+} else {
+    vizElement.style.width = '100%';
+    vizElement.style.height = '2177px';
+}`
+
+,
+
+
+
+`if (divElement.offsetWidth > 800) {
+    vizElement.style.width = '100%';
+    vizElement.style.maxWidth = '1809px';
+    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+    vizElement.style.maxHeight = '1031px';
+} else if (divElement.offsetWidth > 500) {
+    vizElement.style.width = '100%';
+    vizElement.style.maxWidth = '1809px';
+    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+    vizElement.style.maxHeight = '1031px';
+} else {
+    vizElement.style.width = '100%';
+    vizElement.style.height = '877px';
+}`]
+
+
+
+/*
+const list_redim_viz = Array(3).fill(`
+	`)*/
+
+function loc(){
+	return window.location.pathname+window.location.search
 }
 
 function racine_data(){
@@ -26,6 +109,10 @@ async function select_supabase(fields,nametable,options){
 
 function is_local_host(){
 	return window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
+}
+
+function is_home_page(){
+	return !(location.pathname !== '/' && location.pathname !== '/index' && location.pathname !== '/index.html')
 }
 
 async function insert_supabase(nametable,datas,upsert_mode){
@@ -84,7 +171,7 @@ function navbar(){
 	                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#la-data-au-service-des-entreprises">LA DATA</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-services">MES SERVICES</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mon-parcours">MON PARCOURS</a></li>
 	                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#technos">TECHNOS</a>
 	                    </li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#dataviz-site-web">DATAVIZ EN TEMPS REEL DU SITE</a></li>
-	                    <li class="nav-item dropdown"><a class="nav-link link text-black text-primary dropdown-toggle display-4" href="/#projets" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">PROJETS ACCOMPLIS</a><div class="dropdown-menu" aria-labelledby="dropdown-733" data-bs-popper="none"><a class="text-black text-primary dropdown-item display-4" href="/linkedin">Publications LinkedIn</a><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-ouvertes">Données ouvertes</a><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-personnelles">Données personnelles</a><a class="text-black text-primary dropdown-item display-4" href="/projets-automatisations">Automatisations</a></div></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-clients">ILS M'ONT FAIT CONFIANCE</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#contact">CONTACT</a></li></ul>
+	                    <li class="nav-item dropdown"><a class="nav-link link text-black text-primary dropdown-toggle display-4" href="/#projets" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">PROJETS ACCOMPLIS</a><div class="dropdown-menu" aria-labelledby="dropdown-733" data-bs-popper="none"><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-ouvertes">Données ouvertes</a><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-personnelles">Données personnelles</a><a class="text-black text-primary dropdown-item display-4" href="/projets-automatisations">Automatisations</a><a class="text-black text-primary dropdown-item display-4" href="/linkedin">Publications LinkedIn</a></div></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-clients">ILS M'ONT FAIT CONFIANCE</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#contact">CONTACT</a></li></ul>
 	                
 	                
 	            </div>
@@ -155,11 +242,22 @@ function main(){
 	come_and_go()
 	google_tag() //only on NO LOCALHOST
 
-	//check_social_medias()
+	parse_parameters()
 	
 }
 
+function parse_parameters(){
+	const urlParams = new URLSearchParams(window.location.search)
 
+	if (loc().includes('ouvertes')){
+		if(urlParams.get('id')) expand_card(urlParams.get('id'))	
+	}
+	
+}
+
+function action_when_ready(){
+
+}
 
 
 
@@ -201,6 +299,27 @@ function google_tag(){
 function first_script_gtag(){
 	return `../assets/js/analytics.js`
 }
+
+function load_css_in_head(css_url){
+	var style = document.createElement('link')
+	style.rel = "stylesheet"
+	style.href = css_url
+	document.head.appendChild(style)
+	
+}
+
+function load_script_text_in_body(script,id_script){
+	if (document.getElementById(id_script)) document.getElementById(id_script).remove()
+	var body_of_page = document.querySelector("body")
+	var s = document.createElement("script");
+	s.id = id_script;
+	s.type = "text/javascript";
+	s.innerHTML = script;
+	
+	return body_of_page.append(s);	
+
+}
+
 
 function load_script_in_head(script_url, isfirst){
 	var head_of_page = document.querySelector("head")
@@ -253,28 +372,204 @@ function title_project(){
 	
 }
 
-function titles(){
-	if (location.pathname !== '/' && location.pathname !== '/index' && location.pathname !== '/index.html'){
-		add_element(title_project(), 'title-section', document.getElementById('page-content'), 1)
+function get_subtitle(page_name_str){
+	if(page_name_str.includes('ouvertes')){
+		return `Les <strong>données ouvertes (OpenData)</strong> sont des données accessibles à tous.
+		Elles sont généralement fournies par les organismes officiels, les ministères, et parfois même les entreprises et associations.`
+
+	}if(page_name_str.includes('personnel')){
+		return ""
+
+	//nothing on linkedin -> automatisations left (todo)
+	}if(!page_name_str.includes('linkedin')){
+		return ""
+
 	}
 }
 
+function reset_cards(id_viz){
+	$('#close').remove()
+	$(".tableau").children().remove()
+	$("#script_viz").remove()
+	$('.card').removeClass('expanded').addClass('expandable')
+	$('[id_viz="'+id_viz+'"]')[0].addEventListener('click', switch_card)
+	window.history.pushState(new Date, '', loc().split('?')[0]);
+}
+
+function expand_card(id){
+	e = document.querySelector(".card[id='"+id+"']")
+	e.className = 'card expanded'
+	id_viz = e.getAttribute('id_viz')
+	title_viz = e.getAttribute('title_viz')
+	redim_viz = list_redim_viz[list_id_viz.indexOf(id_viz)]
+
+	add_element(`<div id="close" onclick="reset_cards('`+id_viz+`')" class="popupCloseButton">×</div>`, 'close', e, 1) 
+	e.removeAttribute('onclick')
+
+	//add on url if needed
+	if(!loc().includes('?id=' + id)) window.history.pushState(new Date, '', loc().split('?')[0] +'?id=' + id);
+
+	//load viz
+	see_viz(e,id_viz,title_viz,redim_viz)
+}
+
+function switch_card(e){
+	//console.log('\n')
+
+	if(e.target) e = e.target
+	if(!e.className.includes('card expand')){
+		console.log('not the right one!')
+		e = $(e).parents('.card')[0]
+	}
+
+	
+	//console.log('clicked on',e)
+	
+
+
+	//if to expand -> BIGGER + add button + disable switchonclick
+	if(e && e.className && e.className.includes('expandable')){
+
+
+		id_viz = e.getAttribute('id_viz')
+		expand_card(e.id)
+
+
+	//if to reduce -> nothing
+	}else{}
+	
+	return false
+
+}
+
+
+
+function see_viz(e,id_viz,title_viz,redim_viz){
+	add_element(render_a_viz(id_viz,title_viz),id_viz,e.querySelector(".tableau"),1)
+	load_script_text_in_body(script_viz(id_viz,redim_viz),'script_viz')
+}
+
+function subtitle_of_project(subtitle){
+	return `<div class="container-fluid" id="explanation">
+        	<div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+				<h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-7">`+subtitle+`</h4>
+			</div>
+			</div>
+			</div>`
+}
+
+function titles(){
+	if (!is_home_page()){
+		add_element(title_project(), 'title-section', document.getElementById('page-content'), 1)
+		add_element(subtitle_of_project(get_subtitle(page_name())), 'explanation', document.getElementById('page-content'), 2)
+	}
+}
+
+function big_section(content,padding){
+	return `<h4 id="project-content" class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-6" style="padding: `+ (padding || '15%') +`;">`+content+`</h4>`
+}
+
 function loading(){
-	return `<h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-6" style="padding: 15%;">Page en cours de construction, merci de votre patience.</h4>`
+	return big_section('Page en cours de construction, merci de votre patience.')
 }
 
 function post_linkedin(id){
-
-	//https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:6600459666352812032
-
 	return '<iframe class="card" src="https://www.linkedin.com/embed/feed/update/urn:li:share:'+id+'" height="200" width="400" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"  allowfullscreen></iframe>'
+}
+
+function title_to_id(title){
+	return title.trim().toLowerCase().replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
+
+//add_element(one_card("Une carte","Le contenu d'une carte"),"une carte", $("#project-content"),1 )
+function one_card(title,content,id_viz,title_viz){
+	return `<div id="`+title_to_id(title)+`" class="card expandable" style="overflow: auto;" onclick="return switch_card(this)" id_viz=`+id_viz+` title_viz=`+title_viz+`>
+                <div class="card-wrapper" style="overflow: auto;" >
+                	<div class="card-box align-center">
+                		<h5 class="card-title mbr-fonts-style display-7"><strong>`+title+`</strong></h5>
+                		<p class="card-text mbr-fonts-style display-7 align-left">`+content+`</p>
+	                
+	                </div>
+                	<div class="card-wrapper tableau">
+                </div>
+
+
+                </div>
+            </div>
+                `
+}
+
+function render_a_viz(id_viz,title_viz){
+	return `<div class='tableauPlaceholder' id='`+id_viz+`' style='position: relative'>
+   <noscript><a href='#'></a></noscript>
+   <object class='tableauViz'  style='display:none;'>
+      <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+      <param name='embed_code_version' value='3' />
+      <param name='site_root' value='' />
+      <param name='name' value='`+title_viz+`' />
+      <param name='tabs' value='yes' />
+      <param name='toolbar' value='yes' />
+      <param name='animate_transition' value='yes' />
+      <param name='display_static_image' value='yes' />
+      <param name='display_spinner' value='yes' />
+      <param name='display_overlay' value='yes' />
+      <param name='display_count' value='yes' />
+      <param name='language' value='fr-FR' />
+      <param name='height' value='100%' />
+   </object>
+</div>
+`
+}
+
+function script_viz(id_viz,redim_viz){
+	return `var divElement = document.getElementById('`+id_viz+`');
+		var vizElement = divElement.getElementsByTagName('object')[0];
+		`+redim_viz+`
+
+		var scriptElement = document.createElement('script');
+		scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+		vizElement.parentNode.insertBefore(scriptElement, vizElement);
+		`
+}
+
+function open_datas(){
+
+	load_css_in_head(prefix + "/timeline/style.css")
+	load_script_in_head("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js",false)
+
+	var result = ""
+
+	for (let i = 0; i < list_title.length ; i++) {
+		//one_card(title,content,id_viz,title_viz)
+		result += one_card(list_title[i],"",list_id_viz[i], list_title_viz[i], list_title[i].replaceAll(" ","-"), document.querySelector("#project-content"))
+	}
+	
+
+	return big_section('<div class="container-fluid"><div class="row">'+result+'</div></div>','3%')
+}
+
+function personal_datas(){
+	return loading()//big_section('')
+}
+
+function automates(){
+	return loading()//big_section('')
 }
 
 
 function content_of(page_name_str){
-	if(!page_name_str.toLowerCase().trim().includes('linkedin')){
-		return loading()	
-	}else{
+	page_name_str = page_name_str.toLowerCase().trim()
+	
+	if(page_name_str.includes('ouvertes')){
+		return open_datas()
+
+	}if(page_name_str.includes('personnel')){
+		return personal_datas()
+
+	}if(page_name_str.includes('automatisations')){
+		return automates()	
+	}if(page_name_str.includes('linkedin')){
 
 		var linkedin_posts = ''
 		var my_list = list_posts_linkedin().reverse()
@@ -287,6 +582,8 @@ function content_of(page_name_str){
 	}
 	
 }
+
+
 
 function contents(){
 

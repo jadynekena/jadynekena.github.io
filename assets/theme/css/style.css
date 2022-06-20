@@ -993,3 +993,129 @@ blockquote {
   border-width: 1px;
   border-color: #29a;
 }
+
+
+/* Popup box BEGIN */
+.hover_bkgr_fricc{
+    background:rgba(0,0,0,.4);
+    cursor:pointer;
+    display:none;
+    height:100%;
+    position:fixed;
+    text-align:center;
+    top:0;
+    width:100%;
+    z-index:10000;
+}
+.hover_bkgr_fricc .helper{
+    display:inline-block;
+    height:100%;
+    vertical-align:middle;
+}
+.hover_bkgr_fricc > div {
+    background-color: #fff;
+    box-shadow: 10px 10px 60px #555;
+    display: inline-block;
+    height: auto;
+    max-width: 551px;
+    min-height: 100px;
+    vertical-align: middle;
+    width: 60%;
+    position: relative;
+    border-radius: 8px;
+    padding: 15px 5%;
+}
+.popupCloseButton {
+    background-color: #fff;
+    border: 3px solid #999;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}
+.popupCloseButton:hover {
+    background-color: #ccc;
+}
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.expandable{
+  cursor: pointer;
+
+  margin: 5px;
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -o-transition: all .2s;
+  transition:all .2s;
+}
+
+.expandable:hover{
+  -ms-transform: scale(1.05); /* IE 9 */
+  -webkit-transform: scale(1.05); /* Safari 3-8 */
+  transform: scale(1.05); 
+  z-index: 10;
+}
+
+.expanded{  
+  top: 20px;
+  position: fixed;
+  left: 0;
+  z-index: 999;
+  height: 97%;
+  scale: 98%;
+  border-radius: 20px !important;
+  width: 100%;
+
+  -webkit-transition: all .2s;
+  -moz-transition: all .2s;
+  -o-transition: all .2s;
+  transition:all .2s;
+}
+
+.remark {
+  font-style: italic;
+  padding: 5vh;
+  color: #b5b5b5;
+}
+.remark-simple{
+  font-style: italic;
+  color: #b5b5b5;
+}
+#project-container {
+  height: 85%;
+  width: 100%;
+}
+.popupCloseButton {
+  background-color: #fff;
+  border: 3px solid #999;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: arial;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  right: 0px;
+  font-size: 25px;
+  line-height: 30px;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+}
+.tableauPlaceholder {
+  max-height: 100%;
+}
