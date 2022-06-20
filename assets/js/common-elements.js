@@ -1,4 +1,6 @@
 const { createClient } = supabase
+const loc = window.location.pathname+window.location.search
+const prefix = loc === '/' ||  loc === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
 
 function list_posts_linkedin(){
@@ -50,14 +52,13 @@ async function update_supabase(nametable,datas,matches){
 
 
 
+
 function apikey(){
 	return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZG9rdnR2c2N2anV3emdtdmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU2MTk3MTQsImV4cCI6MTk3MTE5NTcxNH0.ViTcu3L79EkuvGvyDiSqwdpgJ0MQFbg8nL1vO0tTcDk'
 }
 
 function navbar(){
 
-	var loc = window.location.pathname+window.location.search
-	var prefix = loc === '/' ||  loc === '/index' ? '/assets' : '../assets' 
 
 	return `<section data-bs-version="5.1" class="menu menu2 cid-t98vDxC9FZ" once="menu" id="navbar-site">
     
@@ -190,17 +191,29 @@ function selector_elements_visible(selector){
 }
 
 function google_tag(){
-	if (is_local_host()) return false;
-	load_script_in_head(url_google_tag())
+	//if (is_local_host()) return false;
+	load_script_in_head(url_google_tag(),true)
+	load_script_in_head(first_script_gtag(),true)
 	load_script_html_in_head(script_load_google_tag())
+
 }
 
-function load_script_in_head(script_url){
+function first_script_gtag(){
+	return `../assets/js/analytics.js`
+}
 
+function load_script_in_head(script_url, isfirst){
+	var head_of_page = document.querySelector("head")
 	var s = document.createElement("script");
 	s.type = "text/javascript";
 	s.src = script_url;
-	return document.getElementsByTagName("head")[0].append(s);
+	
+	if(isfirst){
+		return head_of_page.insertBefore(s, head_of_page.firstChild);
+	}else{
+		return head_of_page.append(s);	
+	}
+	
 }
 
 function load_script_html_in_head(html){
@@ -208,7 +221,7 @@ function load_script_html_in_head(html){
 	var s = document.createElement("script");
 	s.type = "text/javascript";
 	s.innerHTML = html;
-	return document.getElementsByTagName("head")[0].append(s);
+	return document.querySelector("head").append(s);
 }
 
 
