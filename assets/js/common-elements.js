@@ -55,6 +55,10 @@ function apikey(){
 }
 
 function navbar(){
+
+	var loc = window.location.pathname+window.location.search
+	var prefix = loc === '/' ||  loc === '/index' ? '/assets' : '../assets' 
+
 	return `<section data-bs-version="5.1" class="menu menu2 cid-t98vDxC9FZ" once="menu" id="navbar-site">
     
 	    <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg">
@@ -62,7 +66,7 @@ function navbar(){
 	            <div class="navbar-brand">
 	                <span class="navbar-logo">
 	                    <a href="/">
-	                        <img src="assets/images/logo-141x138.png" alt="Jady Nekena | Data Analyst à Lyon" style="height: 3rem;">
+	                        <img src="`+prefix+`/images/logo-141x138.png" alt="Jady Nekena | Data Analyst à Lyon" style="height: 3rem;">
 	                    </a>
 	                </span>
 	                <span class="navbar-caption-wrap"><a class="navbar-caption text-black text-primary display-7" href="/">Jady Nekena</a></span>
@@ -76,10 +80,10 @@ function navbar(){
 	                </div>
 	            </button>
 	            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-	                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#la-data-au-service-des-entreprises">LA DATA</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#mes-services">MES SERVICES</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#mon-parcours">MON PARCOURS</a></li>
-	                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#technos">TECHNOS</a>
-	                    </li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#dataviz-site-web">DATAVIZ EN TEMPS REEL DU SITE</a></li>
-	                    <li class="nav-item dropdown"><a class="nav-link link text-black text-primary dropdown-toggle display-4" href="/#projets" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">PROJETS ACCOMPLIS</a><div class="dropdown-menu" aria-labelledby="dropdown-733" data-bs-popper="none"><a class="text-black text-primary dropdown-item display-4" href="linkedin">Publications LinkedIn</a><a class="text-black text-primary dropdown-item display-4" href="projets-donnees-ouvertes">Données ouvertes</a><a class="text-black text-primary dropdown-item display-4" href="projets-donnees-personnelles">Données personnelles</a><a class="text-black text-primary dropdown-item display-4" href="projets-automatisations">Automatisations</a></div></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#mes-clients">ILS M'ONT FAIT CONFIANCE</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="index#contact">CONTACT</a></li></ul>
+	                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#la-data-au-service-des-entreprises">LA DATA</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-services">MES SERVICES</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mon-parcours">MON PARCOURS</a></li>
+	                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#technos">TECHNOS</a>
+	                    </li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#dataviz-site-web">DATAVIZ EN TEMPS REEL DU SITE</a></li>
+	                    <li class="nav-item dropdown"><a class="nav-link link text-black text-primary dropdown-toggle display-4" href="/#projets" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">PROJETS ACCOMPLIS</a><div class="dropdown-menu" aria-labelledby="dropdown-733" data-bs-popper="none"><a class="text-black text-primary dropdown-item display-4" href="/linkedin">Publications LinkedIn</a><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-ouvertes">Données ouvertes</a><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-personnelles">Données personnelles</a><a class="text-black text-primary dropdown-item display-4" href="/projets-automatisations">Automatisations</a></div></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-clients">ILS M'ONT FAIT CONFIANCE</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#contact">CONTACT</a></li></ul>
 	                
 	                
 	            </div>
@@ -105,7 +109,7 @@ function footer(){
 	                    
 	                    
 	                    
-	                <li class="foot-menu-item mbr-fonts-style display-7"><a href="index.html#mes-services" class="text-primary">MES SERVICES</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="index.html#mon-parcours" class="text-primary">MON PARCOURS</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="index.html#technos" class="text-primary">TECHNOS</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="index.html#dataviz-site-web" class="text-primary">DATAVIZ DU SITE</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="index.html#projets" class="text-primary">PROJETS</a></li></ul>
+	                <li class="foot-menu-item mbr-fonts-style display-7"><a href="/#mes-services" class="text-primary">MES SERVICES</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="/#mon-parcours" class="text-primary">MON PARCOURS</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="/#technos" class="text-primary">TECHNOS</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="/#dataviz-site-web" class="text-primary">DATAVIZ DU SITE</a></li><li class="foot-menu-item mbr-fonts-style display-7"><a href="/#projets" class="text-primary">PROJETS</a></li></ul>
 	            </div>
 	            
 	            <div class="row row-copirayt">
