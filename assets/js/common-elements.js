@@ -154,7 +154,11 @@ function main(){
 	come_and_go()
 	google_tag() //only on NO LOCALHOST
 
+	//check_social_medias()
+	
 }
+
+
 
 
 
@@ -282,6 +286,10 @@ function save_item(item_name,item_value){
 	return window.localStorage.setItem(item_name, item_value)
 }
 
+function append_item(item_name,new_item_value,sep){
+	return window.localStorage.setItem(item_name, (get_item(item_name) ? get_item(item_name) + sep : "") + new_item_value)
+}
+
 function del_item(item_name){
 	return window.localStorage.removeItem(item_name)
 }
@@ -390,6 +398,37 @@ function refresh_client_datas(){
 	save_item('id_visite',uuidv4())
 	save_item('date_premiere_visite',now_function())
 	console.log('very first connection (of the day)', get_item('id_visite'))
+}
+
+function check_social_medias(){
+	add_element(code_check_medias(), "all_medias", document.querySelector('body'), 1)
+	return get_item('medias');
+
+}
+
+function code_check_medias(){
+	return  `<div id="all_medias">
+
+		<!-- GITHUB --> 
+		<img style="/*display:none;*/" onload="show_login_status(this,'Github', true)" 
+		onerror="show_login_status(this,'Github', false)"
+        src="https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Ffavicon.ico%3Fid%3D1" />
+
+
+
+    </div>`
+}
+
+function show_login_status(ceci, website_name, loaded) {
+    if (loaded) {
+        console.log("Logged into : " + website_name);
+        return append_item('medias',website_name,",")
+    } else {
+        console.log("Not logged into : " + website_name);
+        return false
+    }
+
+    //ceci.parentNode.remove()
 }
 
 
