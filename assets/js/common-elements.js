@@ -28,7 +28,7 @@ function is_local_host(){
 
 async function insert_supabase(nametable,datas,upsert_mode){
 
-	//if(is_local_host()) return ;
+	if(is_local_host()) return ;
 
 	const { data, error } = await supabase
 		.from(nametable)
@@ -39,7 +39,7 @@ async function insert_supabase(nametable,datas,upsert_mode){
 
 async function update_supabase(nametable,datas,matches){
 
-	//if(is_local_host()) return ;
+	if(is_local_host()) return ;
 
 	const { data, error } = await supabase
 		.from(nametable)
@@ -146,17 +146,48 @@ function add_element(html, id_element, parent_element, position){
 function main(){
 	var body = document.getElementsByTagName('body')[0]
 	add_element(navbar(), 'navbar-site', body, 1)
+	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
+
 
 	titles()
 	contents()
 	come_and_go()
-	google_tag()
+	google_tag() //only on NO LOCALHOST
 
 }
 
 
+
+
+function add_nav_items_events(){
+
+	const elements = document.querySelectorAll(".nav-item:not(.dropdown), .dropdown-item");
+
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].addEventListener('click',toggleBack)
+	}
+
+}
+
+function toggleBack(){
+	//if phone mode (toggler visible) -> click on $('.navbar-toggler')
+	if(selector_elements_visible('.navbar-toggler:not(.hidden)')){
+		document.querySelector('.navbar-toggler').click()
+	
+	//if NOT phone mode (toggler NOT visible) -> click on $("#navbar-site")
+	}else{
+		document.querySelector('#navbar-site').click()
+	}
+	
+}
+
+function selector_elements_visible(selector){
+	return document.querySelectorAll(selector).length > 0
+}
+
 function google_tag(){
+	if (is_local_host()) return false;
 	load_script_in_head(url_google_tag())
 	load_script_html_in_head(script_load_google_tag())
 }
