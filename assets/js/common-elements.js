@@ -191,7 +191,7 @@ function selector_elements_visible(selector){
 }
 
 function google_tag(){
-	//if (is_local_host()) return false;
+	if (is_local_host()) return false;
 	load_script_in_head(url_google_tag(),true)
 	load_script_in_head(first_script_gtag(),true)
 	load_script_html_in_head(script_load_google_tag())
