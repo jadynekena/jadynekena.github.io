@@ -419,15 +419,26 @@ function check_social_medias(){
 
 }
 
+function redirect_image(platform, url){
+	return `<img style="/*display:none;*/" onload="show_login_status(this,'`+platform+`', true)" 
+		onerror="show_login_status(this,'`+platform+`', false)"
+        src="`+url+`" />`
+}
+
 function code_check_medias(){
 	return  `<div id="all_medias">
 
 		<!-- GITHUB --> 
-		<img style="/*display:none;*/" onload="show_login_status(this,'Github', true)" 
-		onerror="show_login_status(this,'Github', false)"
-        src="https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Ffavicon.ico%3Fid%3D1" />
+		`+redirect_image('Github', 'https://github.com/login?return_to=https%3A%2F%2Fgithub.com%2Ffavicon.ico%3Fid%3D1')+`
+
+        <!-- FACEBOOK --> 
+		`+redirect_image('Facebook', 'https://www.facebook.com/login.php?next=https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-1/83239598_2512264668878829_9085775891874709504_n.jpg')+`
+
+        <!-- TWITTER --> 
+		`+redirect_image('Twitter', 'https://twitter.com/i/flow/login?redirect=https://pbs.twimg.com/profile_images/1536902990933774337/uK8lS09k_400x400.jpg')+`
 
 
+        
 
     </div>`
 }
@@ -585,7 +596,7 @@ async function post_when_clicked(e){
 	var tag_element = element.tagName
 	
 	if(tag_element==='IMG' || tag_element==='INPUT'){
-		var textContent = element.alt || element.value || ''
+		var textContent = element.alt || element.getAttribute('placeholder') || ''
 	}else{
 		var textContent = element.textContent || ''
 	}
