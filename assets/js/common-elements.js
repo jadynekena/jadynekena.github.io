@@ -299,6 +299,7 @@ function add_nav_items_events(){
 		elements[i].addEventListener('click',toggleBack)
 	}
 
+	/*
 	//show it on hover
 	document.querySelector('.nav-item.dropdown').addEventListener('mouseenter',function(e){
 		//e.stopPropagation()
@@ -306,6 +307,7 @@ function add_nav_items_events(){
 		child = e.target.querySelector('.dropdown-menu')
 		if(child) child.className = child.className + ' show'
 	})
+	*/
 
 	/*
 	//hide on unhover
