@@ -1107,14 +1107,15 @@ blockquote {
   display: inline-block;
   font-family: arial;
   font-weight: bold;
-  position: absolute;
-  top: 0;
-  right: 0px;
+  position: fixed;
+  top: 30px;
+  right: 17px;
   font-size: 25px;
   line-height: 30px;
   width: 35px;
   height: 35px;
   text-align: center;
+  z-index: 1000;
 }
 .tableauPlaceholder {
   max-height: 100%;

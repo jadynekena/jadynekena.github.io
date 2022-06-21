@@ -149,7 +149,7 @@ async function insert_supabase(nametable,datas,upsert_mode){
 		.from(nametable)
 		.insert(datas, { upsert: upsert_mode, returning: 'minimal' })
 
-
+	return  { data, error }
 }
 
 async function update_supabase(nametable,datas,matches){
@@ -161,6 +161,8 @@ async function update_supabase(nametable,datas,matches){
 		.from(nametable)
 		.update(datas)
 		.match(matches)
+
+	return  { data, error }
 
 }
 
@@ -297,6 +299,28 @@ function add_nav_items_events(){
 		elements[i].addEventListener('click',toggleBack)
 	}
 
+	//show it on hover
+	document.querySelector('.nav-item.dropdown').addEventListener('mouseenter',function(e){
+		//e.stopPropagation()
+
+		child = e.target.querySelector('.dropdown-menu')
+		if(child) child.className = child.className + ' show'
+	})
+
+	/*
+	//hide on unhover
+	document.querySelector('.nav-item.dropdown').addEventListener('onMouseOut',function(e){
+
+		if(!e.target.className.includes('dropdown-menu')){
+			console.log('bye')
+
+			child = e.target.querySelector('.dropdown-menu')
+			if(child) child.className = child.className.replaceAll(' show','')
+		}
+
+	})*/
+
+
 }
 
 function toggleBack(){
@@ -419,26 +443,41 @@ function get_subtitle(page_name_str){
 }
 
 function reset_cards(id_viz){
+
+	
 	$('#close').remove()
 	$(".tableau").children().remove()
 	$("#script_viz").remove()
 	$('.card').removeClass('expanded').addClass('expandable')
-	$('[id_viz="'+id_viz+'"]')[0].addEventListener('click', switch_card)
+
+	if(id_viz){
+		$('[id_viz="'+id_viz+'"]')[0].addEventListener('click', switch_card)
+		$('[id_viz="'+id_viz+'"]')[0].href = '?id='+$('[id_viz="'+id_viz+'"]')[0].id//NEW
+	}
+	
 	window.history.pushState(new Date, '', loc().split('?')[0]);
+	
+
+
+	//other solution
+	/*
+	window.location.href = loc().split('?')[0]
+	*/
 }
 
 function expand_card(id){
 	e = document.querySelector(".card[id='"+id+"']")
 	e.className = 'card expanded'
+	e.href = '#' //NEW
 	id_viz = e.getAttribute('id_viz')
 	title_viz = e.getAttribute('title_viz')
 	redim_viz = list_redim_viz[list_id_viz.indexOf(id_viz)]
 
-	add_element(`<div id="close" onclick="reset_cards('`+id_viz+`')" class="popupCloseButton">×</div>`, 'close', e, 1) 
+	add_element(`<div id="close" onclick="reset_cards('`+id_viz+`')" class="popupCloseButton">×</div>`, 'close', e.parentNode, 1) 
 	e.removeAttribute('onclick')
 
 	//add on url if needed
-	if(!loc().includes('?id=' + id)) window.history.pushState(new Date, '', loc().split('?')[0] +'?id=' + id);
+	//if(!loc().includes('?id=' + id)) window.history.pushState(new Date, '', loc().split('?')[0] +'?id=' + id);
 
 	//load viz
 	see_viz(e,id_viz,title_viz,redim_viz)
@@ -452,7 +491,7 @@ function switch_card(e){
 		//console.log('not the right one!')
 		e = $(e).parents('.card')[0]
 	}
-
+ 
 	
 	//console.log('clicked on',e)
 	
@@ -515,7 +554,7 @@ function title_to_id(title){
 
 //add_element(one_card("Une carte","Le contenu d'une carte"),"une carte", $("#project-content"),1 )
 function one_card(title,content,id_viz,title_viz){
-	return `<div id="`+title_to_id(title)+`" class="card expandable" style="overflow: auto;" onclick="return switch_card(this)" id_viz=`+id_viz+` title_viz=`+title_viz+`>
+	return `<a href="?id=`+title_to_id(title)+`" id="`+title_to_id(title)+`" class="card expandable" style="overflow: auto;" onclick="return switch_card(this)" id_viz=`+id_viz+` title_viz=`+title_viz+`>
                 <div class="card-wrapper" style="overflow: auto;" >
                 	<div class="card-box align-center">
                 		<h5 class="card-title mbr-fonts-style display-7"><strong>`+title+`</strong></h5>
@@ -527,7 +566,7 @@ function one_card(title,content,id_viz,title_viz){
 
 
                 </div>
-            </div>
+            </a>
                 `
 }
 
@@ -577,7 +616,7 @@ function open_datas(){
 	}
 	
 
-	return big_section('<div class="container-fluid"><div class="row">'+result+'</div></div>','3%')
+	return big_section('<div class="container-fluid">'+result+'</div>','3%')
 }
 
 function personal_datas(){
@@ -911,6 +950,11 @@ function come_and_go(){
 
 }
 
+function nearestAncestorHref(node){
+  while(node && !node.href) node=node.parentNode
+  return node && node.href
+}
+
 
 async function post_when_clicked(e){
 	/*
@@ -927,6 +971,7 @@ async function post_when_clicked(e){
 
 	var element = e.target
 	var tag_element = element.tagName
+	var link = element.href || nearestAncestorHref(element)  || element.src || ''
 	
 	if(tag_element==='IMG' || tag_element==='INPUT'){
 		var textContent = element.alt || element.getAttribute('placeholder') || ''
@@ -941,7 +986,7 @@ async function post_when_clicked(e){
 		'url_page_source':window.location.href,
 		'tag':element.tagName,
 		'contenu_clic': textContent || '',
-		'lien_clic': element.href || element.parentNode.href || element.src || '',
+		'lien_clic': link,
 		'id_element': element.id ||'',
 		'scrollY': window.scrollY
 			
@@ -951,9 +996,10 @@ async function post_when_clicked(e){
 
 		console.warn({a_clic})
 		await insert_supabase('clics',a_clic,false)
-
+		if(link.includes('?id=')) window.location.href = link
 	}
 
+	
 
 	return true
 
