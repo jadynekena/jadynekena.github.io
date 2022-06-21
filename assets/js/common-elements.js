@@ -979,7 +979,7 @@ async function post_when_clicked(e){
 		var textContent = element.textContent || ''
 	}
 	
-	textContent = textContent.trim();
+	textContent = textContent.trim().replace(/\s\s+/g, ' ');
 
 	var a_clic = {
 		'id_visite':get_item('id_visite'),
