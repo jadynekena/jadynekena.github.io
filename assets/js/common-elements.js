@@ -142,7 +142,7 @@ function is_home_page(){
 }
 
 async function insert_supabase(nametable,datas,upsert_mode){
-
+	//console.log('inserting to '+nametable,datas)
 	if(is_local_host()) return ;
 
 	const { data, error } = await supabase
@@ -153,6 +153,7 @@ async function insert_supabase(nametable,datas,upsert_mode){
 }
 
 async function update_supabase(nametable,datas,matches){
+	console.log('updating '+nametable,datas)
 
 	if(is_local_host()) return ;
 
@@ -448,7 +449,7 @@ function switch_card(e){
 
 	if(e.target) e = e.target
 	if(!e.className.includes('card expand')){
-		console.log('not the right one!')
+		//console.log('not the right one!')
 		e = $(e).parents('.card')[0]
 	}
 
@@ -680,14 +681,14 @@ function dateDiffToString(a, b){
 }
 
 
-function new_day_of_connection(){
+function new_period_of_connection(){
 
 	var diff_date = dateDiffToString(new Date(get_item('date_premiere_visite')), new Date)
-	//console.log({diff_date})
+	console.warn(diff_date)
 
 	//if the saved date doesn't exist THEN it's a new connection
 	//if the time elapsed is more than 30min OR 1h THEN it's a new connection
-	return !get_item('date_premiere_visite') || diff_date.h > 1 || diff_date.mm > 30 
+	return !get_item('date_premiere_visite') || diff_date.h >= 1 || diff_date.min >= 30 
 }
 
 async function visit_details(){
@@ -738,7 +739,7 @@ function refresh_client_datas(){
 
 	save_item('id_visite',uuidv4())
 	save_item('date_premiere_visite',now_function())
-	console.log('very first connection (of the day)', get_item('id_visite'))
+	console.log('very first connection (window of 30 min)', get_item('id_visite'))
 }
 
 function check_social_medias(){
@@ -785,39 +786,43 @@ function show_login_status(ceci, website_name, loaded) {
 
 
 async function post_a_visit(){		
+	is_new = false
 
-		//if very first visit then NO COOKIE accepted and NO DATA SAVED AT ALL
-		if(document.cookie.length === 0 && !get_item('id_visite')){
-			
-			refresh_client_datas() //get new datas for the client
-
-
-		//if very first visit then NO COOKIE accepted and DATAS FROM LOADING are SAVED
-		}else if(document.cookie.length === 0 && get_item('id_visite')){
-			//nothing cause we keep the same datas
+	//if very first visit then NO COOKIE accepted and NO DATA SAVED AT ALL
+	if(document.cookie.length === 0 && !get_item('id_visite')){
+		is_new = true
+		refresh_client_datas() //get new datas for the client
 
 
-		//----------------- COOKIES ACCEPTED FROM HERE ----------------- 
-		//new day of connection for an already known user
-		}else if(new_day_of_connection()){
+	//if very first visit then NO COOKIE accepted and DATAS FROM LOADING are SAVED
+	}else if(document.cookie.length === 0 && get_item('id_visite')){
+		//nothing cause we keep the same datas
+		is_new = false
 
-			//disconnect() //est_parti = true for the old one
-			refresh_client_datas() //get new datas for the client
+	//----------------- COOKIES ACCEPTED FROM HERE ----------------- 
+	//new day of connection for an already known user
+	}else if(new_period_of_connection()){
+		is_new = true
+
+		//disconnect() //est_parti = true for the old one
+		refresh_client_datas() //get new datas for the client
 
 
-		//NOT first visit: cookies are accepted, current user already known by server
-		}else{
-			console.log('user recognized',get_item('id_visite'))
-		}
+	//NOT first visit: cookies are accepted, current user already known by server
+	}else{
+		console.warn('user recognized ',get_item('id_visite'))
+		is_new = false
+	}
 
-		var a_visit = await visit_details()
+	var a_visit = await visit_details()
 
-		//upsert ONLY if datas are complete
-		if(a_visit.pays!==''){
-			//console.log({a_visit})
-			await insert_supabase('visites',a_visit,true) //doesn't do an update if user is recognized
+	//upsert ONLY if datas are complete AND it's a new visit
+	if(a_visit.pays!=='' && is_new){
 
-		}
+		//console.log({a_visit})
+		await insert_supabase('visites',a_visit,true) //doesn't do an update if user is recognized
+
+	}
 
 }
 
@@ -944,7 +949,7 @@ async function post_when_clicked(e){
 
 	if(a_clic['id_visite']){
 
-		console.log({a_clic})
+		console.warn({a_clic})
 		await insert_supabase('clics',a_clic,false)
 
 	}
