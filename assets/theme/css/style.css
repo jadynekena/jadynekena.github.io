@@ -1120,3 +1120,15 @@ blockquote {
 .tableauPlaceholder {
   max-height: 100%;
 }
+.retool {
+  height: 50px;
+  width: 100%;
+  position: relative;
+  top: -60px;
+  background-color: whitesmoke;
+  text-align: center;
+}
+
+.a-dataviz {
+  
+}

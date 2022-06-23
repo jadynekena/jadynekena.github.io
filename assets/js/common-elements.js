@@ -2,6 +2,9 @@ const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
 
+var sep = '\t'
+var final_datas = []
+
 function list_posts_linkedin(){
 	return ['6777136376266682369','6777861229898670081','6778585945819123712','6779673164571000832','6782194816580100097','6782919591560548352','6784731509396926464','6936941793640886272', '6944551923622531072']
 }
@@ -258,7 +261,174 @@ function add_element(html, id_element, parent_element, position){
 	return res;
 }
 
+function post_resultat_asynchrone(url,data_json){
+  objet_envoi = {
+    type: 'POST',
+    url: url,
+    data: data_json
+  }
 
+  objet_envoi = rajouter_apijey_ajax(url,objet_envoi)
+
+
+  return $.ajax(objet_envoi).done(function(data) {
+    //console.log(data)
+    return data
+  });
+
+}
+
+function rajouter_apijey_ajax(url,objet_envoi){
+
+
+	objet_envoi.headers = {'apikey': apikey().replaceAll("apikey=","")}
+
+	return objet_envoi;
+	console.log({objet_envoi})
+}
+
+
+async function number_of_rows(tab,field_count){
+  
+  url =racine_data() + '/rest/v1/rpc/number_of_rows?apikey=' + apikey()
+  return await post_resultat_asynchrone(url, {"tab":tab, "field_count":field_count})
+
+}
+
+final_datas = []
+async function select_all(name_table,function_callback,depth,from,into){
+  //console.error({function_callback})
+  var more_datas = []
+
+  //>=2nd page
+  if(from && into){
+    depth += 1
+    count = count !== 9999999999 && count > 0 ? count : await number_of_rows(name_table,'*')
+    var {data,error} = await supabase
+        .from(name_table)
+        .select('*')
+        .range(from,into)
+
+
+    //if data is not big enough -> recursive
+    //console.warn({data})
+    add(data)
+    more_datas = await check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback)
+    //console.warn({more_datas})
+    if(more_datas) add(more_datas)
+    //console.warn({final_datas})
+
+    if(function_callback) function_callback(data)
+    final_datas = [...new Set(final_datas)];
+    return data
+
+  //very first query with only 1 element
+  }else{
+
+    depth = 0 //no depth at the beginning
+
+    //count number of elements
+    count = 9999999999
+    //console.warn({count})
+
+    var  {data,error} = await supabase
+        .from(name_table)
+        .select('*')
+
+    add(data)
+    await check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback)
+  }
+  
+}
+
+function add(more){
+  return Array.prototype.push.apply(final_datas,more);
+}
+
+async function check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback){
+  console.log({final_datas})
+  console.log({count})
+  //alert("check")
+  if(final_datas.length < count  && data){
+
+    depth = depth+1
+    //console.warn({depth})
+
+    from = data.length * depth
+    //console.warn({from})
+
+    into = Math.min(from + data.length -1,count-1)
+    //console.warn({into})
+
+    return await select_all(name_table,function_callback,depth,from,into,function_callback)
+  
+  }else{
+  	return []
+  }
+}
+
+
+
+async function download(){
+
+	wait(true)
+	final_datas = []
+	return await select_all('tout',to_csv) 
+	
+}
+
+function wait(yes){
+	$('body')[0].style.cursor = yes ? 'wait' : ''
+}
+
+function to_csv(){
+	wait(false)
+	if(!sep) return false
+	console.warn({sep})
+	console.warn({final_datas})
+
+	csv = ConvertToCSV(final_datas)
+	console.warn({csv})
+
+	downloadFile(date_now() + '_datas-jadynekena.com.txt',csv)
+	//alert("Téléchargement...")
+
+
+	return final_datas
+}
+
+function date_now(){
+	return (new Date).toLocaleString().replaceAll('/','-').replaceAll(':','-')
+}
+
+function downloadFile(filename, content) {
+	const blob = new Blob([content], { type: 'text/plain' });
+	const a = document.createElement('a');
+	a.setAttribute('download', filename);
+	a.setAttribute('href', window.URL.createObjectURL(blob));
+	a.click();
+	a.remove()
+};
+
+function ConvertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = ''
+
+    str += Object.keys(objArray[0]).join(sep) + '\r\n';
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += sep
+
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
+    }
+
+    return str;
+}
 
 function main(){
 	var body = document.getElementsByTagName('body')[0]
@@ -266,12 +436,28 @@ function main(){
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
 
+	show_btn()
+
 	titles()
 	contents()
 	come_and_go()
 	google_tag() //only on NO LOCALHOST
 
 	parse_parameters()
+	
+}
+
+function show_btn(){
+	var btn = document.getElementById('btn-download')
+
+
+	if(btn){
+
+		document.addEventListener('DOMContentLoaded',  function() {
+		  btn.removeAttribute('hidden')
+		});		
+	}
+
 	
 }
 
@@ -704,7 +890,7 @@ function dateDiffToString(a, b){
 function new_period_of_connection(){
 
 	var diff_date = dateDiffToString(new Date(get_item('date_premiere_visite')), new Date)
-	console.warn(diff_date)
+	//console.warn(diff_date)
 
 	//if the saved date doesn't exist THEN it's a new connection
 	//if the time elapsed is more than 30min OR 1h THEN it's a new connection
@@ -830,7 +1016,7 @@ async function post_a_visit(){
 
 	//NOT first visit: cookies are accepted, current user already known by server
 	}else{
-		console.warn('user recognized ',get_item('id_visite'))
+		//console.warn('user recognized ',get_item('id_visite'))
 		is_new = false
 	}
 
