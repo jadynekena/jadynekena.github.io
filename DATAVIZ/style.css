@@ -91,7 +91,6 @@ body {
 
 .viz-title {
   /*font-weight: bolder;*/
-  background-color: #2299aa21;
   border-radius: 2px;
   padding: 2px 0;
 }
@@ -107,4 +106,17 @@ body {
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+
+.themeViz { /*COLOR OF GRAPHS*/
+  color: #3f4c64
+}
+
+.theme { /*CLEAR  COLOR*/
+  background-color: #dbeff2
+}
+
+body.nightmode {
+	background: #182c33;
 }

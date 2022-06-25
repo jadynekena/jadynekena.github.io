@@ -15,6 +15,7 @@
 		
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/alasql"></script>	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
 	<script src="./utile.js"></script>
 
@@ -23,6 +24,7 @@
 	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
+	<div class="themeViz" hidden></div>
 
 	<div class="grid-container conteneurDashboard">
 		<div class="viz" id="viz1">
@@ -38,7 +40,7 @@
 					<div class="viz-tooltip"></div>
 				</div>
 				<div class="viz-label">
-					<div class="viz-title">Clics uniques</div>
+					<div class="viz-title">Clics</div>
 					<div class="viz-text"></div>
 					<div class="viz-tooltip"></div>
 				</div>

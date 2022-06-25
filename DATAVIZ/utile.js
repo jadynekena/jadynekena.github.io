@@ -57,18 +57,35 @@ function refresh_content(selector,content,index){
   return $($(selector)[index]).text(content)
 }
 
-function refresh_labelcount_viz(label_selector,fields_to_display,index){
-  nb = count_elements(final_datas,fields_to_display,true,true)
-  refresh_content(label_selector,nb,index)
+function count_all(final_datas,fieldName_to_count){
+  return alasql("SELECT COUNT(DISTINCT "+fieldName_to_count+") as res FROM ?",[final_datas])[0]['res']
+}
 
+function select_from_where(final_datas,to_select,where,unique){
+  let sql = "SELECT "+ (unique ? " DISTINCT (" : "") +to_select + (unique ? ")" : "") + "  FROM ?  " + (where ? 'where '+ where : '')
+  log(sql,false)
+  return alasql(sql  ,[final_datas])
+}
+
+function refresh_labelcount_viz(label_selector,fields_to_display,index){
+
+  /*
+  nb = count_elements(final_datas,fields_to_display,true,true)
+  */
+  nb = count_all(final_datas,fields_to_display)
+
+  refresh_content(label_selector,nb,index)
   return Number(nb)
 }
 
 
-function seriesOf(typeChart,datas){
+function seriesOf(typeChart,src_datas,datas){
   let res = []
+  let colorValue = $('.themeViz').css('color')
 
-  if(typeChart === 'gauge'){//datas = {'min':min,'max':max,'value':value}
+  log(src_datas,false)
+
+  if(typeChart === 'gauge'){//datas = {'min':min,'max':max,'value':value,'src_datas':src_datas}
     res = [
       {
         type: 'gauge',
@@ -78,6 +95,13 @@ function seriesOf(typeChart,datas){
         max: datas['max'],
         radius: '100%', // this
         splitNumber: 5,
+        itemStyle: {
+          color: colorValue,
+          shadowColor: 'black',
+          shadowBlur: 0,
+          shadowOffsetX: 0,
+          shadowOffsetY: 2
+        },
         progress: {
           show: true,
           roundCap: true,
@@ -106,17 +130,19 @@ function seriesOf(typeChart,datas){
         data: [{value: datas['value']}]
     }]
 
-
   }else{
     res = datas.map(function(e){
       tmp = {}
       tmp['type'] = typeChart;
       tmp['data'] = e;
+      tmp['color'] = colorValue;
       return tmp
     })
 
 
   }
+
+  log(res,false,true)
   return res
 }
 
@@ -175,17 +201,21 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
 
   let myChart = echarts.init($(parentSelector)[parentSelectorIndex], null);
   let displayed_datas = []
+  let src_datas = []
   let xDatas = []
   let yDatas = []
 
   log(typeChart)
   if(typeChart !== 'gauge'){
+
+
     //let temp = unique(keep_fields(JsonData,xFieldName,xFieldOrderBy,seriesFieldNameToCount)); //keep only the 3 fields we need
     let temp = keep_unique_records(JsonData,xFieldName,xFieldOrderBy,seriesFieldNameToCount)
     temp = sort_by(temp,xFieldOrderBy) // order by xFieldOrderBy
     log(temp)
 
-
+    src_datas = select_from_where(JsonData,'*, "Nombre de '+seriesFieldNameToCount+'" as customName')
+    log(src_datas,false,true)
 
     xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
     log(xDatas)
@@ -201,12 +231,15 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     //show ONLY percentage
     displayed_datas = !with_percentage_only ? displayed_datas : [percentage_of_total(yDatas)]
     log(displayed_datas)
+
+
   }else{
+    src_datas = JsonData
     displayed_datas = JsonData // {min, max, value}
   }
 
 
-  let displayed_series = seriesOf(typeChart,displayed_datas)
+  let displayed_series = seriesOf(typeChart,src_datas,displayed_datas)
 
 
 
@@ -218,9 +251,6 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       title: {
         text: title
       },
-      tooltip: {
-        trigger: 'item' //todo: formatter: function(params){return TOUTES_LES_DONNEES_UNIQUES_JsonData par rapport à une visite}
-      },
       xAxis: {
         type: xFieldType,//'category',
         data: xDatas
@@ -231,19 +261,23 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
         },
 
       },
-      series: displayed_series,
+      
       grid: {
         left: 30,
         bottom: 30
       }
     };
-  }else {
-    option = { 
-      tooltip: {trigger: 'item'},
-      series: displayed_series
-    }
+  
   }
 
+  //todo: formatter: function(params){return TOUTES_LES_DONNEES_UNIQUES_JsonData par rapport à une visite}
+  option['tooltip'] = {
+    trigger: 'item',
+    formatter: tooltipFormatter
+  }
+
+  //common keys
+  option['series'] = displayed_series
   myChart.setOption(option);
 
 
@@ -252,6 +286,20 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       myChart.resize();  
   });
   return myChart
+}
+
+
+function tooltipFormatter(params){
+  /*
+  log(params.name,false,true) //X axis
+  log(params.value,false,true) //Y axis
+  */
+  log(params,false,true)
+  log('\n\n\n\n',false,true)
+
+  return `
+  <strong>`+"CUSTOM NAME HERE"+`: </strong>`+params.value+`<br/>
+  `
 }
 
 function refresh_viz1(){
@@ -272,7 +320,7 @@ function refresh_viz1(){
   //pourcentage de mobiles
   part_mobile = count_category_part(final_datas,'type_appareil','une_visite',true,'mobile')
   part_mobile = part_mobile['nb_occurences'][0]
-  gauge_datas = {min: 0, max:100, value:part_mobile }
+  gauge_datas = {min: 0, max:100, value:part_mobile, 'customName':'Part des mobiles parmi les visites' }
   refreshEchart('gauge','.viz-gauge',0,gauge_datas)
 
 
@@ -286,11 +334,19 @@ function refresh_viz1(){
 }
 
 
+function append_colors(){
 
+  //main color
+  $('.viz-title').addClass('theme')
+  $('.viz-text, .viz-title').addClass('themeViz')
+
+}
 
 
 function creer_dataviz(){
-	log({final_datas})
+	log(final_datas)
+
+  append_colors()
 
 	//viz1
   refresh_viz1()
@@ -302,7 +358,8 @@ function creer_dataviz(){
 
 	//viz3 : 
 
-  //add tooltips everywhere (todo)
+  //append tooltips everywhere (todo)
+
 
 }
 
