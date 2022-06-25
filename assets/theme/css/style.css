@@ -209,6 +209,7 @@ img,
 iframe {
   display: block;
   width: 100%;
+  height: inherit;
 }
 
 .card {
@@ -1130,5 +1131,6 @@ blockquote {
 }
 
 .a-dataviz {
-  
+  height: 170vh;
 }
+

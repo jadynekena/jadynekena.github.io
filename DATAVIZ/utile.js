@@ -135,11 +135,11 @@ function count_category_part(datas,fieldName_category,fieldID_to_count,percentag
   let nb_occurences = countOccurrences(temp,list_category)
 
   let res = result_category_part(list_category,nb_occurences)
-  log(res, false,true)
+  log(res, false)
   
   if(percentage_mode) nb_occurences = percentage_of_total(nb_occurences,2)
   res = result_category_part(list_category,nb_occurences)
-  log(res, false,true)
+  log(res, false)
   
   
   if(optional_categoryValue){
@@ -152,9 +152,9 @@ function count_category_part(datas,fieldName_category,fieldID_to_count,percentag
     if(indexOfValue >= 0){
 
       list_category = [list_category[indexOfValue]]
-      log(list_category,false,true)
+      log(list_category,false)
       nb_occurences = [nb_occurences[indexOfValue]]
-      log(nb_occurences,false,true)
+      log(nb_occurences,false)
 
     }else{
       list_category = [optional_categoryValue]
@@ -163,7 +163,7 @@ function count_category_part(datas,fieldName_category,fieldID_to_count,percentag
 
     //update result
     res = result_category_part(list_category,nb_occurences)
-    log(res,false,true)
+    log(res,false)
   }
   return  res
 }
@@ -303,7 +303,7 @@ function creer_dataviz(){
 	//viz3 : 
 
   //add tooltips everywhere (todo)
-  
+
 }
 
 
