@@ -302,11 +302,8 @@ function creer_dataviz(){
 
 	//viz3 : 
 
-  //add tooltips everywhere
-  $( document ).tooltip({
-    tooltipClass: "viz-tooltip"
-  });
-
+  //add tooltips everywhere (todo)
+  
 }
 
 
