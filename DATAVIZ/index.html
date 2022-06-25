@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	  <meta charset="UTF-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <meta name="twitter:card" content="summary_large_image"/>
+	  <meta name="twitter:image:src" content="">
+	  <meta property="og:image" content="">
+	  <meta name="twitter:title" content="Jady Nekena | Data Analyst">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	  <link rel="shortcut icon" href="/assets/images/logo-128x125.png" type="image/x-icon">
+	  <meta name="description" content="Bienvenue sur les statistiques du site !">
+	<title>DATAVIZ jadynekena.com</title>
+
+		
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+	<script src="./utile.js"></script>
+
+
+
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+	<div class="grid-container conteneurDashboard">
+		<div class="viz" id="viz1">
+			<div  class="labels-container">
+				<div class="viz-label">
+					<div class="viz-title">IP uniques</div>
+					<div class="viz-text"></div>
+					<div class="viz-tooltip"></div>
+				</div>
+				<div class="viz-label">
+					<div class="viz-title">Visites uniques</div>
+					<div class="viz-text"></div>
+					<div class="viz-tooltip"></div>
+				</div>
+				<div class="viz-label">
+					<div class="viz-title">Clics uniques</div>
+					<div class="viz-text"></div>
+					<div class="viz-tooltip"></div>
+				</div>
+				<div class="viz-label">
+					<div class="viz-title">Clics par visite (moyenne)</div>
+					<div class="viz-text"></div>
+					<div class="viz-tooltip"></div>
+				</div>
+			</div>
+
+
+			<div class="chart">
+				<div class="viz-title">Evolution nombre de visites</div>					
+				<div class="viz-tooltip"></div>
+				<div class="chart-element"></div>
+			</div>
+
+		</div>
+
+
+
+		<div  class="viz" id="viz2">
+			<div class="viz-label">
+				<div class="viz-title">Part des appareils mobiles</div>
+				<div class="viz-tooltip"></div>
+			</div>
+			<div class="viz-gauge"></div>
+
+
+
+			<div class="chart">
+				<div class="viz-title">Affluences par horaire</div>					
+				<div class="viz-tooltip"></div>
+				<div class="chart-element affluence"></div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript">
+
+
+
+
+
+
+
+	</script>
+
+</body>
+</html>

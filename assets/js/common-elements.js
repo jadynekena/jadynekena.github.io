@@ -2,6 +2,7 @@ const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
 
+
 var sep = '\t'
 var final_datas = []
 
