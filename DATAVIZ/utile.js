@@ -37,7 +37,7 @@ const tips = {
 
           `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
           <br/>
-          C'est pourquoi il est important qu'un site web soit <strong>responsive</strong>, c'est-à-dire : qu'il s'adpate à la résolution de l'écran de l'utilisateur.`,
+          C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
           
           `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.`,
 
@@ -445,7 +445,8 @@ function tooltipFormatter(params, src_datas){
 
 
     detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_'+type_evolution,'date_'+type_evolution),field_to_count) 
-    log('detail = '+detail)
+    log('detail = ')
+    log(detail)
     
     detail = detail.pop() //get last element (most recent)
     //display DERNIER:
@@ -494,16 +495,16 @@ function get_type_evolution(){
 
 function evolution_field_to_count(type_evolution){
   if(!type_evolution) type_evolution = get_type_evolution()
-  let prefix_to_count = type_evolution === "visite" ? "une_" : 
+  let prefix_to_count = type_evolution === "adresse_ip" ? "" : 
+                type_evolution === "visite" ? "une_" : 
                 type_evolution === "clic" ? "id_" : 
                 ''
   let field_to_count = prefix_to_count + type_evolution
   return field_to_count
 }
 
-function refresh_viz1(){
-  let tip = ''
-  let viz1 = $("#viz1")
+function refresh_viz1_labels(){
+
   let label_selector = '.viz-label > .viz-text'
 
   // nb adresses IP, visites, clics, nb moyen de clics par visites 
@@ -512,9 +513,9 @@ function refresh_viz1(){
   nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1'][2])
   ratio = (nb_clics/nb_visites)
   refresh_content(label_selector,ratio.toFixed(2),3,tips['viz1'][3])
+}
 
-
-  //refreshEchart(typeChart, parentSelector, parentSelectorIndex, JsonData, title, xFieldName, xFieldOrderBy, xFieldType, seriesFieldNameToCount, with_cumulate, with_percentage_only)
+function refresh_viz1_part_mobiles(){
 
   //pourcentage de mobiles
   part_mobile = count_category_part(final_datas,'type_appareil','une_visite',true,'mobile')
@@ -523,15 +524,22 @@ function refresh_viz1(){
   tip = tips['viz1'][4]
   refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
+}
+
+function refresh_viz1_evolutions(){
 
   //evolution nb visites | clics
   let type_evolution = $("#type_evolution").val()
   tip = tips['viz1'][5].replaceAll('#type_evolution',type_evolution)
   field_to_count = evolution_field_to_count(type_evolution)
 
-  log(field_to_count,false,true)
+  log(field_to_count)
   refreshEchart(tip,'line','.chart-element',0,final_datas,'','date_heure_'+type_evolution,'date_'+type_evolution,'category',field_to_count,false,false)
   
+
+}
+
+function refresh_viz1_affluences(){
 
   //affluences
   tip = tips['viz1'][6]
@@ -540,7 +548,15 @@ function refresh_viz1(){
   refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true)
   
 
+}
 
+function refresh_viz1(){
+  let tip = ''
+
+  refresh_viz1_labels()
+  refresh_viz1_part_mobiles()
+  refresh_viz1_evolutions()
+  refresh_viz1_affluences()
 
 }
 

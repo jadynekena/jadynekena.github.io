@@ -24,7 +24,7 @@
 	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-	<div class="themeViz" hidden></div>
+	<div class="themeViz"></div>
 	<span class="current_tooltip"></span>
 
 	<div class="grid-container conteneurDashboard">
@@ -51,7 +51,8 @@
 
 			<div class="chart">
 				<div class="viz-title"><span>Evolution nombre de 
-					<select onchange="refresh_viz1()" id="type_evolution">
+					<select onchange="refresh_viz1_evolutions()" id="type_evolution">
+					  <option value="adresse_ip">IP</option>
 					  <option value="visite">visites</option>
 					  <option value="clic">clics</option>
 					</select></span>
@@ -74,7 +75,7 @@
 
 			<div class="chart">
 				<div class="viz-title"><span>Affluences par
-					<select onchange="refresh_viz1()" id="type_affluence">
+					<select onchange="refresh_viz1_affluences()" id="type_affluence">
 					  <option value="h">heure</option>
 					  <option value="d">jour</option>
 					</select></span>
