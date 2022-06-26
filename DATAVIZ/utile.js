@@ -305,7 +305,7 @@ function two_digits(val){
 }
 
 function set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorIndex,tip){
-  log(typeChart,false,true)
+  log(typeChart)
   
   let title_node = $($(parentSelector)[parentSelectorIndex]).prev()[0].firstElementChild
   log(title_node)
@@ -406,6 +406,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
     },
     confine: 'true',
     backgroundColor:   $('.current_tooltip').css('background-color'),
+    extraCssText:'overflow-wrap: anywhere;max-width:' + $('.current_tooltip').css('max-width'),
   }
 
   //common keys
@@ -495,7 +496,9 @@ function display_if_date(value){
 
 function display(infos){
   let res = ""
+  const MAX_CHAR = 15
   $.each(infos, function( k, value  ) {
+    if(value && value.length > MAX_CHAR) value = value.slice(0, MAX_CHAR) + '...'
     res += '<strong>' + k + '</strong>: ' + value  + '<br/>\n' 
 
     if(isDate(value)) res += '<strong>' + k + ' (heure LOCALE)</strong>: ' + display_if_date(value)  + '<br/>\n' 

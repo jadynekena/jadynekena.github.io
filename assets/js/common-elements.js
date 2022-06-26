@@ -283,9 +283,9 @@ function rajouter_apijey_ajax(url,objet_envoi){
 
 
 	objet_envoi.headers = {'apikey': apikey().replaceAll("apikey=","")}
-
-	return objet_envoi;
 	console.log({objet_envoi})
+	
+	return objet_envoi;
 }
 
 
