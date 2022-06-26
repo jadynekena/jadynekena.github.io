@@ -54,18 +54,18 @@ const tips = {
     
 
 function racine_data(){
-	return 'https://kxdokvtvscvjuwzgmvei.supabase.co'
+  return 'https://kxdokvtvscvjuwzgmvei.supabase.co'
 }
 
 
 
 function apikey(){
-	return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZG9rdnR2c2N2anV3emdtdmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU2MTk3MTQsImV4cCI6MTk3MTE5NTcxNH0.ViTcu3L79EkuvGvyDiSqwdpgJ0MQFbg8nL1vO0tTcDk'
+  return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZG9rdnR2c2N2anV3emdtdmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU2MTk3MTQsImV4cCI6MTk3MTE5NTcxNH0.ViTcu3L79EkuvGvyDiSqwdpgJ0MQFbg8nL1vO0tTcDk'
 }
 
 
 async function get_donnees_site(){
-	await select_all('tout',creer_dataviz)
+  await select_all('tout',creer_dataviz)
 }
 
 function main(){
@@ -89,7 +89,7 @@ function log(content,json_mode,forcing){
   if (DEBUGGING_MODE || forcing) return json_mode ? console.log({[content]:content}) : console.log(content)
 }
 
-
+//TOOLTIP FOR LABELS
 function refresh_content(selector,content,index,tooltipText){
   log((selector + ',' + content +',' + index).split(','))
   $($(selector)[index]).text(content)
@@ -97,7 +97,7 @@ function refresh_content(selector,content,index,tooltipText){
 
   //on hover : set current tooltip on TEXT and its TITLE
   show_tip_on_hover($(selector)[index],tooltipText)
-  show_tip_on_hover($($(selector)[index]).prev()[0].firstChild,tooltipText)
+  show_tip_on_hover($($(selector)[index]).prev()[0].firstElementChild,tooltipText)
 
   return $(selector)[index]
 
@@ -295,13 +295,19 @@ function two_digits(val){
   return ("0" + val.toString() ).slice(-2);
 }
 
+function set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorIndex,tip){
+  log(typeChart,false,true)
+  
+  let title_node = $($(parentSelector)[parentSelectorIndex]).prev()[0].firstElementChild
+  log(title_node)
+  show_tip_on_hover(title_node,tip)
+}
+
 
 function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only) {
   log('\n\n\n\n\n')
 
-  let title_node = $($(parentSelector)[parentSelectorIndex]).prev()
-  log(title_node)
-  show_tip_on_hover(title_node,tip)
+  set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorIndex,tip)
 
   let myChart = echarts.init($(parentSelector)[parentSelectorIndex], null);
   let displayed_datas = []
@@ -571,21 +577,21 @@ function append_colors(){
 
 
 function creer_dataviz(){
-	log(final_datas)
+  log(final_datas)
 
 
   append_colors()
 
   
-	//viz1
+  //viz1
   refresh_viz1()
 
 
-	//viz2 : 
+  //viz2 : 
 
 
 
-	//viz3 : 
+  //viz3 : 
 
   //append tooltips everywhere the mouse goes
   window.onmousemove = function (e) {
@@ -600,10 +606,10 @@ function creer_dataviz(){
 
 
 async function get_canaux(){
-	const {data, error} = await supabase.from('canaux').select('*')
-	log({data})
+  const {data, error} = await supabase.from('canaux').select('*')
+  log({data})
 
-	return data
+  return data
 }
 
 
@@ -649,7 +655,7 @@ async function select_all(name_table,function_callback,depth,from,into){
   //very first query with only 1 element
   }else{
 
-  	final_datas = []
+    final_datas = []
 
     depth = 0 //no depth at the beginning
 
@@ -700,7 +706,7 @@ async function check_if_datas_complete_or_recursive_call(name_table,count,data,d
     return await select_all(name_table,function_callback,depth,from,into,function_callback)
   
   }else{
-  	return []
+    return []
   }
 }
 
@@ -737,9 +743,9 @@ function post_resultat_asynchrone(url,data_json){
 function rajouter_apijey_ajax(url,objet_envoi){
 
 
-	objet_envoi.headers = {'apikey': apikey().replaceAll("apikey=","")}
+  objet_envoi.headers = {'apikey': apikey().replaceAll("apikey=","")}
 
-	return objet_envoi;
+  return objet_envoi;
 }
 
 function sort_by(array,field_name,invert){
