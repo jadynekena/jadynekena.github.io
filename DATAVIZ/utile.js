@@ -273,28 +273,23 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     temp = sort_by(temp,xFieldOrderBy) // order by xFieldOrderBy
     log(temp)
 
-    src_datas = {
-      customName: (with_percentage_only ? "Part" : "Nombre") + " de " + seriesFieldNameToCount.replaceAll('id_','').replaceAll('une_','').replaceAll('un_','') + 's',
-      fieldName_to_count: seriesFieldNameToCount,
-      xFieldOrderBy: xFieldOrderBy,
-      with_percentage_only: with_percentage_only
-    }
-    log(src_datas)
 
-    //date visite
-    /*if(xFieldName.includes('date')){
-
-      first = new Date('2022-06-19 13:13:15.018834+00')
-      last = new Date('2022-06-26 00:11:22.786845+00')
-      xDatas =   range_date(first,last) 
-    
-    }else{*/
-      xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
-    //}
+    xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
     log(xDatas)
 
     yDatas = xDatas.map(xElementValue => count_elements(temp, seriesFieldNameToCount,true,true,xFieldName,xElementValue)) // for each X element, count seriesFieldNameToCount from temp
     log(yDatas)
+
+
+    src_datas = {
+      customName: (with_percentage_only ? "Part" : "Nombre") + " de " + seriesFieldNameToCount.replaceAll('id_','').replaceAll('une_','').replaceAll('un_','') + 's',
+      fieldName_to_count: seriesFieldNameToCount,
+      xFieldOrderBy: xFieldOrderBy,
+      with_percentage_only: with_percentage_only,
+      xFieldName: xFieldName,
+      xDatas: xDatas
+    }
+    log(src_datas)
 
 
     //show WITH accumulate
@@ -348,7 +343,8 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     trigger: 'item',
     formatter: function(params){
       return tooltipFormatter(params,src_datas)
-    } 
+    },
+    confine: 'true',
   }
 
   //common keys
@@ -372,35 +368,72 @@ function tooltipFormatter(params, src_datas){
 
   log('\n\n\n\n',false,true)
   log(params)
-  log(src_datas,false,true)
+  log(src_datas)
 
   let title = src_datas['customName'] || '{customName}'
   let current_value = params.value
   let current_data = []
 
+  //GAUGE
   if(params.seriesType === 'gauge'){
     current_value += ' %'
+    current_data = {[title]: current_value}
+    current_data = display(current_data)
+
+  //BARS, LINE, SCATTER
   }else {
+
     if(src_datas['with_percentage_only']) current_value += ' %'
     title += ' ' + params.name
+
+    current_data = {[title]: current_value}
+    current_data = display(current_data)
+    log(current_data)
+
+    let additional_infos = {}
+    
+    let all = src_datas['xDatas'].map(a_categ => sort_by(final_datas.filter(e => e[src_datas['xFieldName']] === a_categ)  , src_datas['xFieldOrderBy'])  )    
+    let detail = all[params.dataIndex]
+
+    detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_visite','date_visite'),'une_visite') 
+    log(detail,false,true)
+    
+    detail = detail.pop() //get last element (most recent)
+    //display DERNIER:
+    Object.keys(detail).forEach(k => renameKey ( detail, k, 'Dernier(e) ' + k ))
+
+    log(detail)
+    current_data += display(detail)
+
+
+
   }
 
-  current_data = {[title]: current_value}
-  current_data = display(current_data)
   log(current_data,false,true)
-
-  let additional_infos = {}
-  final_datas.forEach(function(e){
-    return e
-  })
-
   return current_data
+}
+
+
+
+function renameKey ( obj, oldKey, newKey ) {
+  obj[newKey] = obj[oldKey];
+  delete obj[oldKey];
+}
+
+function isDate(val){
+  return (Date.parse(val) || -1) > 0
+}
+
+function display_if_date(value){
+  return isDate(value) ? (new Date(value)).toLocaleString() :  value
 }
 
 function display(infos){
   let res = ""
   $.each(infos, function( k, value  ) {
     res += '<strong>' + k + '</strong>: ' + value  + '<br/>\n' 
+
+    if(isDate(value)) res += '<strong>' + k + ' (heure LOCALE)</strong>: ' + display_if_date(value)  + '<br/>\n' 
   });
 
   return res
