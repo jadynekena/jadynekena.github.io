@@ -43,6 +43,7 @@ body {
 	grid-gap: var(--grid-layout-gap);
 
 	width: 100%;
+	margin-bottom: 5px;
 
 }
 
@@ -61,8 +62,7 @@ body {
 
 .chart {
 	margin-bottom: 30px;
-	height: 85%;
-	max-height: 520px;
+	height: 520px;
 }
 
 .chart-element {
