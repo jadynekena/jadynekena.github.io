@@ -501,14 +501,34 @@ function display_if_date(value){
   return isDate(value) ? (new Date(value)).toLocaleString() :  value
 }
 
+function slice_if_needed(value){
+
+  const MAX_CHAR = 20
+
+  let final_display = value
+  if(final_display && final_display.length > MAX_CHAR){
+    final_display = final_display.slice(0, MAX_CHAR) + '...'
+    log('WE SLICED ')
+  } else{
+    log('NO SLICE')
+  }
+  log(final_display)
+
+  return final_display
+}
+
 function display(infos){
   let res = ""
-  const MAX_CHAR = 15
   $.each(infos, function( k, value  ) {
-    if(value && value.length > MAX_CHAR) value = value.slice(0, MAX_CHAR) + '...'
-    res += '<strong>' + k + '</strong>: ' + value  + '<br/>\n' 
+    res += '<strong>' + k + '</strong>: ' + slice_if_needed(value)  + '<br/>\n' 
 
-    if(isDate(value)) res += '<strong>' + k + ' (heure LOCALE)</strong>: ' + display_if_date(value)  + '<br/>\n' 
+    let is_date = isDate(value)
+    log('\n\n\n\n\n')
+    log({[value]: is_date})
+
+
+    if(is_date) res += '<strong>' + k + ' (heure LOCALE)</strong>: ' + slice_if_needed(display_if_date(value))  + '<br/>\n' 
+
   });
 
   return res
