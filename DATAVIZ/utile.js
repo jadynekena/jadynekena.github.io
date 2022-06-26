@@ -111,8 +111,6 @@ function show_tip_on_hover(nodes,tooltipText){
       show_tip(false)
   })
 
-  $(nodes).click(function(){show_tip(true,tooltipText)})
-
 }
 
 function show_tip(yes,tooltipText){
