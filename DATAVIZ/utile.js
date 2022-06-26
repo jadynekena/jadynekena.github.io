@@ -41,7 +41,7 @@ const tips = {
           
           `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.`,
 
-          `La part des visites est <strong>selon l'heure UTC</strong>, c'est-à-dire <strong>2 heures de moins qu'en France</strong>
+          `La part des visites est <strong>selon l'heure UTC</strong>, c'est-à-dire <strong>2 heures de moins qu'en France.</strong>
           <br/>
           Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
           `

@@ -146,4 +146,5 @@ body.nightmode {
 	box-shadow: 0 0 10px #4a4a4a80;
 	max-width: 500px;
 	color: #646464;
+	overflow-wrap: break-word;
 }
