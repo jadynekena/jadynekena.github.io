@@ -346,9 +346,7 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       return tooltipFormatter(params,src_datas)
     },
     confine: 'true',
-    textStyle: {
-      fontSize: '12',
-    },
+    backgroundColor:   $('.chart-tooltip').css('background-color'),
   }
 
   //common keys
