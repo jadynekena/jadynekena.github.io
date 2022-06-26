@@ -8,7 +8,7 @@ async function subscribe_supabase(){
   return await supabase
     .from('*')
     .on('*', async function (payload){
-      log({payload})
+      log({payload},false,true)
       if(payload.table === 'visites' || payload.table === 'clics'){
         log('------🡺 update viz \n\n\n')
 
@@ -16,7 +16,14 @@ async function subscribe_supabase(){
 
         //insertion ---> on ajoute le dernier element de 'tout'
         if(payload.eventType === 'INSERT'){
-          last_tout = await supabase.from('last_tout')
+          
+          if(payload.new.id_clic){
+            last_tout = await supabase.from('tout').select('*').eq('id_clic',payload.new.id_clic)
+          }else if(payload.new.une_visite){
+            last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.une_visite)  
+          }
+          
+          
           last_tout = last_tout.data[0]
           log({last_tout})
 
