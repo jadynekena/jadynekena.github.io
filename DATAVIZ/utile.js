@@ -39,7 +39,7 @@ const tips = {
           <br/>
           C'est pourquoi il est important qu'un site web soit <strong>responsive</strong>, c'est-à-dire : qu'il s'adpate à la résolution de l'écran de l'utilisateur.`,
           
-          `Seules les dates-heures ayant reçues <strong>au moins 1 visite</strong> sont affichées.`,
+          `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.`,
 
           `La part des visites est <strong>selon l'heure UTC</strong>, c'est-à-dire <strong>2 heures de moins qu'en France</strong>
           <br/>
@@ -97,7 +97,7 @@ function refresh_content(selector,content,index,tooltipText){
 
   //on hover : set current tooltip on TEXT and its TITLE
   show_tip_on_hover($(selector)[index],tooltipText)
-  show_tip_on_hover($($(selector)[index]).prev(),tooltipText)
+  show_tip_on_hover($($(selector)[index]).prev()[0].firstChild,tooltipText)
 
   return $(selector)[index]
 
@@ -439,14 +439,17 @@ function tooltipFormatter(params, src_datas){
     let additional_infos = {}
     
     let all = src_datas['xDatas'].map(a_categ => sort_by(final_datas.filter(e => e[src_datas['xFieldName']] === a_categ)  , src_datas['xFieldOrderBy'])  )    
+    let type_evolution = get_type_evolution()
+    let field_to_count = evolution_field_to_count(type_evolution)
     let detail = all[params.dataIndex]
 
-    detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_visite','date_visite'),'une_visite') 
-    log(detail)
+
+    detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_'+type_evolution,'date_'+type_evolution),field_to_count) 
+    log('detail = '+detail)
     
     detail = detail.pop() //get last element (most recent)
     //display DERNIER:
-    Object.keys(detail).forEach(k => renameKey ( detail, k, 'Dernier(e) ' + k ))
+    if(detail) Object.keys(detail).forEach(k => renameKey ( detail, k, 'Dernier(e) ' + k ))
 
     log(detail)
     current_data += display(detail)
@@ -485,6 +488,19 @@ function display(infos){
   return res
 }
 
+function get_type_evolution(){
+  return $("#type_evolution").val()
+}
+
+function evolution_field_to_count(type_evolution){
+  if(!type_evolution) type_evolution = get_type_evolution()
+  let prefix_to_count = type_evolution === "visite" ? "une_" : 
+                type_evolution === "clic" ? "id_" : 
+                ''
+  let field_to_count = prefix_to_count + type_evolution
+  return field_to_count
+}
+
 function refresh_viz1(){
   let tip = ''
   let viz1 = $("#viz1")
@@ -508,9 +524,13 @@ function refresh_viz1(){
   refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
 
-  //évolution nb visites | 
-  tip = tips['viz1'][5]
-  refreshEchart(tip,'line','.chart-element',0,final_datas,'','date_heure_visite','date_visite','category','une_visite',false,false)
+  //evolution nb visites | clics
+  let type_evolution = $("#type_evolution").val()
+  tip = tips['viz1'][5].replaceAll('#type_evolution',type_evolution)
+  field_to_count = evolution_field_to_count(type_evolution)
+
+  log(field_to_count,false,true)
+  refreshEchart(tip,'line','.chart-element',0,final_datas,'','date_heure_'+type_evolution,'date_'+type_evolution,'category',field_to_count,false,false)
   
 
   //affluences

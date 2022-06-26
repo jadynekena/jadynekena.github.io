@@ -96,15 +96,19 @@ body {
   padding: 2px 0;
 }
 
+.viz-title > span {	
+  cursor: pointer;
+}
+
 .viz-text {
   font-size: calc(12px + 1.2vw);
   font-weight: bold;
   width: min-content;
+  cursor: pointer;
 }
 
-.viz-title:hover, .viz-text:hover {
+.viz-title > span:hover, .viz-text:hover {
   color: #769ab9;
-  cursor: pointer;
 }
 
 .vertical-center {

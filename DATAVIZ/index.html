@@ -31,26 +31,32 @@
 		<div class="viz" id="viz1">
 			<div  class="labels-container">
 				<div class="viz-label">
-					<div class="viz-title">IP uniques</div>
+					<div class="viz-title"><span>IP uniques</span></div>
 					<div class="viz-text"></div>
 				</div>
 				<div class="viz-label">
-					<div class="viz-title">Visites uniques</div>
+					<div class="viz-title"><span>Visites uniques</span></div>
 					<div class="viz-text"></div>
 				</div>
 				<div class="viz-label">
-					<div class="viz-title">Clics</div>
+					<div class="viz-title"><span>Clics</span></div>
 					<div class="viz-text"></div>
 				</div>
 				<div class="viz-label">
-					<div class="viz-title">Clics par visite (moyenne)</div>
+					<div class="viz-title"><span>Clics par visite (moyenne)</span></div>
 					<div class="viz-text"></div>
 				</div>
 			</div>
 
 
 			<div class="chart">
-				<div class="viz-title">Evolution nombre de visites</div>		
+				<div class="viz-title"><span>Evolution nombre de 
+					<select onchange="refresh_viz1()" id="type_evolution">
+					  <option value="visite">visites</option>
+					  <option value="clic">clics</option>
+					</select></span>
+
+				</div>		
 				<div class="chart-element"></div>
 			</div>
 
@@ -60,18 +66,18 @@
 
 		<div  class="viz" id="viz2">
 			<div class="viz-label">
-				<div class="viz-title">Part des appareils mobiles</div>
+				<div class="viz-title"><span>Part des appareils mobiles</span></div>
 			</div>
 			<div class="viz-gauge"></div>
 
 
 
 			<div class="chart">
-				<div class="viz-title">Affluences par
+				<div class="viz-title"><span>Affluences par
 					<select onchange="refresh_viz1()" id="type_affluence">
-					  <option value="h">Heure</option>
-					  <option value="d">Jour</option>
-					</select>
+					  <option value="h">heure</option>
+					  <option value="d">jour</option>
+					</select></span>
 				</div>			
 				<div class="chart-element affluence"></div>
 			</div>
