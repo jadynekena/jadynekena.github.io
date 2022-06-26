@@ -300,7 +300,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   log('\n\n\n\n\n')
 
   let title_node = $($(parentSelector)[parentSelectorIndex]).prev()
-  log(title_node,false,true)
+  log(title_node)
   show_tip_on_hover(title_node,tip)
 
   let myChart = echarts.init($(parentSelector)[parentSelectorIndex], null);
