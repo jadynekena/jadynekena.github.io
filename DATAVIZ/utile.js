@@ -4,26 +4,31 @@ const { createClient } = supabase
 supabase = createClient(racine_data(),  apikey())
 
 
-async function subs(){
 
-  const sub_click = await supabase
-      .from('clics')
-      .on('INSERT', payload => {
-        log(payload,true)
+async function subscribe_supabase(){
+  return await supabase
+    .from('*')
+    .on('*', async function (payload){
+      console.log({payload})
+      if(payload.table === 'visites' || payload.table === 'clics'){
+        console.log('-------> update viz \n\n\n')
 
-      })
-      .subscribe()
+        get_donnees_site()
 
-  const sub_visites = await supabase
-      .from('visites')
-      .on('INSERT', payload => {
-        log(payload,true)
+      }
 
-      })
-      .subscribe()
 
-  return [sub_click, sub_visites]
+
+  }).subscribe()
+
 }
+
+
+    
+
+
+
+    
 
 function racine_data(){
 	return 'https://kxdokvtvscvjuwzgmvei.supabase.co'
@@ -40,12 +45,21 @@ async function get_donnees_site(){
 	await select_all('tout',creer_dataviz)
 }
 
-get_donnees_site()
-$(document).on('click',function(){
-  DEBUGGING_MODE = false
-  refresh_viz1()
-  DEBUGGING_MODE = true
-})
+function main(){
+
+  subscribe_supabase()
+
+  $(document).on('click',function(){
+    DEBUGGING_MODE = false
+    refresh_viz1()
+    DEBUGGING_MODE = true
+  })
+
+  get_donnees_site()
+
+}
+
+main()
 
 function log(content,json_mode,forcing){
   if (DEBUGGING_MODE || forcing) return json_mode ? console.log({[content]:content}) : console.log(content)
@@ -376,8 +390,10 @@ function append_colors(){
 function creer_dataviz(){
 	log(final_datas)
 
+
   append_colors()
 
+  
 	//viz1
   refresh_viz1()
 
