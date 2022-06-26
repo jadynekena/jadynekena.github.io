@@ -50,9 +50,10 @@ function main(){
   subscribe_supabase()
 
   $(document).on('click',function(){
+    initial_value = DEBUGGING_MODE
     DEBUGGING_MODE = false
     refresh_viz1()
-    DEBUGGING_MODE = true
+    DEBUGGING_MODE = initial_value
   })
 
   get_donnees_site()
@@ -159,8 +160,8 @@ function seriesOf(typeChart,datas){
 
   }
 
-  log('series: ',false)
-  log(res,false)
+  log('series: ')
+  log(res)
   return res
 }
 
@@ -366,7 +367,7 @@ function tooltipFormatter(params, src_datas){
   log(params.value,false,true) //Y axis
   */
 
-  log('\n\n\n\n',false,true)
+  log('\n\n\n\n')
   log(params)
   log(src_datas)
 
@@ -396,7 +397,7 @@ function tooltipFormatter(params, src_datas){
     let detail = all[params.dataIndex]
 
     detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_visite','date_visite'),'une_visite') 
-    log(detail,false,true)
+    log(detail)
     
     detail = detail.pop() //get last element (most recent)
     //display DERNIER:
@@ -409,7 +410,7 @@ function tooltipFormatter(params, src_datas){
 
   }
 
-  log(current_data,false,true)
+  log(current_data)
   return current_data
 }
 
