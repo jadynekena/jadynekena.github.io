@@ -346,6 +346,9 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       return tooltipFormatter(params,src_datas)
     },
     confine: 'true',
+    textStyle: {
+      fontSize: '12',
+    },
   }
 
   //common keys
