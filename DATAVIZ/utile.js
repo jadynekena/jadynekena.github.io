@@ -366,6 +366,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
     displayed_datas = JsonData // {min, max, value}
   }
 
+  src_datas['typeChart'] = typeChart
   log(displayed_datas)
   let displayed_series = seriesOf(typeChart,displayed_datas)
 
@@ -400,7 +401,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
 
   //todo: formatter: function(params){return TOUTES_LES_DONNEES_UNIQUES_JsonData par rapport à une visite}
   option['tooltip'] = {
-    trigger: 'item',
+    trigger: typeChart === 'gauge' ? 'item': 'axis' ,
     formatter: function(params){
       return tooltipFormatter(params,src_datas)
     },
@@ -429,7 +430,13 @@ function tooltipFormatter(params, src_datas){
   */
 
   log('\n\n\n\n')
-  log(params)
+  log({params})
+  log(src_datas['typeChart'] )
+  if(src_datas['typeChart'] !== 'gauge'){
+    log("todo: prendre le premier element")
+    params=params[0]
+  }
+  log({params})
   log(src_datas)
 
   let title = src_datas['customName'] || '{customName}'
