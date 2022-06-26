@@ -1,5 +1,6 @@
 * {
 	font-family: arial;
+	user-select: none;
 }
 
 body {
@@ -98,6 +99,12 @@ body {
 .viz-text {
   font-size: calc(12px + 1.2vw);
   font-weight: bold;
+  width: min-content;
+}
+
+.viz-title:hover, .viz-text:hover {
+  color: #769ab9;
+  cursor: pointer;
 }
 
 .vertical-center {
@@ -121,6 +128,17 @@ body.nightmode {
 	background: #182c33;
 }
 
-.chart-tooltip {
-	background-color: #ffffffc4;
+.current_tooltip{
+	display: none;
+	z-index: 5;
+	position: fixed;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	padding: 20px;
+	bottom: 0;
+	background-color: #ffffffe8;
+	height: fit-content;
+	box-shadow: 0 0 10px #4a4a4a80;
+	max-width: 500px;
 }

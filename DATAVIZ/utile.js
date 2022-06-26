@@ -11,7 +11,7 @@ async function subscribe_supabase(){
     .on('*', async function (payload){
       console.log({payload})
       if(payload.table === 'visites' || payload.table === 'clics'){
-        console.log('-------> update viz \n\n\n')
+        console.log('------🡺 update viz \n\n\n')
 
         get_donnees_site()
 
@@ -23,7 +23,30 @@ async function subscribe_supabase(){
 
 }
 
+const tips = {
+  'viz1':[`L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
+            <strong>1 IP = 1 utilisateur unique.</strong>`,
 
+          `Une visite représente une <strong>adresse IP</strong> qui se connecte dans une <strong>durée totale de 30 minutes</strong>.
+            <br/> <br/>
+            <u><strong>Exemple</strong></u>: une même adresse IP clique sur un élément du site, puis clique sur un autre <strong>31 minutes plus tard</strong> 🡺 cela est considéré comme <strong>2 visites</strong>, car le visiteur a probablement quitté le site, puis est revenu.`,
+          
+          `Comme son nom l'indique, le nombre de clics recense <strong>toutes les fois où le visiteur clique sur un élément</strong> (texte, bouton, lien, etc).`,
+          
+          `Ce nombre indique le <strong>nombre moyen de fois qu'un visiteur va cliquer</strong> sur un élément pendant sa visite.`,
+
+          `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
+          <br/>
+          C'est pourquoi il est important qu'un site web soit <strong>responsive</strong>, c'est-à-dire : qu'il s'adpate à la résolution de l'écran de l'utilisateur.`,
+          
+          `Seules les dates-heures ayant reçues <strong>au moins 1 visite</strong> sont affichées.`,
+
+          `La part des visites est <strong>selon l'heure UTC</strong>, c'est-à-dire <strong>2 heures de moins qu'en France</strong>
+          <br/>
+          Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
+          `
+          ]
+}
     
 
 
@@ -67,9 +90,29 @@ function log(content,json_mode,forcing){
 }
 
 
-function refresh_content(selector,content,index){
+function refresh_content(selector,content,index,tooltipText){
   log((selector + ',' + content +',' + index).split(','))
-  return $($(selector)[index]).text(content)
+  $($(selector)[index]).text(content)
+  //$($(selector)[index]).attr('title',tooltipText)
+
+  //on hover : set current tooltip on TEXT and its TITLE
+  show_tip_on_hover($(selector)[index],tooltipText)
+  show_tip_on_hover($($(selector)[index]).prev(),tooltipText)
+
+  return $(selector)[index]
+
+}
+
+function show_tip_on_hover(nodes,tooltipText){
+  $(nodes).hover(
+    function(){
+    $(".current_tooltip").html(tooltipText)  
+    $(".current_tooltip").show()
+  },function(){
+    $(".current_tooltip").html('')  
+    $(".current_tooltip").hide()
+  })
+
 }
 
 function count_all(final_datas,fieldName_to_count){
@@ -82,14 +125,13 @@ function select_from_where(final_datas,to_select,where,unique){
   return alasql(sql  ,[final_datas])
 }
 
-function refresh_labelcount_viz(label_selector,fields_to_display,index){
+function refresh_labelcount_viz(label_selector,fields_to_display,index,tooltipText){
 
   /*
   nb = count_elements(final_datas,fields_to_display,true,true)
   */
   nb = count_all(final_datas,fields_to_display)
-
-  refresh_content(label_selector,nb,index)
+  refresh_content(label_selector,nb,index,tooltipText)
   return Number(nb)
 }
 
@@ -254,10 +296,12 @@ function two_digits(val){
 }
 
 
-function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only) {
+function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only) {
   log('\n\n\n\n\n')
 
-
+  let title_node = $($(parentSelector)[parentSelectorIndex]).prev()
+  log(title_node,false,true)
+  show_tip_on_hover(title_node,tip)
 
   let myChart = echarts.init($(parentSelector)[parentSelectorIndex], null);
   let displayed_datas = []
@@ -346,7 +390,7 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       return tooltipFormatter(params,src_datas)
     },
     confine: 'true',
-    backgroundColor:   $('.chart-tooltip').css('background-color'),
+    backgroundColor:   $('.current_tooltip').css('background-color'),
   }
 
   //common keys
@@ -412,7 +456,7 @@ function tooltipFormatter(params, src_datas){
   }
 
   log(current_data)
-  return current_data
+  return '<div class="test">' + current_data +'</div>'
 }
 
 
@@ -442,16 +486,16 @@ function display(infos){
 }
 
 function refresh_viz1(){
-
+  let tip = ''
   let viz1 = $("#viz1")
   let label_selector = '.viz-label > .viz-text'
 
   // nb adresses IP, visites, clics, nb moyen de clics par visites 
-  nb_ip = refresh_labelcount_viz(label_selector,'adresse_ip',0)
-  nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1)
-  nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2)
+  nb_ip = refresh_labelcount_viz(label_selector,'adresse_ip',0,tips['viz1'][0])
+  nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1,tips['viz1'][1])
+  nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1'][2])
   ratio = (nb_clics/nb_visites)
-  refresh_content(label_selector,ratio.toFixed(2),3)
+  refresh_content(label_selector,ratio.toFixed(2),3,tips['viz1'][3])
 
 
   //refreshEchart(typeChart, parentSelector, parentSelectorIndex, JsonData, title, xFieldName, xFieldOrderBy, xFieldType, seriesFieldNameToCount, with_cumulate, with_percentage_only)
@@ -460,14 +504,20 @@ function refresh_viz1(){
   part_mobile = count_category_part(final_datas,'type_appareil','une_visite',true,'mobile')
   part_mobile = part_mobile['nb_occurences'][0]
   gauge_datas = {min: 0, max:100, value:part_mobile, 'customName':'Part des mobiles parmi les visites' }
-  refreshEchart('gauge','.viz-gauge',0,gauge_datas)
+  tip = tips['viz1'][4]
+  refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
 
-  //évolution nb visites | affluences
-  refreshEchart('line','.chart-element',0,final_datas,'','date_heure_visite','date_visite','category','une_visite',false,false)
+  //évolution nb visites | 
+  tip = tips['viz1'][5]
+  refreshEchart(tip,'line','.chart-element',0,final_datas,'','date_heure_visite','date_visite','category','une_visite',false,false)
+  
+
+  //affluences
+  tip = tips['viz1'][6]
   let categ = $('#type_affluence').val() === "h" ? "heure_visite" : "jour_visite"
   let categ_str = $('#type_affluence').val() === "h" ? "heure_visite_str" : "jour_visite_str"
-  refreshEchart('bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true)
+  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true)
   
 
 
@@ -501,7 +551,13 @@ function creer_dataviz(){
 
 	//viz3 : 
 
-  //append tooltips everywhere (todo)
+  //append tooltips everywhere the mouse goes
+  window.onmousemove = function (e) {
+    var x = e.clientX,
+        y = e.clientY;
+    $(".current_tooltip")[0].style.top = (y + 20) + 'px';
+    $(".current_tooltip")[0].style.left = (x + 20) + 'px';
+  };
 
 
 }
@@ -542,7 +598,7 @@ async function select_all(name_table,function_callback,depth,from,into){
         .range(from,into)
 
 
-    //if data is not big enough -> recursive
+    //if data is not big enough 🡺 recursive
     //console.warn({data})
     add(data)
     more_datas = await check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback)
