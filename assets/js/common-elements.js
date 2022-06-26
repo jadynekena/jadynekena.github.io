@@ -1178,6 +1178,40 @@ async function post_when_clicked(e){
 }
 
 
+async function delete_my_datas(){
+	const ref = { id_visite: get_item('id_visite') }
+
+	if(ref['id_visite']){
+		
+		let yes = confirm('⚠️❌Supprimer vos données ?\nCette action est irréversible.\n\nID: ' + ref['id_visite'])
+
+		if(yes) {
+
+			res1 = await supabase
+				  .from('visites')
+				  .delete()
+				  .match(ref)
+
+			res2 = await supabase
+				  .from('clics')
+				  .delete()
+				  .match(ref)
+
+			del_item('id_visite')
+			del_item('adresse_ip')
+			del_item('date_premiere_visite')
+
+			return [res1,res2]
+		}
+
+	}else {
+		return alert('✔️ Vos données sont déjà supprimées.')
+	}
+
+	return ref
+
+}
+
 
 
 main()
