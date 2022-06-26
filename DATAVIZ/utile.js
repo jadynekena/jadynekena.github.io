@@ -83,8 +83,10 @@ function seriesOf(typeChart,src_datas,datas){
   let res = []
   let colorValue = $('.themeViz').css('color')
 
-  log(src_datas,false)
+  log('\n\n\n\n'+typeChart,false)
 
+
+  //if GAUGE
   if(typeChart === 'gauge'){//datas = {'min':min,'max':max,'value':value,'src_datas':src_datas}
     res = [
       {
@@ -127,9 +129,11 @@ function seriesOf(typeChart,src_datas,datas){
             return value.toFixed(1) + ' %';
           },
         },
-        data: [{value: datas['value']}]
+        data: [{value: datas['value'], 'src_datas': src_datas}],
+        
     }]
 
+  //IF NOT GAUGE
   }else{
     res = datas.map(function(e){
       tmp = {}
@@ -139,10 +143,11 @@ function seriesOf(typeChart,src_datas,datas){
       return tmp
     })
 
-
   }
 
-  log(res,false,true)
+  log('series: ',false)
+  log(res,false)
+  log(src_datas,false)
   return res
 }
 
@@ -214,8 +219,8 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     temp = sort_by(temp,xFieldOrderBy) // order by xFieldOrderBy
     log(temp)
 
-    src_datas = select_from_where(JsonData,'*, "Nombre de '+seriesFieldNameToCount+'" as customName')
-    log(src_datas,false,true)
+    src_datas = {customName: "Nombre de " + seriesFieldNameToCount.replaceAll('id_','').replaceAll('une_','').replaceAll('un_','') + 's', fullDatas: JsonData}
+    log(src_datas)
 
     xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
     log(xDatas)
@@ -238,7 +243,7 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     displayed_datas = JsonData // {min, max, value}
   }
 
-
+  log(displayed_datas,false,true)
   let displayed_series = seriesOf(typeChart,src_datas,displayed_datas)
 
 
@@ -294,12 +299,37 @@ function tooltipFormatter(params){
   log(params.name,false,true) //X axis
   log(params.value,false,true) //Y axis
   */
-  log(params,false,true)
+  log(params)
   log('\n\n\n\n',false,true)
 
-  return `
-  <strong>`+"CUSTOM NAME HERE"+`: </strong>`+params.value+`<br/>
-  `
+  let title = ""
+  let current_value = params.value
+  let current_data = []
+
+  let additional_infos = {}
+
+  if(params.seriesType === 'gauge'){
+    title = params.data['src_datas']['customName'] || '{customName}'
+    current_value += ' %'
+    current_data = {[title]: current_value}
+  }else {
+    log(params,false,true)
+    title = "CUSTOM NAME HERE"
+    current_data = {[title]: current_value}
+  }
+
+
+  log(current_data,false,true)
+  return display(current_data)
+}
+
+function display(infos){
+  let res = ""
+  $.each(infos, function( k, value  ) {
+    res += '<strong>' + k + '</strong>: ' + value  + '<br/>\n' 
+  });
+
+  return res
 }
 
 function refresh_viz1(){
