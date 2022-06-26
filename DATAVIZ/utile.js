@@ -106,13 +106,24 @@ function refresh_content(selector,content,index,tooltipText){
 function show_tip_on_hover(nodes,tooltipText){
   $(nodes).hover(
     function(){
-    $(".current_tooltip").html(tooltipText)  
-    $(".current_tooltip").show()
-  },function(){
-    $(".current_tooltip").html('')  
-    $(".current_tooltip").hide()
+      show_tip(true,tooltipText)
+  },function(){    
+      show_tip(false)
   })
 
+  $(nodes).click(function(){show_tip(true,tooltipText)})
+
+}
+
+function show_tip(yes,tooltipText){
+
+    if(yes){
+    $(".current_tooltip").html(tooltipText)  
+      $(".current_tooltip").show()
+    } else{
+    $(".current_tooltip").html('')  
+      $(".current_tooltip").hide()
+    }
 }
 
 function count_all(final_datas,fieldName_to_count){
