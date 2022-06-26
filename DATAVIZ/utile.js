@@ -93,7 +93,7 @@ function refresh_labelcount_viz(label_selector,fields_to_display,index){
 }
 
 
-function seriesOf(typeChart,src_datas,datas){
+function seriesOf(typeChart,datas){
   let res = []
   let colorValue = $('.themeViz').css('color')
 
@@ -143,7 +143,7 @@ function seriesOf(typeChart,src_datas,datas){
             return value.toFixed(1) + ' %';
           },
         },
-        data: [{value: datas['value'], 'src_datas': src_datas}],
+        data: [{value: datas['value']}],
         
     }]
 
@@ -161,7 +161,6 @@ function seriesOf(typeChart,src_datas,datas){
 
   log('series: ',false)
   log(res,false)
-  log(src_datas,false)
   return res
 }
 
@@ -213,6 +212,47 @@ function count_category_part(datas,fieldName_category,fieldID_to_count,percentag
   return  res
 }
 
+function dateDiffInDays(date_min,date_max){
+  return Math.abs(Number((new Date(date_max-date_min)/1000/60/60/24).toFixed(0)))
+}
+
+function addDays(current_date,nb_days){
+  return new Date(current_date.setDate(current_date.getDate() + nb_days));
+}
+
+function range_date(date_min,date_max){
+  //count nb of days
+  nb_days = dateDiffInDays(date_min,date_max)
+
+  //get current hour
+  current_hour = (new Date).getHours()
+
+  res = []
+  current_date = date_min;
+
+  //for each day (except last): append 0 to 24
+  for(day_index = 0;day_index<nb_days;day_index++){
+    current_date = current_date.getFullYear() + '-' + two_digits(current_date.getMonth()) + '-' + two_digits(current_date.getDate())
+    
+    for (hour_index=0;hour_index<=23;hour_index++){
+      res.push([current_date + ' ' + (hour_index) + 'h'])  
+    }
+      
+    current_date = addDays(date_min,1)
+
+  }
+
+  //on last: from 0 to current hour
+
+  return res
+}
+
+
+function two_digits(val){
+  return ("0" + val.toString() ).slice(-2);
+}
+
+
 function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only) {
   log('\n\n\n\n\n')
 
@@ -233,10 +273,24 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     temp = sort_by(temp,xFieldOrderBy) // order by xFieldOrderBy
     log(temp)
 
-    src_datas = {customName: "Nombre de " + seriesFieldNameToCount.replaceAll('id_','').replaceAll('une_','').replaceAll('un_','') + 's', fullDatas: JsonData}
+    src_datas = {
+      customName: (with_percentage_only ? "Part" : "Nombre") + " de " + seriesFieldNameToCount.replaceAll('id_','').replaceAll('une_','').replaceAll('un_','') + 's',
+      fieldName_to_count: seriesFieldNameToCount,
+      xFieldOrderBy: xFieldOrderBy,
+      with_percentage_only: with_percentage_only
+    }
     log(src_datas)
 
-    xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
+    //date visite
+    /*if(xFieldName.includes('date')){
+
+      first = new Date('2022-06-19 13:13:15.018834+00')
+      last = new Date('2022-06-26 00:11:22.786845+00')
+      xDatas =   range_date(first,last) 
+    
+    }else{*/
+      xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
+    //}
     log(xDatas)
 
     yDatas = xDatas.map(xElementValue => count_elements(temp, seriesFieldNameToCount,true,true,xFieldName,xElementValue)) // for each X element, count seriesFieldNameToCount from temp
@@ -257,8 +311,8 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
     displayed_datas = JsonData // {min, max, value}
   }
 
-  log(displayed_datas,false,true)
-  let displayed_series = seriesOf(typeChart,src_datas,displayed_datas)
+  log(displayed_datas)
+  let displayed_series = seriesOf(typeChart,displayed_datas)
 
 
 
@@ -272,7 +326,7 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       },
       xAxis: {
         type: xFieldType,//'category',
-        data: xDatas
+        data: xDatas,
       },
       yAxis: {
         axisLabel: {
@@ -282,7 +336,7 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
       },
       
       grid: {
-        left: 30,
+        left: 50,
         bottom: 30
       }
     };
@@ -292,7 +346,9 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
   //todo: formatter: function(params){return TOUTES_LES_DONNEES_UNIQUES_JsonData par rapport à une visite}
   option['tooltip'] = {
     trigger: 'item',
-    formatter: tooltipFormatter
+    formatter: function(params){
+      return tooltipFormatter(params,src_datas)
+    } 
   }
 
   //common keys
@@ -308,33 +364,37 @@ function refreshEchart(typeChart,parentSelector,parentSelectorIndex,JsonData,tit
 }
 
 
-function tooltipFormatter(params){
+function tooltipFormatter(params, src_datas){
   /*
   log(params.name,false,true) //X axis
   log(params.value,false,true) //Y axis
   */
-  log(params)
-  log('\n\n\n\n',false,true)
 
-  let title = ""
+  log('\n\n\n\n',false,true)
+  log(params)
+  log(src_datas,false,true)
+
+  let title = src_datas['customName'] || '{customName}'
   let current_value = params.value
   let current_data = []
 
-  let additional_infos = {}
-
   if(params.seriesType === 'gauge'){
-    title = params.data['src_datas']['customName'] || '{customName}'
     current_value += ' %'
-    current_data = {[title]: current_value}
   }else {
-    log(params,false,true)
-    title = "CUSTOM NAME HERE"
-    current_data = {[title]: current_value}
+    if(src_datas['with_percentage_only']) current_value += ' %'
+    title += ' ' + params.name
   }
 
-
+  current_data = {[title]: current_value}
+  current_data = display(current_data)
   log(current_data,false,true)
-  return display(current_data)
+
+  let additional_infos = {}
+  final_datas.forEach(function(e){
+    return e
+  })
+
+  return current_data
 }
 
 function display(infos){
@@ -370,7 +430,9 @@ function refresh_viz1(){
 
   //évolution nb visites | affluences
   refreshEchart('line','.chart-element',0,final_datas,'','date_heure_visite','date_visite','category','une_visite',false,false)
-  refreshEchart('bar','.chart-element',1,final_datas,'','heure_visite_str','heure_visite','category','une_visite',false,true)
+  let categ = $('#type_affluence').val() === "h" ? "heure_visite" : "jour_visite"
+  let categ_str = $('#type_affluence').val() === "h" ? "heure_visite_str" : "jour_visite_str"
+  refreshEchart('bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true)
   
 
 
