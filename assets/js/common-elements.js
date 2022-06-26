@@ -432,6 +432,10 @@ function ConvertToCSV(objArray) {
 }
 
 function main(){
+	come_and_go()
+
+	if(loc() === '/DATAVIZ/') return false;
+
 	var body = document.getElementsByTagName('body')[0]
 	add_element(navbar(), 'navbar-site', body, 1)
 	add_nav_items_events()
@@ -441,7 +445,6 @@ function main(){
 
 	titles()
 	contents()
-	come_and_go()
 	google_tag() //only on NO LOCALHOST
 
 	parse_parameters()

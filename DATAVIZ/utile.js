@@ -1,6 +1,5 @@
 
 let DEBUGGING_MODE = false
-const { createClient } = supabase
 supabase = createClient(racine_data(),  apikey())
 
 
@@ -9,11 +8,33 @@ async function subscribe_supabase(){
   return await supabase
     .from('*')
     .on('*', async function (payload){
-      console.log({payload})
+      log({payload})
       if(payload.table === 'visites' || payload.table === 'clics'){
-        console.log('------🡺 update viz \n\n\n')
+        log('------🡺 update viz \n\n\n')
 
-        get_donnees_site()
+        //await get_donnees_site()
+
+        //insertion ---> on ajoute le dernier element de 'tout'
+        if(payload.eventType === 'INSERT'){
+          last_tout = await supabase.from('last_tout')
+          last_tout = last_tout.data[0]
+          log({last_tout})
+
+
+          final_datas.push(last_tout)
+          refresh_all_viz()
+
+
+        //update or delete ---> get ALL
+        }else {
+
+          window.location.href = window.location.href 
+
+        }
+        
+          
+        log({final_datas})
+        refresh_all_viz()
 
       }
 
@@ -52,18 +73,6 @@ const tips = {
 
 
     
-
-function racine_data(){
-  return 'https://kxdokvtvscvjuwzgmvei.supabase.co'
-}
-
-
-
-function apikey(){
-  return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZG9rdnR2c2N2anV3emdtdmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU2MTk3MTQsImV4cCI6MTk3MTE5NTcxNH0.ViTcu3L79EkuvGvyDiSqwdpgJ0MQFbg8nL1vO0tTcDk'
-}
-
-
 async function get_donnees_site(){
   await select_all('tout',creer_dataviz)
 }
@@ -75,12 +84,16 @@ function main(){
   $(document).on('click',function(){
     initial_value = DEBUGGING_MODE
     DEBUGGING_MODE = false
-    refresh_viz1()
+    refresh_all_viz()
     DEBUGGING_MODE = initial_value
   })
 
   get_donnees_site()
 
+}
+
+function refresh_all_viz(){
+  refresh_viz1()
 }
 
 main()
