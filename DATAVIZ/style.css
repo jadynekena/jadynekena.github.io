@@ -15,7 +15,7 @@ body {
 
 .grid-container {
 
-	--grid-layout-gap: 5px;
+	--grid-layout-gap: 20px;
 	--grid-column-count: 2;
 	--grid-item--min-width: 360px;
 
