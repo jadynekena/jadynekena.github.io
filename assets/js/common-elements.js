@@ -28,8 +28,8 @@ const list_id_viz = loc().includes(ref_project_open) ? ['viz1655731628354','viz1
 					loc().includes(ref_project_perso) ? ['viz1655747869171','viz1655747945236','viz1655748303418'] : []
 
 //title online
-const list_title_viz = loc().includes(ref_project_open) ? ['InspectionssanitairesAlimConfiance/Nombretotaldtablissementsinspects','Etudedesmodlesdevhiculescommercialiss/Conclusion','Parcoursup_16538279647500/ParcourSup2018-2021']:
-					loc().includes(ref_project_perso) ? ['Unprojetagile/Rsum','StudyingBible/Numberofwordsversesperbookname','Personalyoutubehistory/Viewsperhourthroughyears'] : []
+const list_title_viz = loc().includes(ref_project_open) ? ['InspectionssanitairesAlimConfiance/Dashboard','Etudedesmodlesdevhiculescommercialiss/Conclusion','Parcoursup_16538279647500/ParcourSup2018-2021']:
+					loc().includes(ref_project_perso) ? ['Unprojetagile/Rsum','StudyingBible/Numberofwordsversesperbookname','Personalyoutubehistory/Dashboard_1'] : []
 
 
 
@@ -749,7 +749,7 @@ function render_a_viz(id_viz,title_viz){
       <param name='embed_code_version' value='3' />
       <param name='site_root' value='' />
       <param name='name' value='`+title_viz+`' />
-      <param name='tabs' value='yes' />
+      <param name='tabs' value='false' />
       <param name='toolbar' value='yes' />
       <param name='animate_transition' value='yes' />
       <param name='display_static_image' value='yes' />
