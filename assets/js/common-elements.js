@@ -431,13 +431,16 @@ function ConvertToCSV(objArray) {
     return str;
 }
 
-function iframe_resize(){
-	$(window).on('resize',adapt_iframe_height)
+function iframe_resize(id){
+	$('iframe[id="'+id+'"]').on('load',function(){
+		adapt_iframe_height(id)
+	})
+	$(window).on('resize',function(){adapt_iframe_height(id)})
 }
 
-function adapt_iframe_height(){
-	let final_height = $('iframe').contents().find('body')[0].offsetHeight
-	if (final_height > 0) $('iframe').parent().css('height',final_height  + 'px') 
+function adapt_iframe_height(id){
+	let final_height = $('iframe[id="'+id+'"]').contents().find('body')[0].offsetHeight
+	if (final_height > 0) $('iframe[id="'+id+'"]').parent().css('height',final_height  + 'px') 
 }
 
 function main(){
@@ -457,8 +460,7 @@ function main(){
 	google_tag() //only on NO LOCALHOST
 
 	parse_parameters()
-	iframe_resize()
-	adapt_iframe_height()
+	iframe_resize('DATAVIZ')
 	
 }
 
