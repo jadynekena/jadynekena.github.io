@@ -7,7 +7,7 @@ var sep = '\t'
 var final_datas = []
 
 function list_posts_linkedin(){
-	return ['6777136376266682369','6777861229898670081','6778585945819123712','6779673164571000832','6782194816580100097','6782919591560548352','6784731509396926464','6936941793640886272', '6944551923622531072']
+	return ['6777136376266682369','6777861229898670081','6778585945819123712','6779673164571000832','6782194816580100097','6782919591560548352','6784731509396926464','6936941793640886272', '6944551923622531072', '6947171562777153537',]
 }
 
 
@@ -431,6 +431,15 @@ function ConvertToCSV(objArray) {
     return str;
 }
 
+function iframe_resize(){
+	$(window).on('resize',adapt_iframe_height)
+}
+
+function adapt_iframe_height(){
+	let final_height = $('iframe').contents().find('body')[0].offsetHeight
+	if (final_height > 0) $('iframe').parent().css('height',final_height  + 'px') 
+}
+
 function main(){
 	come_and_go()
 
@@ -448,6 +457,8 @@ function main(){
 	google_tag() //only on NO LOCALHOST
 
 	parse_parameters()
+	iframe_resize()
+	adapt_iframe_height()
 	
 }
 
