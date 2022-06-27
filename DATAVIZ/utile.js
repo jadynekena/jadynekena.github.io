@@ -75,7 +75,7 @@ const tips = {
           `,
 
           `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
-          <br/>Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
+          <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
           
           `
           ]
