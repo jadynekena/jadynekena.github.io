@@ -498,13 +498,17 @@ function tooltipFormatter(params, src_datas){
     log(detail)
     
     detail = detail.pop() //get last element (most recent)
-    //display DERNIER:
-    if(detail) Object.keys(detail).forEach(k => renameKey ( detail, k, 'Dernier(e) ' + k ))
-
-    log(detail)
-    current_data += display(detail)
 
 
+    //display DERNIER of THE CURRENT X ELEMENT:
+    if(detail){
+      Object.keys(detail).forEach(k => renameKey ( detail, k, 'Dernier(e) ' + k ))
+
+      log(detail)
+      current_data += '<i>---- DETAILS SUR LE DERNIER PARMI '+title+' ----</i><br/>'
+      current_data +=  display(detail)
+
+    } 
 
   }
 
