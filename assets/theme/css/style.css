@@ -993,6 +993,7 @@ blockquote {
   border-style: inset;
   border-width: 1px;
   border-color: #29a;
+  min-height: 250px;
 }
 
 
