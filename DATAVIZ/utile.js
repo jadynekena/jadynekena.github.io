@@ -676,9 +676,51 @@ async function get_canaux(){
 }
 
 
+async function submit_choice(){
 
 
 
+  //only if choice is made
+  let choice = $('input:checked').val()
+  if(!choice) return update_remark('⚠️ Merci de faire un choix de vote.')
+
+
+  //insert only if (legend,id_visite) doesn't exist yet
+  let legend = $('legend').text().trim()
+  const {data,error} = await supabase.from('votes').select('*')
+                            .eq('id_visite',get_item('id_visite'))
+                            .eq('legend',legend)
+  log(data)
+  if(data.length > 0) return update_remark('❌ Vous avez déjà voté pour cette semaine, RDV la semaine prochaine !')
+
+  
+
+  let tmp = {
+    id_visite: get_item('id_visite'),
+    legend: legend,
+    choix: Number(choice.replace('choice','')),
+    intitule_choix: $("input[type='radio']:checked").parent().text()
+  }
+  
+  res = await supabase.from('votes').insert([tmp]) 
+  update_remark('✅ Votre vote a été soumis, merci !',true)
+  
+  return res
+}
+
+function update_remark(text,valid){
+  if(valid){
+    $('.remark').css('color','green')
+    $("#sendVote").remove()
+  }else{
+    $('.remark').css('color','')
+  }
+
+
+  $(".remark").text(text)
+
+  return text
+}
 
 
 
@@ -895,3 +937,5 @@ const omit = (obj, ...keys) => Object.fromEntries(
   Object.entries(obj)
   .filter(([key]) => !keys.includes(key))
 );
+
+
