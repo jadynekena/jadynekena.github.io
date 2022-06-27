@@ -8,7 +8,7 @@ async function subscribe_supabase(){
   return await supabase
     .from('*')
     .on('*', async function (payload){
-      log({payload},false,true)
+      log({payload})
       if(payload.table === 'visites' || payload.table === 'clics'){
         log('------🡺 update viz \n\n\n')
 
@@ -17,13 +17,15 @@ async function subscribe_supabase(){
         //insertion ---> on ajoute le dernier element de 'tout'
         if(payload.eventType === 'INSERT'){
           
-          if(payload.new.id_clic){
-            last_tout = await supabase.from('tout').select('*').eq('id_clic',payload.new.id_clic)
-          }else if(payload.new.une_visite){
-            last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.une_visite)  
+          if(payload.new.une_visite){
+            last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.une_visite)
+          }else if(payload.new.id_clic){
+            last_tout = await supabase.from('tout').select('*').eq('id_clic',payload.new.id_clic)  
+          }else{
+            log({payload},false,true)            
+            log('Problème nouvelle visite.',false,true)
+            return false
           }
-          
-          
           last_tout = last_tout.data[0]
           log({last_tout})
 
@@ -67,11 +69,14 @@ const tips = {
           <br/>
           C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
           
-          `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.`,
-
-          `La part des visites est <strong>selon l'heure UTC</strong>, c'est-à-dire <strong>2 heures de moins qu'en France.</strong>
+          `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.
           <br/>
-          Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
+          Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
+          `,
+
+          `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
+          <br/>Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
+          
           `
           ]
 }
@@ -333,7 +338,7 @@ function set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorInde
 }
 
 
-function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only) {
+function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only,ignore_evolution_for_tooltip) {
   log('\n\n\n\n\n')
 
   set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorIndex,tip)
@@ -367,7 +372,8 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
       xFieldOrderBy: xFieldOrderBy,
       with_percentage_only: with_percentage_only,
       xFieldName: xFieldName,
-      xDatas: xDatas
+      xDatas: xDatas,
+      ignore_evolution_for_tooltip: ignore_evolution_for_tooltip
     }
     log(src_datas)
 
@@ -483,7 +489,7 @@ function tooltipFormatter(params, src_datas){
     
     let all = src_datas['xDatas'].map(a_categ => sort_by(final_datas.filter(e => e[src_datas['xFieldName']] === a_categ)  , src_datas['xFieldOrderBy'])  )    
     let type_evolution = get_type_evolution()
-    let field_to_count = evolution_field_to_count(type_evolution)
+    let field_to_count = src_datas['ignore_evolution_for_tooltip'] ? src_datas['fieldName_to_count'] : evolution_field_to_count(type_evolution)
     let detail = all[params.dataIndex]
 
 
@@ -532,6 +538,8 @@ function slice_if_needed(value){
   } else{
     log('NO SLICE')
   }
+
+  if(!final_display) final_display = ""
   log(final_display)
 
   return final_display
@@ -541,14 +549,6 @@ function display(infos){
   let res = ""
   $.each(infos, function( k, value  ) {
     res += '<strong>' + k + '</strong>: ' + slice_if_needed(value)  + '<br/>\n' 
-
-    let is_date = isDate(value)
-    log('\n\n\n\n\n')
-    log({[value]: is_date})
-
-
-    if(is_date) res += '<strong>' + k + ' (heure LOCALE)</strong>: ' + slice_if_needed(display_if_date(value))  + '<br/>\n' 
-
   });
 
   return res
@@ -610,7 +610,7 @@ function refresh_viz1_affluences(){
   tip = tips['viz1'][6]
   let categ = $('#type_affluence').val() === "h" ? "heure_visite" : "jour_visite"
   let categ_str = $('#type_affluence').val() === "h" ? "heure_visite_str" : "jour_visite_str"
-  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true)
+  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true,true)
   
 
 }

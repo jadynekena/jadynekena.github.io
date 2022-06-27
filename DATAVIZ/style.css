@@ -7,6 +7,10 @@ body {
 	margin: 0;
 }
 
+select {
+	font-weight: bold;
+}
+
 .conteneurDashboard {
 	width: 100%;
 	height: 97vh;

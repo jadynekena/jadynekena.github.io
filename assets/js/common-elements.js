@@ -994,6 +994,11 @@ function show_login_status(ceci, website_name, loaded) {
     //ceci.parentNode.remove()
 }
 
+async function im_not_reported(){
+	var res = await supabase.from('visites').select('id_visite').eq('id_visite',get_item('id_visite')).limit(1)
+	return res.data.length === 0;
+
+}
 
 async function post_a_visit(){		
 	is_new = false
@@ -1018,9 +1023,15 @@ async function post_a_visit(){
 		refresh_client_datas() //get new datas for the client
 
 
+	//if i'm not reported yet -> send it without refreshing locally
+	}else if(await im_not_reported() ){
+		console.warn('user recognized but not reported yet',get_item('id_visite'))
+		is_new = true
+
+
 	//NOT first visit: cookies are accepted, current user already known by server
 	}else{
-		//console.warn('user recognized ',get_item('id_visite'))
+		console.warn('user recognized ',get_item('id_visite'))
 		is_new = false
 	}
 
@@ -1033,6 +1044,8 @@ async function post_a_visit(){
 		await insert_supabase('visites',a_visit,true) //doesn't do an update if user is recognized
 
 	}
+
+	return is_new
 
 }
 
