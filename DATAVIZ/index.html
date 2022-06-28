@@ -61,7 +61,7 @@
 			<div class="chart">
 				<div class="viz-title"><span>Evolution nombre de 
 					</span>
-					<select onchange="refresh_viz1_evolutions()" id="type_evolution">
+					<select onchange="refresh_viz1_counters(this)" id="type_evolution">
 					  <option value="visite">visites</option>
 					  <option value="clic">clics</option>
 					  <option value="adresse_ip">IP</option>
@@ -83,7 +83,14 @@
 
 
 			<div class="chart">
-				<div class="viz-title"><span>Affluences des visites par
+				<div class="viz-title">
+					<span>Affluences des
+						<select onchange="refresh_viz1_counters(this)" id="type_evolution_affluences">
+						  <option value="visite">visites</option>
+						  <option value="clic">clics</option>
+						  <option value="adresse_ip">IP</option>
+						</select>
+						par
 					</span>
 					<select onchange="refresh_viz1_affluences()" id="type_affluence">
 					  <option value="h">heure</option>

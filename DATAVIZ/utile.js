@@ -694,9 +694,34 @@ function refresh_viz1_affluences(){
   tip = tips['viz1']['affluences']
   let categ = $('#type_affluence').val() === "h" ? "heure_visite" : "jour_visite"
   let categ_str = $('#type_affluence').val() === "h" ? "heure_visite_str" : "jour_visite_str"
-  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true,true)
+  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category',evolution_field_to_count(),false,true,true)
   
 
+}
+
+function the_other_list_id(me){
+  res = ''
+  if(me.id === 'type_evolution'){
+    res = 'type_evolution_affluences'
+  }else if(me.id === 'type_evolution_affluences'){
+    res = 'type_evolution'
+  }
+
+  return res
+}
+
+function refresh_viz1_counters(ceci){
+
+  if(ceci){
+
+    let list_to_update = $('select[id="'+the_other_list_id(ceci)+'"]')
+    list_to_update.val(ceci.value)
+    log(ceci.value)
+
+  }
+
+  refresh_viz1_evolutions()
+  refresh_viz1_affluences()
 }
 
 function refresh_viz1(){
