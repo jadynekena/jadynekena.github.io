@@ -234,7 +234,7 @@ function seriesOf(typeChart,datas){
       return tmp
     })
 
-    log(res,false,true)
+    log(res)
 
   }
 
@@ -471,10 +471,10 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
 
 
 function tooltipFormatter(params, src_datas){
-  /*
-  log(params.name,false,true) //X axis
-  log(params.value,false,true) //Y axis
-  */
+  
+  log(params.name) //X axis
+  log(params.value) //Y axis
+  
 
   log('\n\n\n\n')
   log({params})
@@ -489,12 +489,30 @@ function tooltipFormatter(params, src_datas){
   let title = src_datas['customName'] || '{customName}'
   let current_value = params.value
   let current_data = []
+  let detail = []
 
   //GAUGE
   if(params.seriesType === 'gauge'){
     current_value += ' %'
     current_data = {[title]: current_value}
     current_data = display(current_data)
+
+
+    log(src_datas)
+    //use total_count
+    if(src_datas['total_count']){
+
+      tmp = {}
+      src_datas['total_count']['list_category'].forEach(function(a_categ,index_categ){
+        
+        tmp = {[a_categ]: src_datas['total_count']['nb_occurences'][index_categ]}
+        tmp = display(tmp,true)
+        log(tmp)
+
+        current_data +=tmp
+      })
+      
+    }
 
   //BARS, LINE, SCATTER
   }else {
@@ -511,7 +529,7 @@ function tooltipFormatter(params, src_datas){
     let all = src_datas['xDatas'].map(a_categ => sort_by(final_datas.filter(e => e[src_datas['xFieldName']] === a_categ)  , src_datas['xFieldOrderBy'])  )    
     let type_evolution = get_type_evolution()
     let field_to_count = src_datas['ignore_evolution_for_tooltip'] ? src_datas['fieldName_to_count'] : evolution_field_to_count(type_evolution)
-    let detail = all[params.dataIndex]
+    detail = all[params.dataIndex]
 
 
     detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_'+type_evolution,'date_'+type_evolution),field_to_count) 
@@ -570,10 +588,10 @@ function slice_if_needed(value){
   return final_display
 }
 
-function display(infos){
+function display(infos,with_tab){
   let res = ""
   $.each(infos, function( k, value  ) {
-    res += '<strong>' + k + '</strong>: ' + slice_if_needed(value)  + '<br/>\n' 
+    res +=  (with_tab ? '&ensp;&ensp;' : '') + '<strong>' + k + '</strong>: ' + slice_if_needed(value)  + '<br/>\n' 
   });
 
   return res
@@ -605,12 +623,34 @@ function refresh_viz1_labels(){
   refresh_content(label_selector,ratio.toFixed(2),3,tips['viz1'][3])
 }
 
+function get_specific_category_count(nb_original,category_name, percentage_mode){
+
+  //sum_array(nb_appareils_total['nb_occurences'])
+  res = nb_original['nb_occurences'][    nb_original['list_category'].indexOf(category_name)   ]
+  if(percentage_mode) res = 100* Number(res/(sum_array(nb_appareils_total['nb_occurences']))).toFixed(2)
+
+  return res
+}
+
 function refresh_viz1_part_mobiles(){
 
   //pourcentage de mobiles
-  part_mobile = count_category_part(final_datas,'type_appareil','une_visite',true,'mobile')
-  part_mobile = part_mobile['nb_occurences'][0]
-  gauge_datas = {min: 0, max:100, value:part_mobile, 'customName':'Part des mobiles parmi les visites' }
+  let category_value_to_count = 'Mobile'
+
+
+  nb_appareils_total = count_category_part(final_datas,'type_appareil','une_visite',false) 
+  log({nb_appareils_total})
+
+  part_mobile = get_specific_category_count(nb_appareils_total,category_value_to_count,true)
+  log({part_mobile})
+  
+  gauge_datas = { min: 0,
+                max:100,
+                value:part_mobile,
+                'customName':'Part des mobiles parmi les visites',
+                total_count: nb_appareils_total,
+                category_value_to_count: category_value_to_count
+              }
   tip = tips['viz1'][4]
   refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
@@ -887,6 +927,7 @@ function count_elements(array,fields,only_unique,ignore_null, fixed_field_name,f
 }
 
 const accumulate = arr => arr.map((sum => value => sum += value)(0));
+const sum_array = arr => accumulate(arr).pop()
 const percentage_of_total = (arr,nb_of_decimals) => arr.map(e => Number((100*(Number(e)/accumulate(arr).pop())).toFixed(   (nb_of_decimals ? nb_of_decimals : 1) ))  )
 const countOccurrences = (a,b) => b.map(e => a.filter(c => c['type_appareil'] === e).length)
 
