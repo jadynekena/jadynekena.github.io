@@ -1152,6 +1152,10 @@ blockquote {
   max-width: 80%;
 }
 
+.poll > div > input {
+    margin-top: 15px;
+}
+
 legend {
 
   width: auto;
