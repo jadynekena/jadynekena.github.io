@@ -67,6 +67,8 @@ const tips = {
 
           ip_revenu: `Lorsqu'une même adresse IP <strong>revient sur le site</strong>, elle est comptabilisée dans cet indicateur.`,
 
+          part_ip_revenu: `La grande majorité des visites représente la <strong>première découverte du site</strong>, et non la <strong>reconsultation</strong> de celui-ci.`,
+
           part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
           <br/>
           C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
@@ -126,7 +128,7 @@ function refresh_content(selector,content,index,tooltipText){
   show_tip_on_hover($(selector)[index],tooltipText)
   show_tip_on_hover($($(selector)[index]).prev()[0].firstElementChild,tooltipText)
 
-  return $(selector)[index]
+  return content
 
 }
 
@@ -233,6 +235,7 @@ function seriesOf(typeChart,datas){
     res = datas.map(function(e){
       tmp = {}
       tmp['type'] = typeChart;
+      tmp['smooth'] = 0.4;
       tmp['data'] = e;
       tmp['color'] = colorValue;
       return tmp
@@ -462,6 +465,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   }
 
   //common keys
+  log({displayed_series},false,true)
   option['series'] = displayed_series
   myChart.setOption(option);
 
@@ -635,6 +639,7 @@ function refresh_viz1_labels(){
   nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1']['clic_unique'])
   ratio = refresh_content(label_selector,(nb_clics/nb_visites).toFixed(2),3,tips['viz1']['clic_par_visite'])
   nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['viz1']['ip_revenu'])
+  part_nb_ip_back = refresh_content(label_selector, + (100*(nb_ip_back/nb_visites)).toFixed(2) + '%',5,tips['viz1']['part_ip_revenu'])
 }
 
 function get_specific_category_count(nb_original,category_name, percentage_mode){
