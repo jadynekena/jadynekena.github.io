@@ -7,7 +7,15 @@ var sep = '\t'
 var final_datas = []
 
 function list_posts_linkedin(){
-	return ['6777136376266682369','6777861229898670081','6778585945819123712','6779673164571000832','6782194816580100097','6782919591560548352','6784731509396926464','6936941793640886272', '6944551923622531072', '6947171562777153537',]
+	return ['6777136376266682369',
+			'6777861229898670081',
+			'6778585945819123712',
+			'6779673164571000832',
+			'6782194816580100097',
+			'6782919591560548352',
+			'6784731509396926464',
+			'6936941793640886272',
+			'6944551923622531072',]
 }
 
 
@@ -461,6 +469,8 @@ function main(){
 
 	parse_parameters()
 	iframe_resize('DATAVIZ')
+
+	show_number_of_votes() //only on home page
 	
 }
 
@@ -1262,7 +1272,7 @@ async function submit_choice(){
                             .eq('id_visite',get_item('id_visite'))
                             .eq('legend',legend)
                             .limit(1)
-  console.log(data)
+  //console.log(data)
   if(data.length > 0) return update_remark('❌ Vous avez déjà voté pour cette semaine, RDV la semaine prochaine !')
 
   
@@ -1274,12 +1284,14 @@ async function submit_choice(){
     adresse_ip: get_item('adresse_ip'),
     legend: legend,
     choix: Number(choice.replace('choice','')),
-    intitule_choix: $("input[type='radio']:checked").parent().text()
+    intitule_choix: $("input[type='radio']:checked").parent().children('label').text()
   }
   
   res = await supabase.from('votes').insert([tmp]) 
   update_remark('✅ Votre vote a été soumis, merci !',true)
   
+
+  await show_number_of_votes()
   return res
 }
 
@@ -1298,7 +1310,32 @@ function update_remark(text,valid){
 }
 
 
+async function show_number_of_votes(){
 
+	//if home page
+	if(is_home_page()){
+
+		const {data,error} = await supabase.from('votes')
+											.select('*')
+											.eq('legend',$('legend').text().trim())
+		let all_choices = $('.poll > div > label').get().map(e => e.innerText.trim())
+		let nb_votes = 0
+
+		//for each possible choice
+		return all_choices.map(function (a_choice){
+			nb_votes = data.filter(e => e['intitule_choix'] === a_choice).length //count votes
+			res = {[a_choice] : nb_votes}
+
+			$('label:contains("'+a_choice+'")').siblings('span').text('('+nb_votes+')')
+
+
+			return res //filter(e => e.intitule_choix === 'Rajouter un filtre Pays').length	
+		})
+	}
+
+
+
+}
 
 
 
