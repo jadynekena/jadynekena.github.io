@@ -54,31 +54,33 @@ async function subscribe_supabase(){
 }
 
 const tips = {
-  'viz1':[`L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
+  'viz1': {ip_unique: `L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
             <strong>1 IP = 1 utilisateur unique.</strong>`,
 
-          `Une visite représente une <strong>adresse IP</strong> qui se connecte dans une <strong>durée totale de 30 minutes</strong>.
+          visite_unique: `Une visite représente une <strong>adresse IP</strong> qui se connecte dans une <strong>durée totale de 30 minutes</strong>.
             <br/> <br/>
             <u><strong>Exemple</strong></u>: une même adresse IP clique sur un élément du site, puis clique sur un autre <strong>31 minutes plus tard</strong> 🡺 cela est considéré comme <strong>2 visites</strong>, car le visiteur a probablement quitté le site, puis est revenu.`,
           
-          `Comme son nom l'indique, le nombre de clics recense <strong>toutes les fois où le visiteur clique sur un élément</strong> (texte, bouton, lien, etc).`,
+          clic_unique: `Comme son nom l'indique, le nombre de clics recense <strong>toutes les fois où le visiteur clique sur un élément</strong> (texte, bouton, lien, etc).`,
           
-          `Ce nombre indique le <strong>nombre moyen de fois qu'un visiteur va cliquer</strong> sur un élément pendant sa visite.`,
+          clic_par_visite: `Ce nombre indique le <strong>nombre moyen de fois qu'un visiteur va cliquer</strong> sur un élément pendant sa visite.`,
 
-          `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
+          ip_revenu: `Lorsqu'une même adresse IP <strong>revient sur le site</strong>, elle est comptabilisée dans cet indicateur.`,
+
+          part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
           <br/>
           C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
           
-          `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.
+          evolutions: `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.
           <br/>
           Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
           `,
 
-          `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
+          affluences: `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
           <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
           
           `
-          ]
+          }
 }
     
 
@@ -149,13 +151,15 @@ function show_tip(yes,tooltipText){
     }
 }
 
-function count_all(final_datas,fieldName_to_count){
-  return alasql("SELECT COUNT(DISTINCT "+fieldName_to_count+") as res FROM ?",[final_datas])[0]['res']
+function count_all(final_datas,fieldName_to_count,where){
+  sql = "SELECT COUNT(DISTINCT "+fieldName_to_count+") as res FROM ? "+ (where ? 'where '+ where : '')
+  log(sql)
+  return alasql(sql,[final_datas])[0]['res']
 }
 
 function select_from_where(final_datas,to_select,where,unique){
   let sql = "SELECT "+ (unique ? " DISTINCT (" : "") +to_select + (unique ? ")" : "") + "  FROM ?  " + (where ? 'where '+ where : '')
-  log(sql,false)
+  log(sql)
   return alasql(sql  ,[final_datas])
 }
 
@@ -611,16 +615,26 @@ function evolution_field_to_count(type_evolution){
   return field_to_count
 }
 
+function count_ip_back(final_datas){
+
+  all_ips = select_from_where(final_datas,'adresse_ip',null,true)
+  nb_visites_per_ip = all_ips.map(ip => count_all(final_datas,'une_visite','adresse_ip = "'+ip['(adresse_ip)']+'"'))
+  all = zip(all_ips.map(e => e['(adresse_ip)']), nb_visites_per_ip)
+  res = all.filter(e => e[1] > 1)
+
+  return res.length
+}
+
 function refresh_viz1_labels(){
 
   let label_selector = '.viz-label > .viz-text'
 
   // nb adresses IP, visites, clics, nb moyen de clics par visites 
-  nb_ip = refresh_labelcount_viz(label_selector,'adresse_ip',0,tips['viz1'][0])
-  nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1,tips['viz1'][1])
-  nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1'][2])
-  ratio = (nb_clics/nb_visites)
-  refresh_content(label_selector,ratio.toFixed(2),3,tips['viz1'][3])
+  nb_ip = refresh_labelcount_viz(label_selector,'adresse_ip',0,tips['viz1']['ip_unique'])
+  nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1,tips['viz1']['visite_unique'])
+  nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1']['clic_unique'])
+  ratio = refresh_content(label_selector,(nb_clics/nb_visites).toFixed(2),3,tips['viz1']['clic_par_visite'])
+  nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['viz1']['ip_revenu'])
 }
 
 function get_specific_category_count(nb_original,category_name, percentage_mode){
@@ -651,7 +665,7 @@ function refresh_viz1_part_mobiles(){
                 total_count: nb_appareils_total,
                 category_value_to_count: category_value_to_count
               }
-  tip = tips['viz1'][4]
+  tip = tips['viz1']['part_mobiles']
   refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
 }
@@ -660,7 +674,7 @@ function refresh_viz1_evolutions(){
 
   //evolution nb visites | clics
   let type_evolution = $("#type_evolution").val()
-  tip = tips['viz1'][5].replaceAll('#type_evolution',type_evolution)
+  tip = tips['viz1']['evolutions'].replaceAll('#type_evolution',type_evolution)
   field_to_count = evolution_field_to_count(type_evolution)
 
   log(field_to_count)
@@ -672,7 +686,7 @@ function refresh_viz1_evolutions(){
 function refresh_viz1_affluences(){
 
   //affluences
-  tip = tips['viz1'][6]
+  tip = tips['viz1']['affluences']
   let categ = $('#type_affluence').val() === "h" ? "heure_visite" : "jour_visite"
   let categ_str = $('#type_affluence').val() === "h" ? "heure_visite_str" : "jour_visite_str"
   refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category','une_visite',false,true,true)
@@ -930,6 +944,7 @@ const accumulate = arr => arr.map((sum => value => sum += value)(0));
 const sum_array = arr => accumulate(arr).pop()
 const percentage_of_total = (arr,nb_of_decimals) => arr.map(e => Number((100*(Number(e)/accumulate(arr).pop())).toFixed(   (nb_of_decimals ? nb_of_decimals : 1) ))  )
 const countOccurrences = (a,b) => b.map(e => a.filter(c => c['type_appareil'] === e).length)
+const zip = (x, y) => Array.from(Array(Math.max(x.length, y.length)), (_, i) => [x[i], y[i]])
 
 function keep_fields(obj, ...keys){
   return sort_by(obj.map(e => pick(e, ...keys)),keys[0])
