@@ -1142,13 +1142,14 @@ blockquote {
 }
 
 .poll > * {
-  display: block;
+  display: flex;
   padding: 5px;
   margin: 5px 15%;
 }
 
 .poll > div > label {
   margin: 10px;
+  max-width: 80%;
 }
 
 legend {
@@ -1177,4 +1178,9 @@ legend {
   border-radius: 10px;
   text-align: center;
   display: none;
+}
+
+.nb_votes {
+  margin: 10px 0;
+  min-width: 30px;
 }
