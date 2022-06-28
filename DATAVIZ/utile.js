@@ -465,7 +465,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   }
 
   //common keys
-  log({displayed_series},false,true)
+  log({displayed_series})
   option['series'] = displayed_series
   myChart.setOption(option);
 
