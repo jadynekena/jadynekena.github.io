@@ -234,6 +234,8 @@ function seriesOf(typeChart,datas){
       return tmp
     })
 
+    log(res,false,true)
+
   }
 
   log('series: ')
@@ -406,6 +408,8 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
       title: {
         text: title
       },
+
+
       xAxis: {
         type: xFieldType,//'category',
         data: xDatas,
@@ -416,7 +420,24 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
         },
 
       },
-      
+
+      /*
+      visualMap: {
+        type: 'piecewise',
+        dimension: 0,
+        seriesIndex: 0,
+        pieces: [{
+            gt: 1,
+            lt: 5,
+            color: 'rgba(0, 180, 0, 0.5)'
+        }, {
+            gt: 8,
+            lt: 7,
+            color: 'rgba(0, 180, 0, 0.5)'
+        }]
+      },
+      */
+
       grid: {
         left: 50,
         bottom: 30
