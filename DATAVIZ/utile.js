@@ -110,11 +110,17 @@ function main(){
   get_donnees_site()
   let theme_to_keep = check_if_collecting_datas()
   if(!theme_to_keep){
-    log('applying theme')
+    log('applying theme, showing icon',false,true)
     apply_light()
+    document.getElementById('switch').style.display= ""
   } else{
-    log('NOT applying theme')
+    log('NOT applying theme, hiding icon',false,true)
+    document.getElementById('switch').style.display= "none"
   }
+}
+
+function show_light_icon(){
+
 }
 
 function check_if_collecting_datas(){

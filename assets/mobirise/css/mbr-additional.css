@@ -3210,6 +3210,9 @@ a {
   background-color: black;
 }
 
+#cookiesdirective {
+  z-index: 999999;
+}
 
 .night .swal2-confirm,
 .night .info,
@@ -3229,13 +3232,14 @@ a {
 
 
 .fixed, .nightmode .fixed {
-  position: relative;
+  position: fixed; /*relative;*/
   bottom: 0;
   width: 90vw;
   -webkit-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
   text-align: end;
   margin: 15px;
+  display: flex; /*new*/
 }
 
 
