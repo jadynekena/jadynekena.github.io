@@ -238,7 +238,7 @@ async function select_supabase(fields,nametable,options){
 
 function local_if_dataviz_not_iframe(){
 	//considered LOCAL if (NOT IFRAME and /DATAVIZ/)
-	return (!inIframe() && loc() === "/DATAVIZ/")
+	return (!inIframe() && loc().includes("/DATAVIZ/"))
 }
 
 function is_local_host(){
@@ -252,6 +252,9 @@ function is_home_page(){
 async function insert_supabase(nametable,datas,upsert_mode){
 	//console.log('inserting to '+nametable,datas)
 	if(is_local_host()) return ;
+
+	const list_secondary_tables = ',clics,votes,'
+	if(list_secondary_tables.includes(','+ list_secondary_tables +',')) await post_a_visit()
 
 	const { data, error } = await supabase
 		.from(nametable)
