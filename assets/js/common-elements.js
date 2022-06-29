@@ -254,7 +254,9 @@ async function insert_supabase(nametable,datas,upsert_mode){
 	if(is_local_host()) return ;
 
 	const list_secondary_tables = ',clics,votes,'
-	if(list_secondary_tables.includes(','+ list_secondary_tables +',')) await post_a_visit()
+	if(list_secondary_tables.includes(','+ list_secondary_tables +',')){
+		if(!await im_not_reported()) await post_a_visit() //send visit if not yet	
+	} 
 
 	const { data, error } = await supabase
 		.from(nametable)
