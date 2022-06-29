@@ -1146,8 +1146,10 @@ function del_item(item_name){
 	return window.localStorage.removeItem(item_name)
 }
 
-function get_item(item_name){
-	return window.localStorage.getItem(item_name)
+function get_item(item_name,parseJSON){
+	let res = window.localStorage.getItem(item_name)
+	if(parseJSON) res = JSON.parse(res)
+	return res
 }
 
 
@@ -1201,9 +1203,9 @@ function new_period_of_connection(){
 	return !get_item('date_premiere_visite') || diff_date.h >= 1 || diff_date.min >= 30 
 }
 
-async function visit_details(){
+async function visit_details(forcing){
 
-	del_item('adresse_ip')
+	//del_item('adresse_ip')
 
 	var body = document.getElementsByTagName('body')[0]
 	var res = {
@@ -1224,18 +1226,42 @@ async function visit_details(){
 
 	try{
 
-		var client = await data_client()	
-		save_item('adresse_ip',client['ip'])
+		var client = await data_client(forcing)	
 
-		res['adresse_ip'] = client['ip']
+		//get thos details from ipapi OR ipwho OR local
+
+		res['adresse_ip'] = client['ip']  || client['adresse_ip'] 
+		//console.log({adresse_ip: res['adresse_ip']})
+		
 		res['latitude'] = client['latitude']
+		//console.log({latitude: res['latitude']})
+
 		res['longitude'] = client['longitude']
-		res['pays'] = client['country_name']
+		//console.log({longitude: res['longitude']})
+
+		res['pays'] = client['country_name'] || client['country']  || client['pays']
+		//console.log({pays: res['pays']})
+
 		res['region'] = client['region']
-		res['ville'] = client['city']
-		res['operateur'] = client['org']
-		res['timezone'] = client['timezone']
-		res['utc_offset'] = client['utc_offset']
+		//console.log({region: res['region']})
+
+		res['ville'] = client['city'] || client['ville'] 
+		//console.log({ville: res['ville']})
+		
+		res['operateur'] = client['org'] || (client['connection'] ? client['connection']['isp'] : client['operateur'] )
+		//console.log({operateur: res['operateur']})
+		
+		res['timezone'] = typeof(client['timezone']) === 'string' ? client['timezone'] : client['timezone'] 
+		//console.log({timezone: res['timezone']})
+		
+		res['utc_offset'] = typeof(client['timezone']) === 'string' ? client['utc_offset'] : ( client['timezone'] ? client['timezone']['utc'] : "inconnu")
+		//console.log({utc_offset: res['utc_offset']})
+		
+
+
+		save_item('adresse_ip',client['ip'] )
+		save_item('my_datas',JSON.stringify(res))
+
 	}catch(err){
 		console.error('Error on client',err)
 	}
@@ -1249,6 +1275,7 @@ function refresh_client_datas(){
 
 	save_item('id_visite',uuidv4())
 	save_item('date_premiere_visite',now_function())
+	del_item('my_datas')
 	console.log('very first connection (window of 30 min)', get_item('id_visite'))
 }
 
@@ -1335,7 +1362,7 @@ async function post_a_visit(){
 		is_new = false
 	}
 
-	var a_visit = await visit_details()
+	var a_visit = await visit_details(is_new)
 
 	//upsert ONLY if datas are complete AND it's a new visit
 	if(a_visit.pays!=='' && is_new){
@@ -1349,9 +1376,33 @@ async function post_a_visit(){
 
 }
 
-async function data_client(){
+async function data_client(forcing,url){
+
+	if(!url) url = 'https://ipapi.co/json/'
+
 	if(!is_local_host()){
-		return await get_result('https://ipapi.co/json/')	
+		//no local datas OR we force pulling new datas
+		if(!get_item('my_datas') || forcing){
+
+			//get it from remote
+			try{
+				res = await get_result('https://ipapi.co/json/')	
+
+			//remote with wrong response: try another one
+			}catch(err){
+				res = await data_client(true,'https://ipwho.is/')
+
+			//no matter what the response is, save datas
+			}finally {
+
+				return res
+
+			}
+
+		//already got the local datas (no force-pulling)
+		} else{
+			return get_item('my_datas',true)
+		}
 	}else {
 		return {}
 	}

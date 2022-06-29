@@ -17,10 +17,15 @@ async function subscribe_supabase(){
         //insertion ---> on ajoute le dernier element de 'tout'
         if(payload.eventType === 'INSERT'){
           
-          if(payload.new.une_visite){
-            last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.une_visite)
+          //with ip address ---> new visit
+          if(payload.new.adresse_ip){
+            last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.adresse_ip + ' ' + payload.new.id_visite)
+
+          //with id clic ---> new clic
           }else if(payload.new.id_clic){
             last_tout = await supabase.from('tout').select('*').eq('id_clic',payload.new.id_clic)  
+
+          //else ---> we don't know
           }else{
             log({payload},false,true)            
             log('Problème nouvelle visite.',false,true)
@@ -110,11 +115,11 @@ function main(){
   get_donnees_site()
   let theme_to_keep = check_if_collecting_datas()
   if(!theme_to_keep){
-    log('applying theme, showing icon',false,true)
+    console.warn('applying theme, showing icon')
     apply_light()
     document.getElementById('switch').style.display= ""
   } else{
-    log('NOT applying theme, hiding icon',false,true)
+    console.warn('NOT applying theme, hiding icon')
     document.getElementById('switch').style.display= "none"
   }
 }
