@@ -24,71 +24,138 @@ const ref_project_perso = 'personnel'
 const ref_project_auto = 'automatisations'
 const ref_project_linkedin = 'linkedin'
 
+function current_location_shortcut(){
+	let res = loc().includes(ref_project_open) ? ref_project_open :
+				loc().includes(ref_project_perso) ? ref_project_perso :
+				loc().includes(ref_project_auto) ? ref_project_auto :
+				loc().includes(ref_project_linkedin) ? ref_project_linkedin :
+				""
+
+	return res
+}
 
 //title card
-const list_title = loc().includes(ref_project_open) ? ['Inspections sanitaires', 'Véhicules commercialisées', 'Aide au choix de formation ParcourSup'] : 		
-					loc().includes(ref_project_perso) ? ['Un projet Agile', 'Les mots de la Bible en anglais', 'Mon historique Youtube'] : []
+const list_title_initial = {
+	[ref_project_open]: ['Inspections sanitaires',
+						'Véhicules commercialisées',
+						'Aide au choix de formation ParcourSup'],
+	[ref_project_perso]: ['Un projet Agile',
+						'Les mots de la Bible en anglais',
+						'Mon historique Youtube']
+
+}
 
 
 
-//id viz
-const list_id_viz = loc().includes(ref_project_open) ? ['viz1655731628354','viz1655737537459','viz1655737600382'] :
-					loc().includes(ref_project_perso) ? ['viz1655747869171','viz1655747945236','viz1655748303418'] : []
+//title online (tableau public)
+const list_title_viz_initial = {
+	[ref_project_open]: ['InspectionssanitairesAlimConfiance/Dashboard',
+						'Etudedesmodlesdevhiculescommercialiss/Conclusion',
+						'Parcoursup_16538279647500/ParcourSup2018-2021'],
+	[ref_project_perso]: ['Unprojetagile/Rsum',
+						'StudyingBible/Dashboard',
+						'Personalyoutubehistory/Dashboard_1'
+						]
 
-//title online
-const list_title_viz = loc().includes(ref_project_open) ? ['InspectionssanitairesAlimConfiance/Dashboard','Etudedesmodlesdevhiculescommercialiss/Conclusion','Parcoursup_16538279647500/ParcourSup2018-2021']:
-					loc().includes(ref_project_perso) ? ['Unprojetagile/Rsum','StudyingBible/Numberofwordsversesperbookname','Personalyoutubehistory/Dashboard_1'] : []
+}
 
+//ids from tableau
+const list_id_viz_initial = {
+	[ref_project_open]: ['viz1655731628354',
+						'viz1655737537459',
+						'viz1655737600382'],
+	[ref_project_perso]: ['viz1655747869171',
+						'viz1655747945236',
+						'viz1655748303418'
+						]
 
+}
 
-const list_redim_viz = [`if (divElement.offsetWidth > 800) {
-	    vizElement.style.width = '100%';
-	    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-	} else if (divElement.offsetWidth > 500) {
-	    vizElement.style.width = '100%';
-	    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-	} else {
-	    vizElement.style.width = '100%';
-	    vizElement.style.minHeight = '2100px';
-	    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
-	}
-	
-`
+//redim when embedded from tableau
+const list_redim_viz_initial = {
+	[ref_project_open]: [`if (divElement.offsetWidth > 800) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else if (divElement.offsetWidth > 500) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else {
+						    vizElement.style.width = '100%';
+						    vizElement.style.minHeight = '2100px';
+						    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
+						}
 
-,
-
-
-`if (divElement.offsetWidth > 800) {
-    vizElement.style.width = '100%';
-    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-} else if (divElement.offsetWidth > 500) {
-    vizElement.style.width = '100%';
-    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-} else {
-    vizElement.style.width = '100%';
-    vizElement.style.height = '2177px';
-}`
-
-,
-
-
-
-`if (divElement.offsetWidth > 800) {
-    vizElement.style.width = '100%';
-    vizElement.style.maxWidth = '1809px';
-    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-    vizElement.style.maxHeight = '1031px';
-} else if (divElement.offsetWidth > 500) {
-    vizElement.style.width = '100%';
-    vizElement.style.maxWidth = '1809px';
-    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
-    vizElement.style.maxHeight = '1031px';
-} else {
-    vizElement.style.width = '100%';
-    vizElement.style.height = '877px';
-}`]
+						`,
 
 
+						`if (divElement.offsetWidth > 800) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else if (divElement.offsetWidth > 500) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = '2177px';
+						}`,
+
+
+						`if (divElement.offsetWidth > 800) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.maxWidth = '1809px';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						    vizElement.style.maxHeight = '1031px';
+						} else if (divElement.offsetWidth > 500) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.maxWidth = '1809px';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						    vizElement.style.maxHeight = '1031px';
+						} else {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = '877px';
+						}`],
+
+
+	[ref_project_perso]: [`if (divElement.offsetWidth > 800) {
+							vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else if (divElement.offsetWidth > 500) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else {
+						    vizElement.style.width = '100%';
+						    vizElement.style.minHeight = '1150px';
+						    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
+						}`,
+
+
+						`if (divElement.offsetWidth > 800) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else if (divElement.offsetWidth > 500) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else {
+						    vizElement.style.width = '100%';
+						    vizElement.style.minHeight = '1100px';
+						    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
+						}`,
+
+
+						`if (divElement.offsetWidth > 800) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else if (divElement.offsetWidth > 500) {
+						    vizElement.style.width = '100%';
+						    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+						} else {
+						    vizElement.style.width = '100%';
+						    vizElement.style.minHeight = '2100px';
+						    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
+						}`
+						]
+
+}
 
 
 
@@ -686,7 +753,10 @@ function expand_card(id){
 	e.href = '#' //NEW
 	id_viz = e.getAttribute('id_viz')
 	title_viz = e.getAttribute('title_viz')
-	redim_viz = list_redim_viz[list_id_viz.indexOf(id_viz)]
+	list_id_viz = get_list_viz('id')
+	
+	redim_viz = get_list_viz('redim',list_id_viz.indexOf(id_viz))
+	
 
 	add_element(`<div id="close" onclick="reset_cards('`+id_viz+`')" class="popupCloseButton">×</div>`, 'close', e.parentNode, 1) 
 	e.removeAttribute('onclick')
@@ -818,12 +888,33 @@ function script_viz(id_viz,redim_viz){
 		`
 }
 
+function get_list_viz(type_of_field, index_of_viz){
+	let res = []
+	if(type_of_field === 'title'){
+		res = list_title_initial[current_location_shortcut()]
+
+	}else if(type_of_field === 'title_viz'){//title ONLINE
+		res = list_title_viz_initial[current_location_shortcut()]
+
+	}else if(type_of_field === 'id'){
+		res = list_id_viz_initial[current_location_shortcut()]
+
+	}else if(type_of_field === 'redim'){
+		res = list_redim_viz_initial[current_location_shortcut()][index_of_viz]
+	}
+
+	return res
+}
+
 function open_datas(){
 
 	load_css_in_head(prefix + "/timeline/style.css")
 	load_script_in_head("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js",false)
 
 	var result = ""
+	list_title = get_list_viz('title') //list_title_initial[current_location_shortcut()]
+	list_title_viz = get_list_viz('title_viz') //list_title_viz_initial[current_location_shortcut()]
+	list_id_viz = get_list_viz('id') //list_id_viz_initial[current_location_shortcut()]
 
 	for (let i = 0; i < list_title.length ; i++) {
 		//one_card(title,content,id_viz,title_viz)
