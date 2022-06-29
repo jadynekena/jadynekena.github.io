@@ -1634,7 +1634,13 @@ function switch_light(){
 	let next = next_light()
 	let one_more_class = loc() === '/DATAVIZ/' ? ' dataviz' : ''
 	document.querySelector('body').className = next === "🌙" ? "night" + one_more_class : ""
-	if(document.querySelector('.light-switch')) document.querySelector('.light-switch').innerText = next
+
+	try {
+		document.querySelector('.light-switch').innerText = next
+	}catch(err){
+		console.error(err)
+	}
+	
 	save_item('curr_light',next)
 }
 
