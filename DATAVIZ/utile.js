@@ -110,10 +110,10 @@ function main(){
   get_donnees_site()
   let theme_to_keep = check_if_collecting_datas()
   if(!theme_to_keep){
-    console.log('applying theme')
+    log('applying theme')
     apply_light()
   } else{
-    console.log('NOT applying theme')
+    log('NOT applying theme')
   }
 }
 
