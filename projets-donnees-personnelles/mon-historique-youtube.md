@@ -8,7 +8,7 @@ Lately, I downloaded **my youtube datas** from 2018 to mid-june 2022, and starte
 
 4. I have seen **1256 videos through the wednesdays of 2019** - Wednesday was actually a day of my full remote work so I used to listen to some youtube music while working. 💻
 
-5. My 5 most searched words and the related song I've been looking for: 
+5. My **5 most searched words** and the related song I've been looking for: 
 	- [africa](https://youtu.be/kAPEntGix4M) 🌍
 	- [impulso](https://youtu.be/eQFpi8Iouso) 🔥
 	- [promises](https://youtu.be/q5m09rqOoxE) ✝️
