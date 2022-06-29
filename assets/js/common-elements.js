@@ -908,7 +908,7 @@ async function append_details_of_vizzes(){
 	let details = {}
 	let list_to_keep = {
 		viewCount: 'Nombre de vues',
-		firstPublishDate: 'Date de récupération des données',
+		firstPublishDate: 'Date de création',
 		lastUpdateDate: 'Date de dernière mise à jour',
 	}
 
