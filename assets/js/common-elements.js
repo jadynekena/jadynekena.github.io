@@ -35,6 +35,10 @@ function current_project(){
 	return res
 }
 
+function is_tableau_project(){	
+	return  current_project() === ref_project_open || current_project() === ref_project_perso
+}
+
 //title card
 const list_title_initial = {
 	[ref_project_open]: ['Inspections sanitaires',
@@ -569,40 +573,28 @@ function main(){
 
 	if(loc() === '/DATAVIZ/') return false;
 
+	//ALL
 	var body = document.getElementsByTagName('body')[0]
 	add_element(navbar(), 'navbar-site', body, 1)
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
 
-	show_btn()
-
-	titles()
-	contents()
+	titles() //on ALL PROJECTS
+	contents() //on ALL PROJECTS
 	google_tag() //only on NO LOCALHOST
 
-	parse_parameters()
-	iframe_resize('DATAVIZ')
-	append_details_of_vizzes()
+	parse_parameters() //only on tableau projects
+	iframe_resize('DATAVIZ') //only on homepage
+	append_details_of_vizzes() //only on tableau projects
 
 	show_number_of_votes() //only on home page
 	
 }
 
-function show_btn(){
-	var btn = document.getElementById('btn-download')
-
-
-	if(btn){
-
-		document.addEventListener('DOMContentLoaded',  function() {
-		  btn.removeAttribute('hidden')
-		});		
-	}
-
-	
-}
 
 function parse_parameters(){
+	if(!is_tableau_project()) return false
+
 	const urlParams = new URLSearchParams(window.location.search)
 
 	if (loc().includes(ref_project_open) || loc().includes(ref_project_perso)){
@@ -901,7 +893,7 @@ function get_details(res,title_viz){
 
 async function append_details_of_vizzes(){
 
-	if(!current_project()) return false
+	if(!current_project() || !is_tableau_project()) return false
 
 	let all_views = await get_my_all_views()
 	let list_title_viz = get_list_viz('title_viz')
