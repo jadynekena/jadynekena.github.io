@@ -3226,8 +3226,14 @@ a {
 .night input,
 .night textarea,
 .night select ,
-.night a img{
+.night a img,
+.night .alert{
   filter: invert(0.95) !important;
+}
+
+.night select, .night input, .night textarea, .night .form-control:focus {
+    background-color: #1c1c1c;
+    color: white;
 }
 
 
