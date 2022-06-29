@@ -145,8 +145,13 @@ async function select_supabase(fields,nametable,options){
 	return data
 }
 
+function local_if_dataviz_not_iframe(){
+	//considered LOCAL if (NOT IFRAME and /DATAVIZ/)
+	return (!inIframe() && loc() === "/DATAVIZ/")
+}
+
 function is_local_host(){
-	return window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
+	return local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
 }
 
 function is_home_page(){
@@ -1339,6 +1344,13 @@ async function show_number_of_votes(){
 }
 
 
+function inIframe () {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+}
 
 
 

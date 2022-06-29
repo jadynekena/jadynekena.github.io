@@ -108,6 +108,12 @@ function main(){
   })
 
   get_donnees_site()
+  check_if_collecting_datas()
+}
+
+function check_if_collecting_datas(){
+  collect_datas = !is_local_host()
+  console.warn({collect_datas})
 
 }
 
@@ -982,6 +988,7 @@ const sum_array = arr => accumulate(arr).pop()
 const percentage_of_total = (arr,nb_of_decimals) => arr.map(e => Number((100*(Number(e)/accumulate(arr).pop())).toFixed(   (nb_of_decimals ? nb_of_decimals : 1) ))  )
 const countOccurrences = (a,b) => b.map(e => a.filter(c => c['type_appareil'] === e).length)
 const zip = (x, y) => Array.from(Array(Math.max(x.length, y.length)), (_, i) => [x[i], y[i]])
+
 
 function keep_fields(obj, ...keys){
   return sort_by(obj.map(e => pick(e, ...keys)),keys[0])
