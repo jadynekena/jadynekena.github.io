@@ -564,20 +564,31 @@ function iframe_resize(id){
 }
 
 function adapt_iframe_height(id){
-	let final_height = $('iframe[id="'+id+'"]').contents().find('body')[0].offsetHeight
+	let curr_iframe = $('iframe[id="'+id+'"]')
+	if (curr_iframe) final_height = curr_iframe.contents().find('body')[0].offsetHeight
 	if (final_height > 0) $('iframe[id="'+id+'"]').parent().css('height',final_height  + 'px') 
 }
 
+function add_switch(){
+
+	//light switch
+	add_element('<div id="switch" class="fixed"><span  class="light-switch">💡</span></div>','switch',document.getElementById('footer-site'),-1)
+	document.querySelector('#switch').addEventListener('click', switch_light)
+	apply_light()
+}
+
 function main(){
+	var body = document.getElementsByTagName('body')[0]
 	come_and_go()
 
 	if(loc() === '/DATAVIZ/') return false;
 
 	//ALL
-	var body = document.getElementsByTagName('body')[0]
 	add_element(navbar(), 'navbar-site', body, 1)
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
+
+	add_switch() //all
 
 	titles() //on ALL PROJECTS
 	contents() //on ALL PROJECTS
@@ -1612,7 +1623,33 @@ function inIframe () {
 }
 
 
+function switch_light(){
 
+	let next = next_light()
+	document.querySelector('body').className = next === "🌙" ? "night" : ""
+	document.querySelector('.light-switch').innerText = next
+	save_item('curr_light',next)
+}
+
+function apply_light(){
+	switch_light()
+	switch_light()
+}
+
+function next_light(){
+	curr = get_item('curr_light') || current_light()
+	if(curr === "🌙"){
+		return "💡"
+	}else if(curr === "💡"){
+		return "🌙"
+	}else {
+		return "💡"
+	}
+}
+
+function current_light(){
+	return document.querySelector('.light-switch').innerText
+}
 
 
 main()

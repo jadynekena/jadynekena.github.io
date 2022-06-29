@@ -748,6 +748,22 @@ function refresh_viz1(){
 
 }
 
+function animate_beginning_until_now(date_field_name,EVENT_DURATION_IN_SECONDS){
+  a = final_datas
+  final_datas  = []
+  a.forEach(e => {
+      setTimeout(function(){
+        current_date=e[date_field_name]
+        current_date = display_if_date(current_date)
+        $('#current_page').text('Date en cours: '+current_date)
+        log(current_date)
+        final_datas.push(e)
+        refresh_all_viz()
+     },EVENT_DURATION_IN_SECONDS*1000)
+  })
+
+}
+
 
 function append_colors(){
 
