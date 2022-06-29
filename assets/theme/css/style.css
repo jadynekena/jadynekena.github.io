@@ -1188,3 +1188,10 @@ legend {
   margin: 10px 0;
   min-width: 30px;
 }
+
+.details {
+  font-size: 11px;
+  display: grid;
+  color: #8a8a8a;
+  font-style: italic;
+}

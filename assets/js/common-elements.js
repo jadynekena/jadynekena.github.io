@@ -2,6 +2,7 @@ const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
 
+const jquery_lib = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 
 var sep = '\t'
 var final_datas = []
@@ -24,7 +25,7 @@ const ref_project_perso = 'personnel'
 const ref_project_auto = 'automatisations'
 const ref_project_linkedin = 'linkedin'
 
-function current_location_shortcut(){
+function current_project(){
 	let res = loc().includes(ref_project_open) ? ref_project_open :
 				loc().includes(ref_project_perso) ? ref_project_perso :
 				loc().includes(ref_project_auto) ? ref_project_auto :
@@ -354,7 +355,26 @@ function add_element(html, id_element, parent_element, position){
 	return res;
 }
 
-function post_resultat_asynchrone(url,data_json){
+async function post_resultat_asynchrone(url,data_json){
+	try {
+	    const config = {
+	        method: 'POST',
+	        headers: {
+	            'Accept': 'application/json',
+	            'Content-Type': 'application/json',
+	        },
+	        body: JSON.stringify(data_json)
+	    }
+	    
+	    const response = await fetch(url, config)
+	    return await response.json()
+
+	} catch (error) {
+	        //
+	}
+}
+
+function post_resultat_asynchrone_old(url,data_json){
   objet_envoi = {
     type: 'POST',
     url: url,
@@ -557,6 +577,7 @@ function main(){
 
 	parse_parameters()
 	iframe_resize('DATAVIZ')
+	append_details_of_vizzes()
 
 	show_number_of_votes() //only on home page
 	
@@ -654,7 +675,7 @@ function load_script_text_in_body(script,id_script){
 }
 
 
-function load_script_in_head(script_url, isfirst){
+function load_script_in_head(script_url, isfirst, script_id){
 	var head_of_page = document.querySelector("head")
 	var s = document.createElement("script");
 	s.type = "text/javascript";
@@ -725,8 +746,7 @@ function get_subtitle(page_name_str){
 }
 
 function reset_cards(id_viz){
-
-	
+	switch_details_display('grid')
 	$('#close').remove()
 	$(".tableau").children().remove()
 	$("#script_viz").remove()
@@ -797,11 +817,87 @@ function switch_card(e){
 
 }
 
+function switch_details_display(final_value){
+	let elements = document.querySelectorAll('.details')
 
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].style.display = final_value
+	}
 
-function see_viz(e,id_viz,title_viz,redim_viz){
+}
+
+async function see_viz(e,id_viz,title_viz,redim_viz){
+	switch_details_display('block')
 	add_element(render_a_viz(id_viz,title_viz),id_viz,e.querySelector(".tableau"),1)
-	load_script_text_in_body(script_viz(id_viz,redim_viz),'script_viz')
+	await load_script_text_in_body(script_viz(id_viz,redim_viz),'script_viz')
+}
+
+function load_jquery(){
+	load_script_in_head(jquery_lib,false,'jquery_lib')
+}
+
+async function get_my_all_views(){
+	let url = racine_data() + '/rest/v1/rpc/first_100_views?apikey=' + apikey()
+	return await post_resultat_asynchrone(url, {username: 'ramanandray'})
+}
+
+function get_details(res,title_viz){
+	worbookname = title_viz.split('/')[0]
+	return res.find(e=> e['workbookRepoUrl'] === worbookname)
+}
+
+async function append_details_of_vizzes(){
+
+	if(!current_project()) return false
+
+	let all_views = await get_my_all_views()
+	let list_title_viz = get_list_viz('title_viz')
+	let details = {}
+	let list_to_keep = {
+		viewCount: 'Nombre de vues',
+		firstPublishDate: 'Date de récupération des données',
+		lastUpdateDate: 'Date de dernière mise à jour',
+	}
+
+	let title = ""
+	let content = ""
+	let nb_views = []
+
+	return await list_title_viz.forEach( function(a_title_viz) {
+		details = get_details(all_views,a_title_viz)
+
+		el = document.querySelector("[title_viz^='"+a_title_viz+"'] .details")
+		el.innerHTML = ""
+
+		Object.keys(details).forEach(function(key){
+			title = list_to_keep[key]
+			content =  display_value(key,details[key])
+			if(key && title && content){	
+				el.innerHTML += display_detail(title,content)
+			}
+
+		})
+
+		//rearrange views number at the beginning
+		nb_views = $('.detail_element:contains("vues")').get()
+		nb_views.forEach(function(view){
+			view.parentNode.prepend(view)
+		})
+
+	});
+}
+
+
+function display_value(keyname,value){
+	return keyname.includes('Date') ? new Date(value).toLocaleString() : value
+}
+
+
+function display_detail(title,content){
+	return `<span class="detail_element">
+			    <strong>`+title+`:</strong>
+			    <span>`+content+`</span>
+			 </span>`
 }
 
 function subtitle_of_project(subtitle){
@@ -837,6 +933,7 @@ function title_to_id(title){
 	return title.trim().toLowerCase().replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 }
 
+
 //add_element(one_card("Une carte","Le contenu d'une carte"),"une carte", $("#project-content"),1 )
 function one_card(title,content,id_viz,title_viz){
 	return `<a href="?id=`+title_to_id(title)+`" id="`+title_to_id(title)+`" class="card expandable" style="overflow: auto;" onclick="return switch_card(this)" id_viz=`+id_viz+` title_viz=`+title_viz+`>
@@ -846,6 +943,8 @@ function one_card(title,content,id_viz,title_viz){
                 		<p class="card-text mbr-fonts-style display-7 align-left">`+content+`</p>
 	                
 	                </div>
+	                <div class="details">
+					</div>
                 	<div class="card-wrapper tableau">
                 </div>
 
@@ -891,16 +990,16 @@ function script_viz(id_viz,redim_viz){
 function get_list_viz(type_of_field, index_of_viz){
 	let res = []
 	if(type_of_field === 'title'){
-		res = list_title_initial[current_location_shortcut()]
+		res = list_title_initial[current_project()]
 
 	}else if(type_of_field === 'title_viz'){//title ONLINE
-		res = list_title_viz_initial[current_location_shortcut()]
+		res = list_title_viz_initial[current_project()]
 
 	}else if(type_of_field === 'id'){
-		res = list_id_viz_initial[current_location_shortcut()]
+		res = list_id_viz_initial[current_project()]
 
 	}else if(type_of_field === 'redim'){
-		res = list_redim_viz_initial[current_location_shortcut()][index_of_viz]
+		res = list_redim_viz_initial[current_project()][index_of_viz]
 	}
 
 	return res
@@ -909,12 +1008,12 @@ function get_list_viz(type_of_field, index_of_viz){
 function open_datas(){
 
 	load_css_in_head(prefix + "/timeline/style.css")
-	load_script_in_head("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js",false)
+	load_jquery()
 
 	var result = ""
-	list_title = get_list_viz('title') //list_title_initial[current_location_shortcut()]
-	list_title_viz = get_list_viz('title_viz') //list_title_viz_initial[current_location_shortcut()]
-	list_id_viz = get_list_viz('id') //list_id_viz_initial[current_location_shortcut()]
+	list_title = get_list_viz('title') //list_title_initial[current_project()]
+	list_title_viz = get_list_viz('title_viz') //list_title_viz_initial[current_project()]
+	list_id_viz = get_list_viz('id') //list_id_viz_initial[current_project()]
 
 	for (let i = 0; i < list_title.length ; i++) {
 		//one_card(title,content,id_viz,title_viz)
