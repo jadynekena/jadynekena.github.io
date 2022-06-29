@@ -649,7 +649,9 @@ function get_specific_category_count(nb_original,category_name, percentage_mode)
 
   //sum_array(nb_appareils_total['nb_occurences'])
   res = nb_original['nb_occurences'][    nb_original['list_category'].indexOf(category_name)   ]
-  if(percentage_mode) res = 100* Number(res/(sum_array(nb_appareils_total['nb_occurences']))).toFixed(2)
+  if(percentage_mode) res = 100* Number(res/(sum_array(nb_appareils_total['nb_occurences'])))
+
+    res = res.toFixed(2)
 
   return res
 }
@@ -673,6 +675,8 @@ function refresh_viz1_part_mobiles(){
                 total_count: nb_appareils_total,
                 category_value_to_count: category_value_to_count
               }
+
+  log({gauge_datas})
   tip = tips['viz1']['part_mobiles']
   refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
