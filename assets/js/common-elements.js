@@ -732,22 +732,23 @@ function title_project(){
 	
 }
 
-function get_subtitle(page_name_str){
+function get_subtitle(loc){
 
-	if(page_name_str.includes(ref_project_open)){
+	if(loc.includes(ref_project_open)){
 		return `Les <strong>données ouvertes (OpenData)</strong> sont des données accessibles à tous.
 		Elles sont généralement fournies par les organismes officiels, les ministères, et parfois même les entreprises et associations.`
 
-	}if(page_name_str.includes(ref_project_perso)){
+	}if(loc.includes(ref_project_perso)){
 		return "J'ai récupéré mes données depuis différentes plateformes et j'ai découvert des indicateurs très intéressants sur mes activités."
 
-	}if(page_name_str.includes(ref_project_auto)){
+	}if(loc.includes(ref_project_auto)){
 		return ""
 
-	//nothing on linkedin
-	}if(!page_name_str.includes(ref_project_linkedin)){
-		return ""
+	}if(loc.includes(ref_project_linkedin)){
+		return `<h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-7">N'hésitez pas à consulter les publications directement <a href="https://www.linkedin.com/in/data-analyst-vba/" target="_blank">sur LinkedIn</a> !</h4>`
 
+	}else {
+		return ""
 	}
 }
 
@@ -888,7 +889,7 @@ async function get_my_all_views(){
 
 function get_details(res,title_viz){
 	worbookname = title_viz.split('/')[0]
-	return res.find(e=> e['workbookRepoUrl'] === worbookname)
+	return res ? res.find(e=> e['workbookRepoUrl'] === worbookname) : {}
 }
 
 async function append_details_of_vizzes(){
@@ -959,7 +960,7 @@ function subtitle_of_project(subtitle){
 function titles(){
 	if (!is_home_page()){
 		add_element(title_project(), 'title-section', document.getElementById('page-content'), 1)
-		add_element(subtitle_of_project(get_subtitle(page_name())), 'explanation', document.getElementById('page-content'), 2)
+		add_element(subtitle_of_project(get_subtitle(loc())), 'explanation', document.getElementById('page-content'), 2)
 	}
 }
 
