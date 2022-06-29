@@ -41,8 +41,19 @@ const list_title_viz = loc().includes(ref_project_open) ? ['Inspectionssanitaire
 
 
 
-const list_redim_viz = [`vizElement.style.width = '100%';
-vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';`
+const list_redim_viz = [`if (divElement.offsetWidth > 800) {
+	    vizElement.style.width = '100%';
+	    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+	} else if (divElement.offsetWidth > 500) {
+	    vizElement.style.width = '100%';
+	    vizElement.style.height = (divElement.offsetWidth * 0.75) + 'px';
+	} else {
+	    vizElement.style.width = '100%';
+	    vizElement.style.minHeight = '2100px';
+	    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
+	}
+	
+`
 
 ,
 
@@ -446,10 +457,14 @@ function ConvertToCSV(objArray) {
 }
 
 function iframe_resize(id){
-	$('iframe[id="'+id+'"]').on('load',function(){
-		adapt_iframe_height(id)
-	})
-	$(window).on('resize',function(){adapt_iframe_height(id)})
+	if(is_home_page()){
+
+		$('iframe[id="'+id+'"]').on('load',function(){
+			adapt_iframe_height(id)
+		})
+		$(window).on('resize',function(){adapt_iframe_height(id)})
+
+	}
 }
 
 function adapt_iframe_height(id){
