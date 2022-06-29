@@ -780,9 +780,9 @@ function creer_dataviz(){
         y = e.clientY;
     let max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
     log({max_left_position})
-    log(x+20)
+
     $(".current_tooltip")[0].style.top =  (y + 20) + 'px';
-    $(".current_tooltip")[0].style.left = Math.min( (x + 20),max_left_position) + 'px';
+    $(".current_tooltip")[0].style.left = Math.max(0, Math.min( (x + 20),max_left_position)) + 'px';
   };
 
 
