@@ -648,7 +648,8 @@ function refresh_viz1_labels(){
   nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1']['clic_unique'])
   ratio = refresh_content(label_selector,(nb_clics/nb_visites).toFixed(2),3,tips['viz1']['clic_par_visite'])
   nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['viz1']['ip_revenu'])
-  part_nb_ip_back = refresh_content(label_selector, + (100*(nb_ip_back/nb_visites)).toFixed(2) + '%',5,tips['viz1']['part_ip_revenu'])
+  part_nb_ip_back = (100*(nb_ip_back/nb_ip)).toFixed(2) 
+  refresh_content(label_selector, part_nb_ip_back +'%',5,tips['viz1']['part_ip_revenu'])
 }
 
 function get_specific_category_count(nb_original,category_name, percentage_mode){
