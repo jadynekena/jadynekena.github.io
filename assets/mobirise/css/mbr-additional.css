@@ -3227,7 +3227,8 @@ a {
 .night textarea,
 .night select ,
 .night a img,
-.night .alert{
+.night .alert,
+.night .remark{
   filter: invert(0.95) !important;
 }
 
