@@ -67,7 +67,7 @@ const tips = {
 
           ip_revenu: `Lorsqu'une même adresse IP <strong>revient sur le site</strong>, elle est comptabilisée dans cet indicateur.
           <br/>
-          Une adresse IP est considérée <strong>revenue</strong> après <strong>30 minutes de sa visite précédente.</strong>.
+          Une adresse IP est considérée <strong>revenue</strong> après <strong>30 minutes de sa visite précédente</strong>.
           `,
 
           part_ip_revenu: `La grande majorité des visites représente la <strong>première découverte du site</strong>, et non la <strong>reconsultation</strong> de celui-ci.`,
@@ -778,8 +778,11 @@ function creer_dataviz(){
   window.onmousemove = function (e) {
     var x = e.clientX,
         y = e.clientY;
-    $(".current_tooltip")[0].style.top = (y + 20) + 'px';
-    $(".current_tooltip")[0].style.left = (x + 20) + 'px';
+    let max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
+    log({max_left_position})
+    log(x+20)
+    $(".current_tooltip")[0].style.top =  (y + 20) + 'px';
+    $(".current_tooltip")[0].style.left = Math.min( (x + 20),max_left_position) + 'px';
   };
 
 
