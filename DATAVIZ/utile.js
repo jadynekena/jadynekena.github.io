@@ -108,13 +108,19 @@ function main(){
   })
 
   get_donnees_site()
-  check_if_collecting_datas()
+  let theme_to_keep = check_if_collecting_datas()
+  if(!theme_to_keep){
+    console.log('applying theme')
+    apply_light()
+  } else{
+    console.log('NOT applying theme')
+  }
 }
 
 function check_if_collecting_datas(){
   collect_datas = !is_local_host()
   console.warn({collect_datas})
-
+  return collect_datas
 }
 
 function refresh_all_viz(){

@@ -3201,8 +3201,13 @@ a {
   color: white;
 }
 
+
 .night a {
   color: #de6553;
+}
+
+.night.dataviz {
+  background-color: black;
 }
 
 
@@ -3214,7 +3219,6 @@ a {
 .night .timeline,
 .night .linktr__goal,
 .night .theme,
-.night .current_tooltip,
 .night #footer-site,
 .night input,
 .night textarea,

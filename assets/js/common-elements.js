@@ -565,7 +565,7 @@ function iframe_resize(id){
 
 function adapt_iframe_height(id){
 	let curr_iframe = $('iframe[id="'+id+'"]')
-	if (curr_iframe) final_height = curr_iframe.contents().find('body')[0].offsetHeight
+	if (curr_iframe && curr_iframe.contents() && curr_iframe.contents().find('body')[0]) final_height = curr_iframe.contents().find('body')[0].offsetHeight
 	if (final_height > 0) $('iframe[id="'+id+'"]').parent().css('height',final_height  + 'px') 
 }
 
@@ -574,7 +574,7 @@ function add_switch(){
 	//light switch
 	add_element('<div id="switch" class="fixed"><span  class="light-switch">💡</span></div>','switch',document.getElementById('footer-site'),-1)
 	document.querySelector('#switch').addEventListener('click', switch_light)
-	apply_light()
+	
 }
 
 function main(){
@@ -589,6 +589,7 @@ function main(){
 	add_element(footer(), 'footer-site', body, -1)
 
 	add_switch() //all
+	apply_light()
 
 	titles() //on ALL PROJECTS
 	contents() //on ALL PROJECTS
@@ -1349,7 +1350,12 @@ async function post_a_visit(){
 }
 
 async function data_client(){
-	return await get_result('https://ipapi.co/json/')
+	if(!is_local_host()){
+		return await get_result('https://ipapi.co/json/')	
+	}else {
+		return {}
+	}
+	
 }
 
 async function get_result(url){
@@ -1626,8 +1632,9 @@ function inIframe () {
 function switch_light(){
 
 	let next = next_light()
-	document.querySelector('body').className = next === "🌙" ? "night" : ""
-	document.querySelector('.light-switch').innerText = next
+	let one_more_class = loc() === '/DATAVIZ/' ? ' dataviz' : ''
+	document.querySelector('body').className = next === "🌙" ? "night" + one_more_class : ""
+	if(document.querySelector('.light-switch')) document.querySelector('.light-switch').innerText = next
 	save_item('curr_light',next)
 }
 
@@ -1637,7 +1644,7 @@ function apply_light(){
 }
 
 function next_light(){
-	curr = get_item('curr_light') || current_light()
+	curr = current_light()
 	if(curr === "🌙"){
 		return "💡"
 	}else if(curr === "💡"){
@@ -1648,7 +1655,8 @@ function next_light(){
 }
 
 function current_light(){
-	return document.querySelector('.light-switch').innerText
+	let icon = document.querySelector('.light-switch')
+	return  icon ? ( get_item('curr_light') || icon.innerText ) : get_item('curr_light')
 }
 
 
