@@ -287,7 +287,7 @@ function apikey(){
 }
 
 function navbar(){
-
+	let category_votes = document.querySelector('a_dataviz') ? `<li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#poll-votes">VOTES DE LA SEMAINE</a></li>` : ""
 
 	return `<section data-bs-version="5.1" class="menu menu2 cid-t98vDxC9FZ" once="menu" id="navbar-site">
     
@@ -313,7 +313,7 @@ function navbar(){
 	                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#la-data-au-service-des-entreprises">LA DATA</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-services">MES SERVICES</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mon-parcours">MON PARCOURS</a></li>
 	                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#technos">TECHNOS</a></li>
 	                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#dataviz-site-web">DATAVIZ EN TEMPS REEL DU SITE</a></li>
-	                    <li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#poll-votes">VOTES DE LA SEMAINE</a></li>
+	                    `+category_votes+`
 	                    <li class="nav-item dropdown"><a class="nav-link link text-black text-primary dropdown-toggle display-4" href="/#projets" data-toggle="dropdown-submenu" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">PROJETS ACCOMPLIS</a><div class="dropdown-menu" aria-labelledby="dropdown-733" data-bs-popper="none"><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-ouvertes">Données ouvertes</a><a class="text-black text-primary dropdown-item display-4" href="/projets-donnees-personnelles">Données personnelles</a><a class="text-black text-primary dropdown-item display-4" href="/projets-automatisations">Automatisations</a><a class="text-black text-primary dropdown-item display-4" href="/linkedin">Publications LinkedIn</a></div></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#mes-clients">ILS M'ONT FAIT CONFIANCE</a></li><li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#contact">CONTACT</a></li></ul>
 	                
 	                
@@ -569,9 +569,10 @@ function iframe_resize(id){
 }
 
 function adapt_iframe_height(id){
+	let final_height = 0
 	let curr_iframe = $('iframe[id="'+id+'"]')
 	if (curr_iframe && curr_iframe.contents() && curr_iframe.contents().find('body')[0]) final_height = curr_iframe.contents().find('body')[0].offsetHeight
-	if (final_height > 0) $('iframe[id="'+id+'"]').parent().css('height',final_height  + 'px') 
+	if (final_height && $('iframe[id="'+id+'"]').length > 0) $('iframe[id="'+id+'"]').parent().css('height',final_height  + 'px') 
 }
 
 function add_switch(){
