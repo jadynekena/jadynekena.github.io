@@ -1058,9 +1058,6 @@ function get_list_viz(type_of_field, index_of_viz){
 	}else if(type_of_field === 'id'){
 		res = list_id_viz_initial[current_project()]
 
-	}else if(type_of_field === 'legend'){
-		res = list_tooltips_initial[current_project()]
-
 	}else if(type_of_field === 'redim'){
 		res = list_redim_viz_initial[current_project()][index_of_viz]
 	}
@@ -1077,12 +1074,11 @@ function open_datas(){
 	list_title = get_list_viz('title')
 	list_title_viz = get_list_viz('title_viz') 
 	list_id_viz = get_list_viz('id') 
-	legend_viz = get_list_viz('legend')
 
 
 	for (let i = 0; i < list_title.length ; i++) {
 		//one_card(title,legend_viz,id_viz,title_viz)
-		result += one_card(list_title[i], legend_viz[i],list_id_viz[i], list_title_viz[i])
+		result += one_card(list_title[i], "",list_id_viz[i], list_title_viz[i])
 	}
 	
 
