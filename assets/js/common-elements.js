@@ -20,9 +20,9 @@ function list_posts_linkedin(){
 }
 
 
-const ref_project_open = 'ouvertes'
-const ref_project_perso = 'personnel'
-const ref_project_auto = 'automatisations'
+const ref_project_open = 'projets-donnees-ouvertes'
+const ref_project_perso = 'projets-donnees-personnelles'
+const ref_project_auto = 'projets-automatisations'
 const ref_project_linkedin = 'linkedin'
 
 function current_project(){
@@ -161,40 +161,48 @@ const list_redim_viz_initial = {
 
 
 //content card
-/*
-const list_content = [`<strong>31183</strong>. C'est le nombre d'inspections sanitaires en France entre Juin 2020 et Juin 2021, et parmi tout ça, c'est*: <br>
-1- 94,4% de conclusions (très) satisfaisantes<br>
-2- En moyenne 2444 inspections par an <br>
-3- 2/3 dans le milieu de la restauration <br>
-4- très fréquentes au mois de Mars, notamment le Jeudi (probabilité à 30%)<br>
-5- dans le département du Lot-et-Garonne (47): 79% des inspections sont très satisfaisantes<br>
-6- dans le département des Yvelines (78): seulement 8.19% sont très satisfaisantes<br>
-7- 17 établissements inspectées 4fois (ou+) en 1 an<br>
-8- 117 établissements critiques, dont SEULEMENT 4 ont reçu une deuxième inspection plus tard.`,
+
+const list_tooltips_initial = 
+	{[ref_project_open]: [
+
+					`<strong>31183</strong>. C'est le nombre d'inspections sanitaires en France entre Juin 2020 et Juin 2021, et parmi tout ça, c'est : <br>
+					1- 94,4% de conclusions (très) satisfaisantes<br>
+					2- En moyenne 2444 inspections par an <br>
+					3- 2/3 dans le milieu de la restauration <br>
+					4- très fréquentes au mois de Mars, notamment le Jeudi (probabilité à 30%)<br>
+					5- dans le département du Lot-et-Garonne (47): 79% des inspections sont très satisfaisantes<br>
+					6- dans le département des Yvelines (78): seulement 8.19% sont très satisfaisantes<br>
+					7- 17 établissements inspectées 4fois (ou+) en 1 an<br>
+					8- 117 établissements critiques, dont SEULEMENT 4 ont reçu une deuxième inspection plus tard.`,
+								
+
+							`Le nombre de modèles de véhicules commercialisés explose de façon exponentielle depuis 2005 : on en compte plus de 280 000 en 2014 📈.<br>
+
+					1- 84% des émissions de CO2 en automobile sont issues de 5 marques.<br>
+					2- L'émission de CO2 d'un véhicule dépend de 2 choses : sa consommation et son type de carburant, GPL étant le compromis.<br>
+					3- Seulement 14 marques en ont commercialisé, et sur le podium on a Renault avec ses 64 modèles GPL (du moins de 2001 à 2014).<br>
+					4- Les modèles de la marque Lamborghini consomment 2x plus que la moyenne, et produisent ainsi 2x plus de CO2, tout comme les modèles de Bentley et Ferrari.<br>
+
+
+
+							`,
+
+
+							`
+					Choisir son cursus parcoursup, un vrai casse-tête...<br>
+					Grâce aux données officielles de Parcoursup (et après avoir un peu nettoyé tout ça), j'ai mis en place une dataviz qui permet de visualiser 2 indicateurs :<br>
+					1. Le nombre de candidatures moyen par an<br>
+					2. Le taux d'admission moyen<br>
+					On s'intéresse ici à 2 paramètres: l'intitulé de la formation (BTS, DUT, ...) et sa filière (Ecole d'architecture par exemple).<br>
+					Dès que vous définissez un paramètre, l'autre se met à jour. Vous n'êtes pas obligé de renseigné les deux. Par défaut, ces paramètres sont sur la valeur (Tout).<br>
+				`],
+
+	[ref_project_perso]: [
+					"",
+					"",
+					"",]
 			
-
-			`Le nombre de modèles de véhicules commercialisés explose de façon exponentielle depuis 2005 : on en compte plus de 280 000 en 2014 📈.<br>
-
-1- 84% des émissions de CO2 en automobile sont issues de 5 marques.<br>
-2- L'émission de CO2 d'un véhicule dépend de 2 choses : sa consommation et son type de carburant, GPL étant le compromis.<br>
-3- Seulement 14 marques en ont commercialisé, et sur le podium on a Renault avec ses 64 modèles GPL (du moins de 2001 à 2014).<br>
-4- Les modèles de la marque Lamborghini consomment 2x plus que la moyenne, et produisent ainsi 2x plus de CO2, tout comme les modèles de Bentley et Ferrari.<br>
-
-
-
-			`,
-
-
-			`
-Choisir son cursus parcoursup, un vrai casse-tête...<br>
-Grâce aux données officielles de Parcoursup (et après avoir un peu nettoyé tout ça), j'ai mis en place une dataviz qui permet de visualiser 2 indicateurs :<br>
-1. Le nombre de candidatures moyen par an<br>
-2. Le taux d'admission moyen<br>
-On s'intéresse ici à 2 paramètres: l'intitulé de la formation (BTS, DUT, ...) et sa filière (Ecole d'architecture par exemple).<br>
-Dès que vous définissez un paramètre, l'autre se met à jour. Vous n'êtes pas obligé de renseigné les deux. Par défaut, ces paramètres sont sur la valeur (Tout).<br>
-			`]
-			*/
-
+}
 
 
 
@@ -340,7 +348,6 @@ function footer(){
 function add_element(html, id_element, parent_element, position){
 	var elem = document.createElement('div')
 	elem.innerHTML = html
-
 	if(document.getElementById(id_element)) document.getElementById(id_element).remove()
 
 	if(parent_element){			
@@ -459,9 +466,7 @@ function add(more){
 }
 
 async function check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback){
-  console.log({final_datas})
-  console.log({count})
-  //alert("check")
+
   if(final_datas.length < count  && data){
 
     depth = depth+1
@@ -601,7 +606,11 @@ function parse_parameters(){
 	const urlParams = new URLSearchParams(window.location.search)
 
 	if (loc().includes(ref_project_open) || loc().includes(ref_project_perso)){
-		if(urlParams.get('id')) expand_card(urlParams.get('id'))	
+		if(urlParams.get('id')){
+			load_script_in_head('https://cdn.jsdelivr.net/npm/showdown','md_to_html')
+			load_script_in_head('https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js',false,'swal_script')
+			expand_card(urlParams.get('id'))	
+		} 
 	}
 	
 }
@@ -676,10 +685,15 @@ function load_script_text_in_body(script,id_script){
 
 
 function load_script_in_head(script_url, isfirst, script_id){
+	//load only once
+	if(document.querySelector('script[id="'+script_id+'"]')) return true;
+
 	var head_of_page = document.querySelector("head")
 	var s = document.createElement("script");
 	s.type = "text/javascript";
 	s.src = script_url;
+	if (script_id) s.id = script_id
+
 	
 	if(isfirst){
 		return head_of_page.insertBefore(s, head_of_page.firstChild);
@@ -746,6 +760,7 @@ function get_subtitle(page_name_str){
 }
 
 function reset_cards(id_viz){
+
 	switch_details_display('grid')
 	$('#close').remove()
 	$(".tableau").children().remove()
@@ -755,6 +770,7 @@ function reset_cards(id_viz){
 	if(id_viz){
 		$('[id_viz="'+id_viz+'"]')[0].addEventListener('click', switch_card)
 		$('[id_viz="'+id_viz+'"]')[0].href = '?id='+$('[id_viz="'+id_viz+'"]')[0].id//NEW
+		set_infos($('[id_viz="'+id_viz+'"]')[0],false)
 	}
 	
 	window.history.pushState(new Date, '', loc().split('?')[0]);
@@ -768,6 +784,7 @@ function reset_cards(id_viz){
 }
 
 function expand_card(id){
+
 	e = document.querySelector(".card[id='"+id+"']")
 	e.className = 'card expanded'
 	e.href = '#' //NEW
@@ -776,16 +793,52 @@ function expand_card(id){
 	list_id_viz = get_list_viz('id')
 	
 	redim_viz = get_list_viz('redim',list_id_viz.indexOf(id_viz))
-	
 
 	add_element(`<div id="close" onclick="reset_cards('`+id_viz+`')" class="popupCloseButton">×</div>`, 'close', e.parentNode, 1) 
 	e.removeAttribute('onclick')
 
-	//add on url if needed
-	//if(!loc().includes('?id=' + id)) window.history.pushState(new Date, '', loc().split('?')[0] +'?id=' + id);
+	e.querySelector('.info').style.display = 'inline-block'
+	set_infos(e,true)
 
 	//load viz
 	see_viz(e,id_viz,title_viz,redim_viz)
+}
+
+function set_infos(card_parent,yes){
+	let info = card_parent.querySelector('.info')
+	info.style.display = yes ? 'inline-block':'none'
+	if(yes){
+		info.addEventListener('click',async function(){
+			//display_in_popup(this.previousElementSibling.innerText,this.getAttribute('data'))
+			
+			legend_viz = await readFiles(current_legend())
+			console.log(legend_viz)
+			display_md_in_popup(this.previousElementSibling.innerText, legend_viz)
+		})
+	}
+}
+
+function current_legend(){
+	return current_project() ? loc().replace('?id=','') + '.md' : ""
+}
+
+function display_in_popup(title,html_content){
+	return Swal.fire({
+		title: title,
+		html: html_content
+	})
+}
+
+function display_md_in_popup(title,md_content){
+	let converter = new showdown.Converter()
+	let html_content = converter.makeHtml(md_content);
+	return display_in_popup(title,html_content)
+}
+
+function readFiles(local_link){
+    return $.get(local_link, function(data) {
+        return data;
+    }, "text");
 }
 
 function switch_card(e){
@@ -867,6 +920,7 @@ async function append_details_of_vizzes(){
 		details = get_details(all_views,a_title_viz)
 
 		el = document.querySelector("[title_viz^='"+a_title_viz+"'] .details")
+		if(!el) return false
 		el.innerHTML = ""
 
 		Object.keys(details).forEach(function(key){
@@ -934,17 +988,23 @@ function title_to_id(title){
 }
 
 
-//add_element(one_card("Une carte","Le contenu d'une carte"),"une carte", $("#project-content"),1 )
-function one_card(title,content,id_viz,title_viz){
+function one_card(title,legend_viz,id_viz,title_viz){
+	/*
+	console.log({title})
+	console.log({legend_viz})
+	console.log({id_viz})
+	console.log({title_viz})
+	*/
 	return `<a href="?id=`+title_to_id(title)+`" id="`+title_to_id(title)+`" class="card expandable" style="overflow: auto;" onclick="return switch_card(this)" id_viz=`+id_viz+` title_viz=`+title_viz+`>
                 <div class="card-wrapper" style="overflow: auto;" >
                 	<div class="card-box align-center">
-                		<h5 class="card-title mbr-fonts-style display-7"><strong>`+title+`</strong></h5>
-                		<p class="card-text mbr-fonts-style display-7 align-left">`+content+`</p>
-	                
+                		<h5 class="card-title mbr-fonts-style display-7">
+                			<strong>`+title+`</strong>
+                			<span class="info" data="`+legend_viz+`">ℹ️</span>
+                		
+	                		<div class="details"></div>
+	                	</h5>
 	                </div>
-	                <div class="details">
-					</div>
                 	<div class="card-wrapper tableau">
                 </div>
 
@@ -998,6 +1058,9 @@ function get_list_viz(type_of_field, index_of_viz){
 	}else if(type_of_field === 'id'){
 		res = list_id_viz_initial[current_project()]
 
+	}else if(type_of_field === 'legend'){
+		res = list_tooltips_initial[current_project()]
+
 	}else if(type_of_field === 'redim'){
 		res = list_redim_viz_initial[current_project()][index_of_viz]
 	}
@@ -1011,13 +1074,15 @@ function open_datas(){
 	load_jquery()
 
 	var result = ""
-	list_title = get_list_viz('title') //list_title_initial[current_project()]
-	list_title_viz = get_list_viz('title_viz') //list_title_viz_initial[current_project()]
-	list_id_viz = get_list_viz('id') //list_id_viz_initial[current_project()]
+	list_title = get_list_viz('title')
+	list_title_viz = get_list_viz('title_viz') 
+	list_id_viz = get_list_viz('id') 
+	legend_viz = get_list_viz('legend')
+
 
 	for (let i = 0; i < list_title.length ; i++) {
-		//one_card(title,content,id_viz,title_viz)
-		result += one_card(list_title[i],"",list_id_viz[i], list_title_viz[i], list_title[i].replaceAll(" ","-"), document.querySelector("#project-content"))
+		//one_card(title,legend_viz,id_viz,title_viz)
+		result += one_card(list_title[i], legend_viz[i],list_id_viz[i], list_title_viz[i])
 	}
 	
 
@@ -1025,16 +1090,16 @@ function open_datas(){
 }
 
 function personal_datas(){
-	return open_datas()//big_section('')
+	return open_datas()
 }
 
 function automates(){
-	return loading()//big_section('')
+	return loading()
 }
 
 
-function content_of(page_name_str){
-	page_name_str = page_name_str.toLowerCase().trim()
+function content_of_current_location(){
+	page_name_str = loc()
 	
 	if(page_name_str.includes(ref_project_open)){
 		return open_datas()
@@ -1063,7 +1128,7 @@ function content_of(page_name_str){
 
 function contents(){
 
-	var content = content_of(page_name())
+	var content = content_of_current_location()
 	add_element(content, 'content-section', document.getElementById('page-content'), -1)
 }
 

@@ -1195,3 +1195,32 @@ legend {
   color: #8a8a8a;
   font-style: italic;
 }
+
+.info {
+  width: 23px;
+  display: none;
+  color: blueviolet;
+  margin-left: 5px;
+  top: 0;
+  position: relative;
+}
+
+#swal2-content {
+  text-align: left !important;
+}
+
+.expanded .card-box {
+  position: fixed;
+  display: block;  
+  z-index: 50;
+  background: #ffffff6e;
+  max-width: 96vw;
+}
+
+.expandable .tableau {
+  margin-top: 0;
+}
+
+.tableau  {
+  margin-top: 100px;
+}
