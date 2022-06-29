@@ -3228,8 +3228,14 @@ a {
 .night select ,
 .night a img,
 .night .alert,
-.night .remark{
+.night .remark,
+.night #swal2-content{
   filter: invert(0.95) !important;
+}
+
+.night #swal2-content {
+  filter: invert(1);
+  color: white;
 }
 
 .night select, .night input, .night textarea, .night .form-control:focus {
