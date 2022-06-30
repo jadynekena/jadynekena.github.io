@@ -1,0 +1,47 @@
+
+body {
+	background-color: black;
+	color:white;
+	font-family: arial;
+	padding: 30px;
+}		
+div{
+  padding: 20px;
+}
+input {
+	margin: 10px;
+	background-color: #d7d7d7;
+}
+button {
+  margin: 10px;
+  max-width: min-content;
+  background: #262626;
+  border-radius: 5px;
+  color: white;
+}
+span {
+	margin-right: 20px;
+}
+.remark {
+	text-align: center;
+}
+.nok {
+	color: red;			
+}
+
+.ok{
+	color: green;
+}
+
+#getTables {
+	display: none;
+	margin-bottom:50px;
+}
+#DELIMITER {
+  width: 25px;
+}
+
+#results {
+	overflow-wrap: break-word;
+	margin-top: 50px
+}

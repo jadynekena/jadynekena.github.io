@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SUPABASE BACK UP</title>
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/json2csv/5.0.7/json2csv.umd.min.js"></script>
+	
+	<link href="./index.css" rel="stylesheet">
+
+</head>
+<body>
+	<h1>TABLES BACKUP</h1>
+
+	<div>
+		<input type="text" name="PROJECT_ID" id="PROJECT_ID" placeholder="SUPABASE PROJECT ID" value = "kxdokvtvscvjuwzgmvei" hidden> <!--kxdokvtvscvjuwzgmvei-->
+		<input type="text" name="API_KEY" id="API_KEY"  placeholder="SUPABASE API KEY" value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4ZG9rdnR2c2N2anV3emdtdmVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU2MTk3MTQsImV4cCI6MTk3MTE5NTcxNH0.ViTcu3L79EkuvGvyDiSqwdpgJ0MQFbg8nL1vO0tTcDk" hidden>
+		<button onclick="try_connect()">CONNECT</button>
+		<span id="remark" class="remark nok"></span>
+	</div>
+
+	<div id="getTables">
+		<span>TABLE TO EXPORT
+			<select name= "TABLE_NAMES"  id="TABLE_NAMES"></select>
+		</span>
+
+		<span>DELIMITER:
+			<input type="text" name="DELIMITER" id="DELIMITER" value="," style="max-width: 50px">
+		</span>
+		<button onclick="try_export_table()">GET TABLE</button>
+	</div>
+
+	<a id="results"></a>
+
+	<script type="text/javascript" src="./index.js"></script>
+</body>
+</html>

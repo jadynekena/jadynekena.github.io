@@ -1534,7 +1534,8 @@ async function post_when_clicked(e){
 		'contenu_clic': textContent || '',
 		'lien_clic': link,
 		'id_element': element.id ||'',
-		'scrollY': window.scrollY
+		'scrollY': window.scrollY,
+		'adresse_ip':get_item('adresse_ip')
 			
 	}
 
