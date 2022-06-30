@@ -98,7 +98,8 @@ const tips = {
 
     
 async function get_donnees_site(){
-  await select_all('tout',creer_dataviz)
+  final_datas = await select_all('tout')
+  creer_dataviz()
 }
 
 function main(){
@@ -838,59 +839,12 @@ async function get_canaux(){
 
 
 final_datas = []
-async function select_all(name_table,function_callback,depth,from,into){
 
-
-
-  //console.error({function_callback})
-  let more_datas = []
-
-  //>=2nd page
-  if(from && into){
-    depth += 1
-    count = count !== 9999999999 && count > 0 ? count : await number_of_rows(name_table,'*')
-    let {data,error} = await supabase
-        .from(name_table)
-        .select('*')
-        .range(from,into)
-
-
-    //if data is not big enough 🡺 recursive
-    //console.warn({data})
-    add(data)
-    more_datas = await check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback)
-    //console.warn({more_datas})
-    if(more_datas) add(more_datas)
-    //console.warn({final_datas})
-
-    if(function_callback) function_callback(data)
-    final_datas = unique(final_datas);
-    return data
-
-  //very first query with only 1 element
-  }else{
-
-    final_datas = []
-
-    depth = 0 //no depth at the beginning
-
-    //count number of elements
-    count = 9999999999
-    //console.warn({count})
-
-    let  {data,error} = await supabase
-        .from(name_table)
-        .select('*')
-
-    add(data)
-    await check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback)
-  }
-  
+async function select_all(name_table){
+  const {data, error} = await supabase.from(name_table).select('*')
+  return data
 }
 
-function add(more){
-  return Array.prototype.push.apply(final_datas,more);
-}
 
 function unique(array){
   return [...new Set(array)];
@@ -898,31 +852,6 @@ function unique(array){
 
 function unique_objects_array(a,identifier){
   return [...new Map(a.map(item =>  [item[identifier], item])).values()].filter(e => e[identifier]);
-}
-
-async function check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback){
-  /*
-  console.log({final_datas})
-  console.log({count})
-  */
-
-  //alert("check")
-  if(final_datas.length < count  && data){
-
-    depth = depth+1
-    //console.warn({depth})
-
-    from = data.length * depth
-    //console.warn({from})
-
-    into = Math.min(from + data.length -1,count-1)
-    //console.warn({into})
-
-    return await select_all(name_table,function_callback,depth,from,into,function_callback)
-  
-  }else{
-    return []
-  }
 }
 
 
