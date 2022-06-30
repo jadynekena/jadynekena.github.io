@@ -1,4 +1,4 @@
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
@@ -579,14 +579,14 @@ function add_switch(){
 	
 }
 
-async function main(){
+function main(){
 	var body = document.getElementsByTagName('body')[0]
 	come_and_go()
 
-	if(loc() === '/DATAVIZ/') return false;
+	if(loc().includes("/DATAVIZ/")) return false;
 
 	//ALL
-	await pause_if_maintenance()
+	if (pause_if_maintenance()) return false
 	add_element(navbar(), 'navbar-site', body, 1)
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
@@ -1332,7 +1332,10 @@ async function im_not_reported(){
 
 }
 
-async function post_a_visit(){		
+async function post_a_visit(){
+
+	
+
 	is_new = false
 
 	//if very first visit then NO COOKIE accepted and NO DATA SAVED AT ALL
@@ -1484,6 +1487,8 @@ async function post_when_clicked(e){
 		> id_element (optionnel) // session
 	*/
 
+	//alert('click')
+
 	//e.preventDefault();
 	e.stopPropagation();
 
@@ -1507,7 +1512,7 @@ async function post_when_clicked(e){
 		'lien_clic': link,
 		'id_element': element.id ||'',
 		'scrollY': window.scrollY,
-		'adresse_ip_clic':get_item('adresse_ip') ?  get_item('adresse_ip')  : ""
+		'adresse_ip_clic': get_item('adresse_ip') ?  get_item('adresse_ip')  : ""
 			
 	}
 
@@ -1517,6 +1522,8 @@ async function post_when_clicked(e){
 		await insert_supabase('clics',a_clic,false)
 		if(link.includes('?id=')) window.location.href = link
 	}
+
+	//alert("post done !")
 
 	
 
@@ -1662,7 +1669,7 @@ function inIframe () {
 function switch_light(){
 
 	let next = next_light()
-	let one_more_class = loc() === '/DATAVIZ/' ? ' dataviz' : ''
+	let one_more_class = loc().includes("/DATAVIZ/") ? ' dataviz' : ''
 	document.querySelector('body').className = next === "🌙" ? "night" + one_more_class : ""
 
 	try {
@@ -1700,13 +1707,13 @@ function load_swal(){
 }
 
 function pause_if_maintenance(){
-	if(loc() === '/DATAVIZ/') return false;
+	if(loc().includes('/DATAVIZ/')) return false;
 
 	if(MAINTENANCE_MODE){
 		document.body.innerHTML = '<h3 class="align-center">Le site est actuellement en maintenance, merci de revenir plus tard !</h3>'
-		return MAINTENANCE_MODE;
 	} 
 
+	return MAINTENANCE_MODE
 }
 
 main()
