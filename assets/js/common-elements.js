@@ -243,7 +243,7 @@ function local_if_dataviz_not_iframe(){
 }
 
 function is_local_host(){
-	return false //local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
+	return local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
 }
 
 function is_home_page(){
@@ -283,7 +283,7 @@ function apikey(){
 }
 
 function navbar(){
-	let category_votes = document.querySelector('a_dataviz') ? `<li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#poll-votes">VOTES DE LA SEMAINE</a></li>` : ""
+	let category_votes = document.querySelector('.a-dataviz') ? `<li class="nav-item"><a class="nav-link link text-black text-primary display-4" href="/#poll-votes">VOTES DE LA SEMAINE</a></li>` : ""
 
 	return `<section data-bs-version="5.1" class="menu menu2 cid-t98vDxC9FZ" once="menu" id="navbar-site">
     
@@ -1531,7 +1531,11 @@ async function post_when_clicked(e){
 }
 
 
-
+async function refresh_current_details(){
+	var a_visit = await visit_details(true)
+	console.log({new_datas: a_visit})
+	return a_visit
+}
 
 async function submit_choice(){
 
@@ -1544,16 +1548,16 @@ async function submit_choice(){
 
   //insert only if (legend,id_visite) doesn't exist yet
   let legend = $('legend').text().trim()
-  const {data,error} = await supabase.from('votes').select('*')
+  var {data,error} = await supabase.from('votes').select('*')
                             .eq('id_visite',get_item('id_visite'))
                             .eq('legend',legend)
                             .limit(1)
   //console.log(data)
-  if(data.length > 0) return update_remark('❌ Vous avez déjà voté pour cette semaine, RDV la semaine prochaine !')
+  if(data && data.length > 0) return update_remark('❌ Vous avez déjà voté pour cette semaine, RDV la semaine prochaine !')
 
   
   //only if I have my datas, otherwise refresh them
-  if(!get_item('id_visite') ||  !get_item('adresse_ip')) refresh_client_datas()
+  if(!get_item('id_visite') ||  !get_item('adresse_ip')) await refresh_current_details()
 
   let tmp = {
     id_visite: get_item('id_visite'),
@@ -1563,8 +1567,18 @@ async function submit_choice(){
     intitule_choix: $("input[type='radio']:checked").parent().children('label').text()
   }
   
-  res = await supabase.from('votes').insert([tmp]) 
-  update_remark('✅ Votre vote a été soumis, merci !',true)
+
+	var {data, error} = await supabase.from('votes').insert([tmp],{ upsert: false}) 	
+	if(error){
+		update_remark('⚠️ Un problème a été rencontré lors de l\'envoi de votre vote, merci de réessayer plus tard.  \n Err:'+JSON.stringify(error))
+	}else{
+		update_remark('✅ Votre vote a été soumis, merci !',true)
+	}
+  
+  	
+  
+  
+  
   
 
   await show_number_of_votes()
