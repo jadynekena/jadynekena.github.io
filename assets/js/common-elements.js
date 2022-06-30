@@ -1209,8 +1209,6 @@ function new_period_of_connection(){
 
 async function visit_details(forcing){
 
-	//del_item('adresse_ip')
-
 	var body = document.getElementsByTagName('body')[0]
 	var res = {
 		'id_visite': get_item('id_visite'),
@@ -1263,7 +1261,7 @@ async function visit_details(forcing){
 		
 
 
-		save_item('adresse_ip',client['ip'] )
+		save_item('adresse_ip',res['adresse_ip'])
 		save_item('my_datas',JSON.stringify(res))
 
 	}catch(err){
@@ -1279,8 +1277,8 @@ function refresh_client_datas(){
 
 	save_item('id_visite',uuidv4())
 	save_item('date_premiere_visite',now_function())
-	del_item('adresse_ip')
-	del_item('my_datas')
+	//del_item('adresse_ip')
+	//del_item('my_datas')
 	console.log('very first connection (window of 30 min)', get_item('id_visite'))
 }
 
@@ -1531,47 +1529,6 @@ async function post_when_clicked(e){
 
 
 }
-
-
-async function delete_my_datas(){
-	const ref = { id_visite: get_item('id_visite') }
-
-	if(ref['id_visite']){
-		
-		let yes = confirm('⚠️❌Supprimer vos données ?\nCette action est irréversible.\n\nID: ' + ref['id_visite'])
-
-		if(yes) {
-
-			res1 = await supabase
-				  .from('visites')
-				  .delete()
-				  .match(ref)
-
-			res2 = await supabase
-				  .from('clics')
-				  .delete()
-				  .match(ref)
-
-			del_item('id_visite')
-			del_item('adresse_ip')
-			del_item('date_premiere_visite')
-
-			return [res1,res2]
-		}
-
-	}else {
-		return alert('✔️ Vos données sont déjà supprimées.')
-	}
-
-	return ref
-
-}
-
-
-
-
-
-
 
 
 
