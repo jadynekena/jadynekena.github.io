@@ -1,3 +1,4 @@
+const MAINTENANCE_MODE = true;
 const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
@@ -253,14 +254,16 @@ async function insert_supabase(nametable,datas,upsert_mode){
 	//console.log('inserting to '+nametable,datas)
 	if(is_local_host()) return ;
 
+	/*
 	const list_secondary_tables = ',clics,votes,'
 	if(list_secondary_tables.includes(','+ list_secondary_tables +',')){
 		if(!await im_not_reported()) await post_a_visit() //send visit if not yet	
 	} 
+	*/
 
 	const { data, error } = await supabase
 		.from(nametable)
-		.insert(datas, { upsert: upsert_mode, returning: 'minimal' })
+		.insert(datas, { upsert: false, returning: 'minimal' })
 
 	return  { data, error }
 }
@@ -583,13 +586,14 @@ function add_switch(){
 	
 }
 
-function main(){
+async function main(){
 	var body = document.getElementsByTagName('body')[0]
 	come_and_go()
 
 	if(loc() === '/DATAVIZ/') return false;
 
 	//ALL
+	await pause_if_maintenance()
 	add_element(navbar(), 'navbar-site', body, 1)
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
@@ -618,7 +622,7 @@ function parse_parameters(){
 	if (loc().includes(ref_project_open) || loc().includes(ref_project_perso)){
 		if(urlParams.get('id')){
 			load_script_in_head('https://cdn.jsdelivr.net/npm/showdown','md_to_html')
-			load_script_in_head('https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js',false,'swal_script')
+			load_swal()
 			expand_card(urlParams.get('id'))	
 		} 
 	}
@@ -1535,7 +1539,7 @@ async function post_when_clicked(e){
 		'lien_clic': link,
 		'id_element': element.id ||'',
 		'scrollY': window.scrollY,
-		'adresse_ip':get_item('adresse_ip')
+		'adresse_ip_clic':get_item('adresse_ip') || ""
 			
 	}
 
@@ -1723,5 +1727,18 @@ function current_light(){
 	return  icon ? ( get_item('curr_light') || icon.innerText ) : get_item('curr_light')
 }
 
+function load_swal(){
+	return load_script_in_head('https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js',false,'swal_script')
+}
+
+async function pause_if_maintenance(){
+	if(loc() === '/DATAVIZ/') return false;
+
+	if(MAINTENANCE_MODE){
+		document.body.innerHTML = '<h3 class="align-center">Le site est actuellement en maintenance, merci de revenir plus tard !</h3>'
+		return res;
+	} 
+
+}
 
 main()
