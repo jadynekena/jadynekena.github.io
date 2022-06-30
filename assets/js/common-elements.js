@@ -243,7 +243,7 @@ function local_if_dataviz_not_iframe(){
 }
 
 function is_local_host(){
-	return local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
+	return false //local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
 }
 
 function is_home_page(){
@@ -253,13 +253,6 @@ function is_home_page(){
 async function insert_supabase(nametable,datas,upsert_mode){
 	//console.log('inserting to '+nametable,datas)
 	if(is_local_host()) return ;
-
-	/*
-	const list_secondary_tables = ',clics,votes,'
-	if(list_secondary_tables.includes(','+ list_secondary_tables +',')){
-		if(!await im_not_reported()) await post_a_visit() //send visit if not yet	
-	} 
-	*/
 
 	const { data, error } = await supabase
 		.from(nametable)
@@ -1159,6 +1152,7 @@ function del_item(item_name){
 function get_item(item_name,parseJSON){
 	let res = window.localStorage.getItem(item_name)
 	if(parseJSON) res = JSON.parse(res)
+	if(!res) res = ""
 	return res
 }
 
@@ -1285,6 +1279,7 @@ function refresh_client_datas(){
 
 	save_item('id_visite',uuidv4())
 	save_item('date_premiere_visite',now_function())
+	del_item('adresse_ip')
 	del_item('my_datas')
 	console.log('very first connection (window of 30 min)', get_item('id_visite'))
 }
@@ -1460,33 +1455,6 @@ function date_yyyy_MM_dd(the_date){
 }
 
 
-//inutile
-async function disconnect(){
-	var end_visit = {
-		'est_parti': true
-	}
-
-	var matches = {
-		'date_visite_sans_heure' : date_yyyy_MM_dd(new Date(get_item('date_premiere_visite'))),
-		'id_visite': get_item('id_visite'),
-		'adresse_ip': get_item('adresse_ip')
-	}
-
-	console.log('disconnected to previous session')
-	//console.log(end_visit)
-	return await update_supabase('visites',end_visit,matches)
-}
-
-async function post_quit(e){
-
-	var confirmationMessage = "\o/";
-	await disconnect()
-	e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
-	return;              // Gecko, WebKit, Chrome <34
-
-
-
-}
 
 
 function come_and_go(){
@@ -1539,7 +1507,7 @@ async function post_when_clicked(e){
 		'lien_clic': link,
 		'id_element': element.id ||'',
 		'scrollY': window.scrollY,
-		'adresse_ip_clic':get_item('adresse_ip') || ""
+		'adresse_ip_clic':get_item('adresse_ip') ?  get_item('adresse_ip')  : ""
 			
 	}
 
@@ -1731,12 +1699,12 @@ function load_swal(){
 	return load_script_in_head('https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js',false,'swal_script')
 }
 
-async function pause_if_maintenance(){
+function pause_if_maintenance(){
 	if(loc() === '/DATAVIZ/') return false;
 
 	if(MAINTENANCE_MODE){
 		document.body.innerHTML = '<h3 class="align-center">Le site est actuellement en maintenance, merci de revenir plus tard !</h3>'
-		return res;
+		return MAINTENANCE_MODE;
 	} 
 
 }
