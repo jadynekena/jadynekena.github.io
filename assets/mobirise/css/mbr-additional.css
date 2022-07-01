@@ -3273,7 +3273,7 @@ a {
 }
 
 #switch {  
-  z-index: 6000;
+  z-index: 999;
   right: 0;
 }
 
