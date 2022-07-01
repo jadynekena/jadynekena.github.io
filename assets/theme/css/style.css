@@ -968,6 +968,7 @@ blockquote {
 #footer-site {
   bottom: 0;
   width: 100%;
+  position: relative;
 }
 
 @media only screen and (max-width: 600px) {
