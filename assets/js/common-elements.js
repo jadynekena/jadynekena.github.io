@@ -1,7 +1,9 @@
-const MAINTENANCE_MODE = false;
+
 const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
+const MAINTENANCE_MODE = false;
+
 
 const jquery_lib = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
 
@@ -579,11 +581,15 @@ function add_switch(){
 	
 }
 
+function is_loc_without_nav_bar(){
+	return loc().includes("/DATAVIZ/") || loc().includes("/backup/")
+}
+
 function main(){
 	var body = document.getElementsByTagName('body')[0]
 	come_and_go()
 
-	if(loc().includes("/DATAVIZ/")) return false;
+	if(is_loc_without_nav_bar()) return false;
 
 	//ALL
 	if (pause_if_maintenance()) return false
@@ -1678,7 +1684,7 @@ function load_swal(){
 }
 
 function pause_if_maintenance(){
-	if(loc().includes('/DATAVIZ/')) return false;
+	if(is_loc_without_nav_bar()) return false;
 
 	if(MAINTENANCE_MODE){
 		document.body.innerHTML = '<h3 class="align-center">Le site est actuellement en maintenance, merci de revenir plus tard !</h3>'

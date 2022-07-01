@@ -1,5 +1,5 @@
 
-const { createClient } = supabase
+//const { createClient } = supabase
 
 function give_alert(content,is_ok){
 	document.getElementById('remark').innerText = content

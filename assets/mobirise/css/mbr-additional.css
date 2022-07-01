@@ -3229,7 +3229,8 @@ a {
 .night a img,
 .night .alert,
 .night .remark,
-.night #swal2-content{
+.night #swal2-content,
+.night .dropdown-menu{
   filter: invert(0.95) !important;
 }
 
@@ -3238,9 +3239,10 @@ a {
   color: white;
 }
 
-.night select, .night input, .night textarea, .night .form-control:focus {
+
+.night select, .night input, .night textarea, .night .form-control:focus, .night .dropdown-item {
     background-color: #1c1c1c;
-    color: white;
+    color: white !important;
 }
 
 
