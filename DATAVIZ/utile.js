@@ -269,7 +269,7 @@ function seriesOf(typeChart,datas){
       return tmp
     })
 
-    log(res)
+    log(res,false,true)
 
   }
 
@@ -374,6 +374,16 @@ function set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorInde
   show_tip_on_hover(title_node,tip)
 }
 
+function rearrange_if_week_days(xDatas){
+  let sortingArr = week_day_orders()
+  return xDatas.sort(function(a, b){  
+    return sortingArr.indexOf(a) - sortingArr.indexOf(b);
+  });
+}
+
+function week_day_orders(){
+  return ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
+}
 
 function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only,ignore_evolution_for_tooltip) {
   log('\n\n\n\n\n')
@@ -398,6 +408,10 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
 
     xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
     log(xDatas)
+
+    //if weekdays -> rearrange from monday to sunday
+    xDatas = rearrange_if_week_days(xDatas)
+
 
     yDatas = xDatas.map(xElementValue => count_elements(temp, seriesFieldNameToCount,true,true,xFieldName,xElementValue)) // for each X element, count seriesFieldNameToCount from temp
     log(yDatas)
@@ -743,6 +757,10 @@ function refresh_viz1_evolutions(){
   log(field_to_count)
   refreshEchart(tip,'line','.chart-element',0,final_datas,'','date_heure_'+type_evolution,'date_'+type_evolution,'category',field_to_count,false,false)
   
+
+}
+
+function order_days(){
 
 }
 
