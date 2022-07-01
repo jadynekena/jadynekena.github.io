@@ -92,14 +92,16 @@ select {
 }
 
 .viz-label {
-  text-align: left;
-  grid-auto-rows: 1fr;
-  display: grid;
+	text-align: left;
+	display: table-cell;
+	vertical-align: middle;
+	width: 100%;
+	overflow-wrap: break-word;
 }
 
 .viz-title {
   border-radius: 5px;
-  padding: 5px 0 5px 5px;
+  padding: 5px;
   font-weight: bold;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
 }

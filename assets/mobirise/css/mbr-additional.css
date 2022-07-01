@@ -3263,7 +3263,7 @@ a {
 
 
 .light-switch {
-  z-index: 3000;
+  z-index: 6000;
   font-size: 20px;
   filter: grayscale(100%);
   -webkit-filter: grayscale(100%);
