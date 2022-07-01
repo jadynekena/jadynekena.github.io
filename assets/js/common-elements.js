@@ -360,6 +360,7 @@ function footer(){
 }
 
 function add_element(html, id_element, parent_element, position){
+	if (!html || html.length === 0) return false
 	var elem = document.createElement('div')
 	elem.innerHTML = html
 	if(document.getElementById(id_element)) document.getElementById(id_element).remove()
@@ -367,7 +368,7 @@ function add_element(html, id_element, parent_element, position){
 	if(parent_element){			
 		if(position>0){
 			var res = parent_element.insertBefore(elem.firstChild, parent_element.children[position-1]);	
-		}else{
+		}else if(elem.firstChild){			
 			var res = parent_element.appendChild(elem.firstChild)
 		}
 	}
@@ -752,7 +753,7 @@ function script_load_google_tag(){
 
 
 function page_name(){
-	return document.title.split('|')[1].trim()
+	return document.title ? document.title.split('|')[1].trim() : ""
 }
 
 function title_project(){
@@ -1113,7 +1114,7 @@ function personal_datas(){
 }
 
 function automates(){
-	return loading()
+	return '' //loading()
 }
 
 
