@@ -566,10 +566,10 @@ function ConvertToCSV(objArray) {
 function iframe_resize(id){
 	if(is_home_page()){
 
-		$(document).on('load',function(){
+		$('iframe[id="'+id+'"]').on('load',function(){
 			adapt_iframe_height(id)
 		})
-		$(window).on('resize',function(){adapt_iframe_height(id)}) 
+		$(window).on('resize',function(){adapt_iframe_height(id)})
 
 	}
 }
