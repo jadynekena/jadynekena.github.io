@@ -3263,7 +3263,6 @@ a {
 
 
 .light-switch {
-  z-index: 6000;
   font-size: 20px;
   filter: grayscale(100%);
   -webkit-filter: grayscale(100%);
@@ -3271,6 +3270,11 @@ a {
   padding: 5px;
   border-radius: 100px;
   background-color: #868686bd;
+}
+
+#switch {  
+  z-index: 6000;
+  right: 0;
 }
 
 .swal-wide{/*
