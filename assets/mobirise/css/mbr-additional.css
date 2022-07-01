@@ -3277,3 +3277,17 @@ a {
     top: 0;
     margin: 0;*/
 }
+
+.maintenance, .maintenance * {
+  background:black;
+  color:white;
+  text-align: center;
+  padding: 30px;
+  justify-content: center;
+}
+
+.maintenance button {
+  border-color: white;
+  border-radius: 15px;
+  background-color: #262626;
+}

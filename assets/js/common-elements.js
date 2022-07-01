@@ -2,7 +2,7 @@
 const { createClient } = supabase
 const prefix = loc() === '/' ||  loc() === '/index' ? '/assets' : '../assets' 
 supabase = createClient(racine_data(),  apikey())
-const MAINTENANCE_MODE = false;
+let MAINTENANCE_MODE = false ;
 
 
 const jquery_lib = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -27,6 +27,13 @@ const ref_project_open = 'projets-donnees-ouvertes'
 const ref_project_perso = 'projets-donnees-personnelles'
 const ref_project_auto = 'projets-automatisations'
 const ref_project_linkedin = 'linkedin'
+
+
+async function maintenance(){
+	let url = racine_data() + '/rest/v1/rpc/maintenance?apikey=' + apikey()
+	return await post_resultat_asynchrone(url, {})
+}
+
 
 function current_project(){
 	let res = loc().includes(ref_project_open) ? ref_project_open :
@@ -585,14 +592,16 @@ function is_loc_without_nav_bar(){
 	return loc().includes("/DATAVIZ/") || loc().includes("/backup/")
 }
 
-function main(){
+async function main(){
 	var body = document.getElementsByTagName('body')[0]
 	come_and_go()
 
 	if(is_loc_without_nav_bar()) return false;
 
 	//ALL
-	if (pause_if_maintenance()) return false
+	MAINTENANCE_MODE = await pause_if_maintenance()
+	if(MAINTENANCE_MODE) return false
+
 	add_element(navbar(), 'navbar-site', body, 1)
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
@@ -1683,14 +1692,25 @@ function load_swal(){
 	return load_script_in_head('https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.all.min.js',false,'swal_script')
 }
 
-function pause_if_maintenance(){
+async function pause_if_maintenance(){
+	MAINTENANCE_MODE = await maintenance()
 	if(is_loc_without_nav_bar()) return false;
 
 	if(MAINTENANCE_MODE){
-		document.body.innerHTML = '<h3 class="align-center">Le site est actuellement en maintenance, merci de revenir plus tard !</h3>'
+		document.body.outerHTML = `<body class="maintenance">
+									<h3 class="align-center">Le site est actuellement en maintenance, merci de revenir plus tard !</h3>
+									<button onclick="alert('Vous pouvez fermer la fenêtre 🙂');">Revenir plus tard</button>
+									</body>
+									`
+		window.history.pushState(new Date, '', new_pushed_loc('?redirect=maintenance'));
+
 	} 
 
 	return MAINTENANCE_MODE
+}
+
+function new_pushed_loc(params){
+	return loc().includes(params) ? loc() :  loc() + params
 }
 
 main()
