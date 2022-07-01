@@ -269,7 +269,7 @@ function seriesOf(typeChart,datas){
       return tmp
     })
 
-    log(res,false,true)
+    log(res)
 
   }
 
