@@ -1666,6 +1666,7 @@ function switch_light(){
 	}
 	
 	save_item('curr_light',next)
+	return next
 }
 
 function apply_light(){
@@ -1680,6 +1681,7 @@ function next_light(){
 	}else if(curr === "💡"){
 		return "🌙"
 	}else {
+		alert('Problème de changement de thème')
 		return "💡"
 	}
 }
