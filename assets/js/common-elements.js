@@ -445,12 +445,12 @@ async function select_all(name_table,function_callback,depth,from,into){
 
 
     //if data is not big enough -> recursive
-    //console.warn({data})
+    //console.info({data})
     add(data)
     more_datas = await check_if_datas_complete_or_recursive_call(name_table,count,data,depth,from,into,function_callback)
-    //console.warn({more_datas})
+    //console.info({more_datas})
     if(more_datas) add(more_datas)
-    //console.warn({final_datas})
+    //console.info({final_datas})
 
     if(function_callback) function_callback(data)
     final_datas = [...new Set(final_datas)];
@@ -463,7 +463,7 @@ async function select_all(name_table,function_callback,depth,from,into){
 
     //count number of elements
     count = 9999999999
-    //console.warn({count})
+    //console.info({count})
 
     var  {data,error} = await supabase
         .from(name_table)
@@ -484,13 +484,13 @@ async function check_if_datas_complete_or_recursive_call(name_table,count,data,d
   if(final_datas.length < count  && data){
 
     depth = depth+1
-    //console.warn({depth})
+    //console.info({depth})
 
     from = data.length * depth
-    //console.warn({from})
+    //console.info({from})
 
     into = Math.min(from + data.length -1,count-1)
-    //console.warn({into})
+    //console.info({into})
 
     return await select_all(name_table,function_callback,depth,from,into,function_callback)
   
@@ -516,11 +516,11 @@ function wait(yes){
 function to_csv(){
 	wait(false)
 	if(!sep) return false
-	console.warn({sep})
-	console.warn({final_datas})
+	console.info({sep})
+	console.info({final_datas})
 
 	csv = ConvertToCSV(final_datas)
-	console.warn({csv})
+	console.info({csv})
 
 	downloadFile(date_now() + '_datas-jadynekena.com.txt',csv)
 	//alert("Téléchargement...")
@@ -1215,7 +1215,7 @@ function dateDiffToString(a, b){
 function new_period_of_connection(){
 
 	var diff_date = dateDiffToString(new Date(get_item('date_premiere_visite')), new Date)
-	//console.warn(diff_date)
+	//console.info(diff_date)
 
 	//if the saved date doesn't exist THEN it's a new connection
 	//if the time elapsed is more than 30min OR 1h THEN it's a new connection
@@ -1373,13 +1373,13 @@ async function post_a_visit(){
 
 	//if i'm not reported yet -> send it without refreshing locally
 	}else if(await im_not_reported() ){
-		console.warn('user recognized but not reported yet',get_item('id_visite'))
+		console.info('user recognized but not reported yet',get_item('id_visite'))
 		is_new = true
 
 
 	//NOT first visit: cookies are accepted, current user already known by server
 	}else{
-		console.warn('user recognized ',get_item('id_visite'))
+		console.info('user recognized ',get_item('id_visite'))
 		is_new = false
 	}
 
@@ -1531,7 +1531,7 @@ async function post_when_clicked(e){
 
 	if(a_clic['id_visite']){
 
-		console.warn({a_clic})
+		console.info({a_clic})
 		await insert_supabase('clics',a_clic,false)
 		if(link.includes('?id=')) window.location.href = link
 	}
