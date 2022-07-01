@@ -115,7 +115,6 @@ function main(){
 
   get_donnees_site()
   let theme_to_keep = local_if_dataviz_not_iframe()
-  console.log({theme_to_keep})
   if(theme_to_keep){
     console.warn('showing icon')
     apply_light()
