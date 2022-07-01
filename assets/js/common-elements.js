@@ -1702,7 +1702,7 @@ async function pause_if_maintenance(){
 									<button onclick="alert('Vous pouvez fermer la fenêtre 🙂');">Revenir plus tard</button>
 									</body>
 									`
-		window.history.pushState(new Date, '', new_pushed_loc('?redirect=maintenance'));
+		window.history.pushState(new Date, '', new_pushed_loc('redirect=maintenance'));
 
 	} 
 
@@ -1710,7 +1710,8 @@ async function pause_if_maintenance(){
 }
 
 function new_pushed_loc(params){
-	return loc().includes(params) ? loc() :  loc() + params
+	final_concanetor = loc().includes('?') ? '&' : '?'
+	return loc().includes(params) ? loc() :  loc() +   final_concanetor +   params
 }
 
 main()
