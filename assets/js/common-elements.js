@@ -568,7 +568,7 @@ function iframe_resize(id){
 		$('iframe[id="'+id+'"]').on('load',function(){
 			adapt_iframe_height(id)
 		})
-		$(window).on('resize',function(){adapt_iframe_height(id)})
+		$(window).on('resize',function(){adapt_iframe_height(id)}) 
 
 	}
 }
@@ -583,7 +583,7 @@ function adapt_iframe_height(id){
 function add_switch(){
 
 	//light switch
-	add_element('<div id="switch" class="fixed"><span  class="light-switch">💡</span></div>','switch',document.getElementById('footer-site'),-1)
+	add_element('<div id="switch" class="fixed"><span  class="light-switch">💡</span></div>','switch',document.querySelector('#footer-site'),-1)
 	document.querySelector('#switch').addEventListener('click', switch_light)
 	
 }

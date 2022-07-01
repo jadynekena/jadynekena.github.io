@@ -114,13 +114,13 @@ function main(){
   })
 
   get_donnees_site()
-  let theme_to_keep = check_if_collecting_datas()
-  if(!theme_to_keep){
+  let theme_to_keep = local_if_dataviz_not_iframe()
+  if(theme_to_keep){
     console.warn('applying theme, showing icon')
     apply_light()
     document.getElementById('switch').style.display= ""
   } else{
-    console.warn('NOT applying theme, hiding icon')
+    console.warn('hiding icon')
     document.getElementById('switch').style.display= "none"
   }
 

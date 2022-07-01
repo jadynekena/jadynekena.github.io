@@ -2,7 +2,7 @@
   border-width: 2px;
 }
 body {
-  /*font-family: Jost;*/
+  min-height: 100vh;
 }
 
 a.nav-link .text-primary {
@@ -3249,7 +3249,6 @@ a {
 .fixed, .nightmode .fixed {
   position: fixed; /*relative;*/
   bottom: 0;
-  width: 90vw;
   -webkit-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
   text-align: end;
@@ -3266,7 +3265,7 @@ a {
   cursor: pointer;
   padding: 5px;
   border-radius: 100px;
-  background-color: #b7b7b7;
+  background-color: #868686bd;
 }
 
 .swal-wide{/*
