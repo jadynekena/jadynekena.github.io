@@ -1693,8 +1693,10 @@ function load_swal(){
 }
 
 async function pause_if_maintenance(){
+	if(is_loc_without_nav_bar() || is_local_host()) return false;
+
+
 	MAINTENANCE_MODE = await maintenance()
-	if(is_loc_without_nav_bar()) return false;
 
 	if(MAINTENANCE_MODE){
 		document.body.outerHTML = `<body class="maintenance">
