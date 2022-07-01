@@ -101,6 +101,8 @@ select {
   /*font-weight: bolder;*/
   border-radius: 2px;
   padding: 5px 0 5px 5px;
+  font-weight: bold;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
 }
 
 .viz-title > span {	
