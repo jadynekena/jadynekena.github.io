@@ -489,7 +489,11 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
     },
     confine: 'true',
     backgroundColor:   $('.current_tooltip').css('background-color'),
-    extraCssText:'overflow-wrap: anywhere;max-width:' + $('.current_tooltip').css('max-width'),
+    textStyle: {
+      overflow: 'breakAll',
+      width: 40,
+    },
+    extraCssText: css_tooltip(),
   }
 
   //common keys
@@ -505,6 +509,14 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   return myChart
 }
 
+function test(){
+  alert('yo')
+}
+function css_tooltip(){
+  return `
+    white-space: initial;
+    max-width:` + $('.current_tooltip').css('max-width') + ';'
+}
 
 function tooltipFormatter(params, src_datas){
   

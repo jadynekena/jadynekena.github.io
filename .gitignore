@@ -1,3 +1,7 @@
+.jekyll-metadata
+Gemfile*
+Guardfile
 preparations/
+server.bat
 _site/
 .jekyll-cache/
