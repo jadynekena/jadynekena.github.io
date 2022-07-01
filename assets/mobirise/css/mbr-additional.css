@@ -3,6 +3,11 @@
 }
 body {
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.night body {
+  background: black;
 }
 
 a.nav-link .text-primary {
@@ -3289,4 +3294,10 @@ a {
   border-color: white;
   border-radius: 15px;
   background-color: #262626;
+}
+
+.mbr-section-subtitle.mbr-fonts-style.align-center.mb-0.mt-2.display-7,
+.card-text.mbr-fonts-style.display-7 {
+  padding-right: 15px;
+  padding-left: 15px;
 }
