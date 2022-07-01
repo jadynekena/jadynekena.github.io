@@ -123,6 +123,7 @@ function main(){
     console.warn('NOT applying theme, hiding icon')
     document.getElementById('switch').style.display= "none"
   }
+
 }
 
 function show_light_icon(){
@@ -670,11 +671,24 @@ function refresh_viz1_labels(){
   refresh_content(label_selector, part_nb_ip_back +'%',5,tips['viz1']['part_ip_revenu'])
 }
 
-function get_specific_category_count(nb_original,category_name, percentage_mode){
+function get_specific_category_count(nb_original,category_name,categories_to_ignore, percentage_mode){
 
-  //sum_array(nb_appareils_total['nb_occurences'])
+
   res = nb_original['nb_occurences'][    nb_original['list_category'].indexOf(category_name)   ]
-  if(percentage_mode) res = 100* Number(res/(sum_array(nb_appareils_total['nb_occurences'])))
+  log({res})
+  
+  if(categories_to_ignore){
+    index_category_to_ignore = nb_original['list_category'].indexOf(categories_to_ignore)
+    log({nb_original})
+    denominator = nb_original['nb_occurences'].filter((e,i) => i !== index_category_to_ignore)
+    log({nb_original})
+  } else{
+    denominator = nb_original['nb_occurences']
+  }
+  
+  final_sum = sum_array(denominator)
+  
+  if(percentage_mode) res = 100* Number(res/(final_sum))
 
     res = res.toFixed(2)
 
@@ -690,7 +704,7 @@ function refresh_viz1_part_mobiles(){
   nb_appareils_total = count_category_part(final_datas,'type_appareil','une_visite',false) 
   log({nb_appareils_total})
 
-  part_mobile = get_specific_category_count(nb_appareils_total,category_value_to_count,true)
+  part_mobile = get_specific_category_count(nb_appareils_total,category_value_to_count,'Resolution inconnue',true)
   log({part_mobile})
   
   gauge_datas = { min: 0,
