@@ -83,16 +83,17 @@
 			<div class="chart">
 				<div class="viz-title">
 					<span>Affluences des
-					</span>
 						<select onchange="refresh_viz1_counters(this)" id="type_evolution_affluences">
 						  <option value="visite">visites</option>
 						  <option value="clic">clics</option>
 						  <option value="adresse_ip">IP</option>
 						</select>
+					</span>
 						par
 					<select onchange="refresh_viz1_affluences()" id="type_affluence">
-					  <option value="h">heure</option>
 					  <option value="d">jour</option>
+					  <option value="h">heure</option>
+					  <option value="dh">jour et heure</option>
 					</select>
 				</div>			
 				<div class="chart-element affluence"></div>

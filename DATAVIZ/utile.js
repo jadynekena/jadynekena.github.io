@@ -27,8 +27,8 @@ async function subscribe_supabase(){
 
           //else ---> we don't know
           }else{
-            log({payload},false,true)            
-            log('Problème nouvelle visite.',false,true)
+            log({payload},false, true)            
+            log('Problème nouvelle visite.',false, true)
             return false
           }
           last_tout = last_tout.data[0]
@@ -86,7 +86,7 @@ const tips = {
           Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
           `,
 
-          affluences: `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine.
+          affluences: `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine, soit <strong>les deux</strong>.
           <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
           
           `
@@ -377,9 +377,36 @@ function set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorInde
 function rearrange_if_week_days(xDatas){
   let sortingArr = week_day_orders()
   return xDatas.sort(function(a, b){  
-    return sortingArr.indexOf(a) - sortingArr.indexOf(b);
+
+    //multiple words beginning with the  weekday
+    if(a.includes(' ') && b.includes(' ') ){
+
+      return compare(sortingArr,a,b)
+
+    //weekdays or not
+    }else{
+
+      return sortingArr.indexOf(a) - sortingArr.indexOf(b);
+
+    }
+    
   });
 }
+
+function compare(sortingArr,a,b){
+  weekday_a = a.split(' ')[0]
+  weekday_b = b.split(' ')[0]
+  secondword_a = a.split(' ')[1]
+  secondword_b = b.split(' ')[1]
+
+
+  if (weekday_a === weekday_b) {
+     return secondword_b - secondword_a
+  }
+  return sortingArr.indexOf(weekday_a) - sortingArr.indexOf(weekday_b);
+
+}
+
 
 function week_day_orders(){
   return ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
@@ -411,7 +438,6 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
 
     //if weekdays -> rearrange from monday to sunday
     xDatas = rearrange_if_week_days(xDatas)
-
 
     yDatas = xDatas.map(xElementValue => count_elements(temp, seriesFieldNameToCount,true,true,xFieldName,xElementValue)) // for each X element, count seriesFieldNameToCount from temp
     log(yDatas)
@@ -528,6 +554,7 @@ function test(){
 }
 function css_tooltip(){
   return `
+    border-width:0;
     white-space: initial;
     max-width:` + $('.current_tooltip').css('max-width') + ';'
 }
@@ -768,9 +795,12 @@ function refresh_viz1_affluences(){
 
   //affluences
   tip = tips['viz1']['affluences']
-  let categ = $('#type_affluence').val() === "h" ? "heure_visite" : "jour_visite"
-  let categ_str = $('#type_affluence').val() === "h" ? "heure_visite_str" : "jour_visite_str"
-  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category',evolution_field_to_count(),false,true,true)
+  let categ = $('#type_affluence').val() === "d" ? "jour_visite" :
+              $('#type_affluence').val() === "h" ? "heure_visite" :
+              $('#type_affluence').val() === "dh" ? "jour_heure_visite" 
+              : "h"
+  let categ_str = categ + '_str'
+  refreshEchart(tip,'bar','.chart-element',1,final_datas,'',categ_str,categ,'category',evolution_field_to_count(),false, true,true)
   
 
 }
@@ -860,7 +890,7 @@ function creer_dataviz(){
     let max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
     log({max_left_position})
 
-    $(".current_tooltip")[0].style.top =  (y + 20) + 'px';
+    $(".current_tooltip")[0].style.top = (window.scrollY + y + 20) + 'px';
     $(".current_tooltip")[0].style.left = Math.max(0, Math.min( (x + 20),max_left_position)) + 'px';
   };
 

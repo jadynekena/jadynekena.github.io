@@ -594,6 +594,9 @@ function is_loc_without_nav_bar(){
 }
 
 async function main(){
+
+	load_live_if_localhost()
+
 	var body = document.getElementsByTagName('body')[0]
 	come_and_go()
 
@@ -620,6 +623,12 @@ async function main(){
 
 	show_number_of_votes() //only on home page
 	
+}
+
+function load_live_if_localhost(){
+	if(is_local_host()){
+		load_script_in_head('https://livejs.com/live.js',true,'live-js')
+	}
 }
 
 
