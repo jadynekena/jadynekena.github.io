@@ -85,7 +85,8 @@ select {
 }
 
 .viz-gauge {
-	padding-top: 45px;
+	padding-top: 70px;
+	padding-bottom: 20px;
 	width: 100%;
 	height: 200px;
 	display: block;
