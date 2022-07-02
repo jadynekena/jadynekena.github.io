@@ -1,14 +1,6 @@
 .btn {
   border-width: 2px;
 }
-body {
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.night body {
-  background: black;
-}
 
 a.nav-link .text-primary {
   color: black !important;
@@ -3189,6 +3181,10 @@ a {
   filter: invert(0.95);
 }
 
+.night body {
+  background: black;
+}
+
 .night .nav-link {
   color: black !important;
 }
@@ -3251,14 +3247,14 @@ a {
 }
 
 
-.fixed, .nightmode .fixed {
+.fixed, .night .fixed {
   position: fixed; /*relative;*/
   bottom: 0;
   -webkit-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
   text-align: end;
   margin: 15px;
-  display: flex; /*new*/
+  display: flex;
 }
 
 
@@ -3304,4 +3300,8 @@ a {
 .card-text.mbr-fonts-style.display-7 {
   padding-right: 15px;
   padding-left: 15px;
+}
+
+section {
+  overflow-x: hidden;
 }
