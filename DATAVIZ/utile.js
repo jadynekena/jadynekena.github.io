@@ -814,9 +814,9 @@ function display_as_long_duration(duration_in_seconds){
   remaining_sec = Math.floor(remaining_sec%60)
   log({remaining_sec})
 
-  let sec = remaining_sec
+  let sec = (remaining_sec.length === 1 ? '0' : '') + remaining_sec
 
-  return  (day > 0 ? day+'j ' : '') +hour+'h '+min+'m '+sec
+  return  (day > 0 ? day+'j ' : '') +hour+'h'+min+'m'+sec
 }
 
 function display_as_duration(duration_in_seconds){
