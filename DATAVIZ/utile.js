@@ -80,7 +80,7 @@ const tips = {
 
           clics_max: `Le <strong>nombre de clics maximal</strong> représente l'<strong>utilisateur le plus actif</strong> de <strong>toutes les visites</strong> depuis la création du site.`,
           
-          duree_max_visite: `Cette <strong>durée maximale de visite</strong> ne considère que les visiteurs ayant fait <strong>au moins 2 clics</strong>, parmi <strong>les visites de 30 minutes maximum</strong>.`,
+          duree_max_visite: `La <strong>durée maximale de visite</strong> ne considère que les visiteurs ayant fait <strong>au moins 2 clics</strong>, parmi <strong>les visites de 30 minutes maximum</strong>.`,
 
 
           part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
