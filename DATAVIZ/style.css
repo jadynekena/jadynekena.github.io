@@ -116,6 +116,7 @@ select {
   width: min-content;
   cursor: pointer;
   padding-bottom: 30px;
+  white-space: nowrap;
 }
 
 .viz-title > span:hover, .viz-text:hover {

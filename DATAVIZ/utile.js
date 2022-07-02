@@ -796,7 +796,7 @@ function max_duration_visit(final_datas){
 function display_as_duration(duration_in_seconds){
   let mm = (duration_in_seconds/60).toFixed(0)
   let ss = (duration_in_seconds%60).toFixed(0)
-  return  mm+ ':' + ss
+  return  '00:'+ mm+ ':' + ss + ''
 }
 
 function get_specific_category_count(nb_original,category_name,categories_to_ignore, percentage_mode){
