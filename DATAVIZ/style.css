@@ -98,6 +98,7 @@ select {
 	vertical-align: middle;
 	width: 100%;
 	overflow-wrap: break-word;
+	margin-bottom: 12px;
 }
 
 .viz-title {
