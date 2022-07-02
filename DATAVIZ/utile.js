@@ -2,6 +2,54 @@
 let DEBUGGING_MODE = false
 supabase = createClient(racine_data(),  apikey())
 
+const date_ref_site = new Date(2022, 5, 19, 8, 14, 35) // MONTH BEGINS WITH 0 ! new Date('2022-06-19T08:14:35')
+const tips = {
+  'viz1': {ip_unique: `L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
+            <strong>1 IP = 1 utilisateur unique.</strong>`,
+
+          visite_unique: `Une visite représente une <strong>adresse IP</strong> qui se connecte dans une <strong>durée totale de 30 minutes</strong>.
+            <br/> <br/>
+            <u><strong>Exemple</strong></u>: une même adresse IP clique sur un élément du site, puis clique sur un autre <strong>31 minutes plus tard</strong> 🡺 cela est considéré comme <strong>2 visites</strong>, car le visiteur a probablement quitté le site, puis est revenu.`,
+          
+          clic_unique: `Comme son nom l'indique, le nombre de clics recense <strong>toutes les fois où le visiteur clique sur un élément</strong> (texte, bouton, lien, etc).`,
+          
+          clic_par_visite: `Ce nombre indique le <strong>nombre moyen de fois qu'un visiteur va cliquer</strong> sur un élément pendant sa visite.`,
+
+          ip_revenu: `Lorsqu'une même adresse IP <strong>revient sur le site</strong>, elle est comptabilisée dans cet indicateur.
+          <br/>
+          Une adresse IP est considérée <strong>revenue</strong> après <strong>30 minutes de sa visite précédente</strong>.
+          `,
+
+          part_ip_revenu: `La grande majorité des visites représente la <strong>première découverte du site</strong>, et non la <strong>reconsultation</strong> de celui-ci.`,
+
+
+          clics_max: `Le <strong>nombre de clics maximal</strong> représente l'<strong>utilisateur le plus actif</strong> de <strong>toutes les visites</strong> depuis la création du site.`,
+          
+          duree_max_visite: `La <strong>durée maximale de visite</strong> ne considère que les visiteurs ayant fait <strong>au moins 2 clics</strong>, parmi <strong>les visites de 30 minutes maximum</strong>.`,
+
+          date_premiere_visite: `Il m'a fallu <strong>#durée_attente</strong> pour avoir <strong>ma toute première visite</strong> !`,
+
+          elapsed_time: `Ce site a été mis en ligne pour la toute première fois le <strong>` + date_ref_site.toLocaleString() + `</strong> (heure locale <strong>France</strong>).`,
+
+
+          part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
+          <br/>
+          C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
+          
+          evolutions: `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.
+          <br/>
+          Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
+          `,
+
+          affluences: `Observez les affluences soit <strong>par Jour</strong> de la semaine, soit <strong>par Heure</strong>, soit <strong>les deux</strong>.
+          <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
+          
+          `
+          }
+}
+    
+
+
 
 
 async function subscribe_supabase(){
@@ -58,49 +106,6 @@ async function subscribe_supabase(){
 
 }
 
-const tips = {
-  'viz1': {ip_unique: `L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
-            <strong>1 IP = 1 utilisateur unique.</strong>`,
-
-          visite_unique: `Une visite représente une <strong>adresse IP</strong> qui se connecte dans une <strong>durée totale de 30 minutes</strong>.
-            <br/> <br/>
-            <u><strong>Exemple</strong></u>: une même adresse IP clique sur un élément du site, puis clique sur un autre <strong>31 minutes plus tard</strong> 🡺 cela est considéré comme <strong>2 visites</strong>, car le visiteur a probablement quitté le site, puis est revenu.`,
-          
-          clic_unique: `Comme son nom l'indique, le nombre de clics recense <strong>toutes les fois où le visiteur clique sur un élément</strong> (texte, bouton, lien, etc).`,
-          
-          clic_par_visite: `Ce nombre indique le <strong>nombre moyen de fois qu'un visiteur va cliquer</strong> sur un élément pendant sa visite.`,
-
-          ip_revenu: `Lorsqu'une même adresse IP <strong>revient sur le site</strong>, elle est comptabilisée dans cet indicateur.
-          <br/>
-          Une adresse IP est considérée <strong>revenue</strong> après <strong>30 minutes de sa visite précédente</strong>.
-          `,
-
-          part_ip_revenu: `La grande majorité des visites représente la <strong>première découverte du site</strong>, et non la <strong>reconsultation</strong> de celui-ci.`,
-
-
-          clics_max: `Le <strong>nombre de clics maximal</strong> représente l'<strong>utilisateur le plus actif</strong> de <strong>toutes les visites</strong> depuis la création du site.`,
-          
-          duree_max_visite: `La <strong>durée maximale de visite</strong> ne considère que les visiteurs ayant fait <strong>au moins 2 clics</strong>, parmi <strong>les visites de 30 minutes maximum</strong>.`,
-
-
-          part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
-          <br/>
-          C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
-          
-          evolutions: `Seules les dates-heures ayant reçues <strong>au moins 1 #type_evolution</strong> sont affichées.
-          <br/>
-          Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
-          `,
-
-          affluences: `Observez les affluences soit <strong>par Jour</strong> de la semaine, soit <strong>par Heure</strong>, soit <strong>les deux</strong>.
-          <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
-          
-          `
-          }
-}
-    
-
-
 
     
 async function get_donnees_site(){
@@ -155,7 +160,7 @@ function log(content,json_mode,forcing){
 //TOOLTIP FOR LABELS
 function refresh_content(selector,content,index,tooltipText){
   log((selector + ',' + content +',' + index).split(','))
-  $($(selector)[index]).text(content)
+  $($(selector)[index]).html(content)
   //$($(selector)[index]).attr('title',tooltipText)
 
   //on hover : set current tooltip on TEXT and its TITLE
@@ -728,17 +733,99 @@ function refresh_viz1_labels(){
   nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1,tips['viz1']['visite_unique'])
   nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1']['clic_unique'])
   ratio = refresh_content(label_selector,(nb_clics/nb_visites).toFixed(2),3,tips['viz1']['clic_par_visite'])
+  
+  // ip revenus + %
   nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['viz1']['ip_revenu'])
   part_nb_ip_back = (100*(nb_ip_back/nb_ip)).toFixed(2) 
   refresh_content(label_selector, part_nb_ip_back +'%',5,tips['viz1']['part_ip_revenu'])
 
+  // clics max
   clics_max = calculate_clic_max(final_datas)
   refresh_content(label_selector,clics_max,6,tips['viz1']['clics_max'])
+  
+  // durée max visite
   duree_max_visite = max_duration_visit(final_datas)
   refresh_content(label_selector,duree_max_visite,7,tips['viz1']['duree_max_visite'])
 
+  // elapsed time: only once
+  if(no_elapsed_time_yet(label_selector)){
+    
+    //set it first
+    refresh_time_elapsed(label_selector)
+
+    //update every 1 second
+    setInterval(function(){
+      refresh_time_elapsed(label_selector)
+    },1000)
+  }
+
+  // very 1st visit
+  date_premiere_visite = very_first_visit(final_datas)
+  date_premiere_visite_str = display_date_dd_mm_yyyy_hh_min_s(date_premiere_visite)
+  duree_attente = display_as_long_duration(duration_in_seconds(date_ref_site,date_premiere_visite))
+  refresh_content(label_selector,date_premiere_visite_str,9,tips['viz1']['date_premiere_visite'].replace('#durée_attente',duree_attente))
 
 }
+
+function display_date_dd_mm_yyyy_hh_min_s(date){
+  return date.getDate() + '/' + 
+          date.getMonth() + '/' + 
+          date.getFullYear().toString().substring(2) + ' ' + 
+
+          date.getHours() + ':' +
+          date.getMinutes() + ':' +
+          date.getSeconds()
+}
+
+function very_first_visit(final_datas){
+  return new Date(Math.min(... final_datas.map(e => new Date(e['date_visite']))))
+}
+
+function refresh_time_elapsed(label_selector){
+  refresh_content(label_selector,elapsed_time(),8,tips['viz1']['elapsed_time'])
+}
+
+function no_elapsed_time_yet(label_selector){
+  return $(label_selector)[9].innerText.trim() === ''
+}
+
+function elapsed_time(){ // TO CHECK
+  duration_in_s = duration_in_seconds(date_ref_site, new Date())
+  res = display_as_long_duration(duration_in_s) //date_ref_site + '<br/>' + (new Date())
+  return res
+}
+
+function duration_in_seconds(date_min,date_max){
+  return Math.round( (date_max - date_min)/1000 )
+}
+
+function display_as_long_duration(duration_in_seconds){
+  log('\n\n'+duration_in_seconds)
+
+  let day = Math.floor(duration_in_seconds/(24*60*60))
+  var remaining_sec = Math.floor(duration_in_seconds%(24*60*60))
+
+  log({remaining_sec})
+
+  let hour = Math.floor(remaining_sec/(60*60))
+  remaining_sec = Math.floor(remaining_sec%(60*60))
+  log({remaining_sec})
+  
+  let min = Math.floor(remaining_sec/60); 
+  remaining_sec = Math.floor(remaining_sec%60)
+  log({remaining_sec})
+
+  let sec = remaining_sec
+
+  return  (day > 0 ? day+'j ' : '') +hour+'h '+min+'m '+sec+'s'
+}
+
+function display_as_duration(duration_in_seconds){
+  let min = (duration_in_seconds/60).toFixed(0)
+  let sec = (duration_in_seconds%60).toFixed(0)
+  return  '00:'+ min+ ':' + sec + ''
+}
+
 
 function calculate_clic_max(final_datas){
 
@@ -792,12 +879,6 @@ function max_duration_visit(final_datas){
 
   let res = Math.max(... durs)
   return display_as_duration(res) //'19:22'
-}
-
-function display_as_duration(duration_in_seconds){
-  let mm = (duration_in_seconds/60).toFixed(0)
-  let ss = (duration_in_seconds%60).toFixed(0)
-  return  '00:'+ mm+ ':' + ss + ''
 }
 
 function get_specific_category_count(nb_original,category_name,categories_to_ignore, percentage_mode){

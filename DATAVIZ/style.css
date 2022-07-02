@@ -39,7 +39,7 @@ select {
 .labels-container {
 
 	--grid-layout-gap: 5px;
-	--grid-column-count: 4;
+	--grid-column-count: 5;
 	--grid-item--min-width: 100px;
 
 	--gap-count: calc(var(--grid-column-count) - 1);
@@ -50,7 +50,7 @@ select {
 	grid-gap: var(--grid-layout-gap);
 
 	width: 100%;
-	padding-bottom: 5px;
+	margin-bottom: 25px;
 
 }
 
@@ -114,10 +114,7 @@ select {
 .viz-text {
   font-size: calc(12px + 1.2vw);
   font-weight: bold;
-  width: min-content;
   cursor: pointer;
-  padding-bottom: 30px;
-  white-space: nowrap;
 }
 
 .viz-title > span:hover, .viz-text:hover {
