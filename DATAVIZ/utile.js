@@ -484,6 +484,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   // specify chart configuration item and data
   let option = {}
 
+  //NOT GAUGE ---> only charts
   if(typeChart !== 'gauge'){
     option = {
       title: {
