@@ -816,7 +816,7 @@ function display_as_long_duration(duration_in_seconds){
 
   let sec = remaining_sec
 
-  return  (day > 0 ? day+'j ' : '') +hour+'h '+min+'m '+sec+'s'
+  return  (day > 0 ? day+'j ' : '') +hour+'h '+min+'m '+sec
 }
 
 function display_as_duration(duration_in_seconds){
