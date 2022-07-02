@@ -118,6 +118,10 @@ select {
   cursor: pointer;
 }
 
+.fit-text {
+	font-size: min(15px,calc(12px + 1.2vw));
+}
+
 .viz-title > span:hover, .viz-text:hover {
   color: #769ab9;
 }
