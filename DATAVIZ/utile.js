@@ -77,6 +77,12 @@ const tips = {
 
           part_ip_revenu: `La grande majorité des visites représente la <strong>première découverte du site</strong>, et non la <strong>reconsultation</strong> de celui-ci.`,
 
+
+          clics_max: `Le <strong>nombre de clics maximal</strong> représente l'<strong>utilisateur le plus actif</strong> de <strong>toutes les visites</strong> depuis la création du site.`,
+          
+          duree_max_visite: `Cette <strong>durée maximale de visite</strong> ne considère que les visiteurs ayant fait <strong>au moins 2 clics</strong>, parmi <strong>les visites de 30 minutes maximum</strong>.`,
+
+
           part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
           <br/>
           C'est pourquoi il est important qu'un site web soit <strong>responsive</strong> : le contenu doit s'adapter à la taille de l'écran.`,
@@ -724,6 +730,73 @@ function refresh_viz1_labels(){
   nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['viz1']['ip_revenu'])
   part_nb_ip_back = (100*(nb_ip_back/nb_ip)).toFixed(2) 
   refresh_content(label_selector, part_nb_ip_back +'%',5,tips['viz1']['part_ip_revenu'])
+
+  clics_max = calculate_clic_max(final_datas)
+  refresh_content(label_selector,clics_max,6,tips['viz1']['clics_max'])
+  duree_max_visite = max_duration_visit(final_datas)
+  refresh_content(label_selector,duree_max_visite,7,tips['viz1']['duree_max_visite'])
+
+
+}
+
+function calculate_clic_max(final_datas){
+
+  all_visits = select_from_where(final_datas,'une_visite','id_clic is not null',true)
+  nb_clics_per_visit = all_visits.map(vis => count_all(final_datas,'id_clic','une_visite = "'+vis['(une_visite)']+'"'))
+  log(nb_clics_per_visit)
+
+  let res = Math.max(...nb_clics_per_visit)
+  log(res)
+  
+  return res
+
+}
+
+
+function max_duration_visit(final_datas){
+
+  //get all visits ID WITH A CLICK
+  let all_visits_with_click = select_from_where(final_datas,'une_visite','date_clic is not null',true)
+
+
+
+  let MAXDUR = 1800; // 1800seconds = 30 minutes
+  //for each visit
+  let durs = all_visits_with_click.map(function(v){
+    //get all click dates
+    all_dates = final_datas.filter(e => e['une_visite'] === v['(une_visite)']).map(e => new Date(e['date_clic']).getTime())
+    
+    //no possible duration so we discard
+    if(all_dates.length <= 1) return null
+    
+    //deduce min and max
+    mindate = (Math.min(...all_dates));
+    maxdate = (Math.max(...all_dates));
+  
+    //calculate dur = (max-min) IN SECONDS
+    durDate = (maxdate-mindate)/1000
+    
+    //if dur > 30 min then discard
+    if(durDate > MAXDUR){
+      return null
+    }
+
+    log('\n\n\n' + v['(une_visite)']+'\n'+JSON.stringify(all_dates)+'\n'+new Date(mindate)+'\n'+new Date(maxdate)+'\n'+durDate)
+    
+    return durDate
+    
+  }).filter(e => e !== null)//keep non null values
+
+  log(durs)
+
+  let res = Math.max(... durs)
+  return display_as_duration(res) //'19:22'
+}
+
+function display_as_duration(duration_in_seconds){
+  let mm = (duration_in_seconds/60).toFixed(0)
+  let ss = (duration_in_seconds%60).toFixed(0)
+  return  mm+ ':' + ss
 }
 
 function get_specific_category_count(nb_original,category_name,categories_to_ignore, percentage_mode){
@@ -895,7 +968,7 @@ function creer_dataviz(){
     $(".current_tooltip")[0].style.top = (y + 20) + 'px';
     $(".current_tooltip")[0].style.left = Math.max(0, Math.min( (x + 20),max_left_position)) + 'px';
 
-    
+
   };
 
 

@@ -39,7 +39,7 @@ select {
 .labels-container {
 
 	--grid-layout-gap: 5px;
-	--grid-column-count: 6;
+	--grid-column-count: 4;
 	--grid-item--min-width: 100px;
 
 	--gap-count: calc(var(--grid-column-count) - 1);
