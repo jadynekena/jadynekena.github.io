@@ -27,9 +27,9 @@ const tips = {
           
           duree_max_visite: `La <strong>durée maximale de visite</strong> ne considère que les visiteurs ayant fait <strong>au moins 2 clics</strong>, parmi <strong>les visites de 30 minutes maximum</strong>.`,
 
-          date_premiere_visite: `Il m'a fallu <strong>#durée_attente</strong> pour avoir <strong>ma toute première visite</strong> !`,
-
           elapsed_time: `Ce site a été mis en ligne pour la toute première fois le <strong>` + date_ref_site.toLocaleString() + `</strong> (heure locale <strong>France</strong>).`,
+
+          date_premiere_visite: `Il m'a fallu <strong>#durée_attente</strong> pour avoir <strong>ma toute première visite</strong> !`,
 
 
           part_mobiles: `Les appareils <strong>mobiles</strong> sont <strong>souvent majoritaires</strong> parmi les visites.
@@ -761,20 +761,19 @@ function refresh_viz1_labels(){
 
   // very 1st visit
   date_premiere_visite = very_first_visit(final_datas)
-  date_premiere_visite_str = display_date_dd_mm_yy_hh_min_s(date_premiere_visite)
+  date_premiere_visite_str = display_date_dd_mm_yy_hh_min(date_premiere_visite)
   duree_attente = display_as_long_duration(duration_in_seconds(date_ref_site,date_premiere_visite))
   refresh_content(label_selector,date_premiere_visite_str,9,tips['viz1']['date_premiere_visite'].replace('#durée_attente',duree_attente))
 
 }
 
-function display_date_dd_mm_yy_hh_min_s(date){
+function display_date_dd_mm_yy_hh_min(date){
   return date.getDate() + '/' + 
           (date.getMonth() + 1) + '/' + 
           date.getFullYear().toString().substring(2) + ' ' + 
 
           date.getHours() + ':' +
-          date.getMinutes() + ':' +
-          date.getSeconds()
+          date.getMinutes() 
 }
 
 function very_first_visit(final_datas){

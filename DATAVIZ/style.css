@@ -174,3 +174,7 @@ body.nightmode {
   background: #ffffff36;
 
 }
+
+.single-line {
+	white-space: nowrap;
+}
