@@ -633,7 +633,9 @@ function tooltipFormatter(params, src_datas){
       Object.keys(detail).forEach(k => renameKey ( detail, k, 'Dernier(e) ' + k ))
 
       log(detail)
-      current_data += '<i>---- DETAILS SUR LE DERNIER PARMI '+title+' ----</i><br/>'
+      current_data += `--------------------------------<br/>
+                      <i>DETAILS SUR LE DERNIER PARMI <strong>`+title+`</i></strong><br/>
+                       --------------------------------<br/>`
       current_data +=  display(detail)
 
     } 
@@ -883,15 +885,17 @@ function creer_dataviz(){
 
   //viz3 : 
 
-  //append tooltips everywhere the mouse goes
+  //put tooltips everywhere the mouse goes
   window.onmousemove = function (e) {
+
     var x = e.clientX,
         y = e.clientY;
-    let max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
-    log({max_left_position})
+        max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
 
-    $(".current_tooltip")[0].style.top = (window.scrollY + y + 20) + 'px';
+    $(".current_tooltip")[0].style.top = (y + 20) + 'px';
     $(".current_tooltip")[0].style.left = Math.max(0, Math.min( (x + 20),max_left_position)) + 'px';
+
+    
   };
 
 
