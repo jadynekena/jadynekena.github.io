@@ -92,7 +92,7 @@ const tips = {
           Les dates sont affichées selon l'UTC+002, en référence aux horaires en France.
           `,
 
-          affluences: `Observez les visites soit <strong>par Heure</strong>, soit <strong>par Jour</strong> de semaine, soit <strong>les deux</strong>.
+          affluences: `Observez les affluences soit <strong>par Jour</strong> de la semaine, soit <strong>par Heure</strong>, soit <strong>les deux</strong>.
           <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
           
           `
