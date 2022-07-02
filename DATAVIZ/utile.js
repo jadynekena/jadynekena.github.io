@@ -761,15 +761,15 @@ function refresh_viz1_labels(){
 
   // very 1st visit
   date_premiere_visite = very_first_visit(final_datas)
-  date_premiere_visite_str = display_date_dd_mm_yyyy_hh_min_s(date_premiere_visite)
+  date_premiere_visite_str = display_date_dd_mm_yy_hh_min_s(date_premiere_visite)
   duree_attente = display_as_long_duration(duration_in_seconds(date_ref_site,date_premiere_visite))
   refresh_content(label_selector,date_premiere_visite_str,9,tips['viz1']['date_premiere_visite'].replace('#durée_attente',duree_attente))
 
 }
 
-function display_date_dd_mm_yyyy_hh_min_s(date){
+function display_date_dd_mm_yy_hh_min_s(date){
   return date.getDate() + '/' + 
-          date.getMonth() + '/' + 
+          (date.getMonth() + 1) + '/' + 
           date.getFullYear().toString().substring(2) + ' ' + 
 
           date.getHours() + ':' +
