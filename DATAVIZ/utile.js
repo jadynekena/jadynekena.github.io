@@ -144,6 +144,7 @@ function main(){
 function load_group(e){
   $('.conteneurDashboard').hide()
   $('#'+e).show()
+  $(window).resize()
 }
 
 
@@ -154,8 +155,14 @@ function check_if_collecting_datas(){
 }
 
 function refresh_all_viz(){
+
+  //group1 : main vision
   refresh_group1()
-  refresh_group2()
+
+  //group2 : clicks
+  //refresh_group2()
+
+  //group3 : from where people come from (countries, websites, social medias) --> todo
 }
 
 main()
@@ -212,9 +219,6 @@ function select_from_where(final_datas,to_select,where,unique){
 
 function refresh_labelcount_viz(label_selector,fields_to_display,index,tooltipText){
 
-  /*
-  nb = count_elements(final_datas,fields_to_display,true,true)
-  */
   nb = count_all(final_datas,fields_to_display)
   refresh_content(label_selector,nb,index,tooltipText)
   return Number(nb)
@@ -949,10 +953,6 @@ function refresh_group1_evolutions(){
 
 }
 
-function order_days(){
-
-}
-
 function refresh_group1_affluences(){
 
   //affluences
@@ -993,7 +993,7 @@ function refresh_group1_counters(ceci){
 }
 
 function refresh_group1(){
-  
+
   refresh_group1_labels()
   refresh_group1_part_mobiles()
   refresh_group1_evolutions()
@@ -1001,10 +1001,92 @@ function refresh_group1(){
 
 }
 
+function get_words(final_datas,fieldName_to_count,fieldName_to_display){
+  return final_datas.map(function(e) {return {[fieldName_to_count]: e[fieldName_to_count], [fieldName_to_display]: e[fieldName_to_display]}   }).filter(e => e).map(e => e.trim()).filter(e => e)
+}
+
 function refresh_group2(){
 
+  refresh_group2_contents()
+  refresh_group2_sections()
+  refresh_group2_links()
+  refresh_group2_techs()
+
+  $('.jqcloud > span').on('click, hover', function() {alert('oui')});
+}
+
+function generateWords(element_node,final_list){
+  log({element_node})
+  console.log({final_list})
+
+  let opt = {
+    autoResize: true,
+    removeOverflowing: true,
+    delay: 10
+  }
+
+  $(element_node).jQCloud(final_list, opt)    
+  
 
 
+}
+
+function get_clicks_of(datas_original,fieldName,percentage_mode,optional_field_name_to_filter,optional_field_value_filter){
+  datas = datas_original
+
+  //if we need to filter before counting
+  if(optional_field_name_to_filter){
+    datas = datas.filter(e => e[optional_field_name_to_filter] === optional_field_value_filter)
+  }
+
+  //useful if percentage
+  total_local_clics = count_elements(datas,'id_clic',true,true)
+
+  //get all unique contents
+  all_contents = get_elements(datas,fieldName,true,fieldName,false,true).filter(e => e)
+
+
+  //for each content, count id_clic
+  final_contents = all_contents.map(function(content){    
+
+      val = unique(datas.filter(d => d[fieldName] === content).map(e => e['id_clic'])).length
+      if(percentage_mode) val = 100*(val/total_local_clics).toFixed(2)
+
+      return {
+        text: content,
+        weight: val
+      }
+  })
+
+  //display
+  return final_contents
+    
+}
+
+
+function refresh_group2_contents(){  
+  
+  let res = get_clicks_of(final_datas,'premiers_mots')
+  generateWords($('#group2 .chart-element')[0],res)
+  return res;
+}
+
+function refresh_group2_sections(){
+  let res = get_clicks_of(final_datas,'premiers_mots',false,'est_section',true)
+  generateWords($('#group2 .chart-element')[1],res)
+  return res;
+}
+
+function refresh_group2_links(){
+  let res = get_clicks_of(final_datas,'lien')
+  generateWords($('#group2 .chart-element')[2],res)
+  return res;
+}
+
+function refresh_group2_techs(){
+  let res = get_clicks_of(final_datas,'premiers_mots',false,'est_techno',true)
+  generateWords($('#group2 .chart-element')[3],res)
+  return res;
 }
 
 function animate_beginning_until_now(date_field_name,EVENT_DURATION_IN_SECONDS){
@@ -1040,15 +1122,11 @@ function creer_dataviz(){
   append_colors()
 
   
-  //group1 : main vision
-  refresh_group1()
-
-
-  //group2 : clicks
+  refresh_all_viz()
 
 
 
-  //viz3 : from where people come from (countries, websites, social medias)
+
 
 
 

@@ -16,6 +16,10 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqcloud/1.0.3/jqcloud.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqcloud/1.0.3/jqcloud.min.css">
+
 	<script src="https://cdn.jsdelivr.net/npm/alasql"></script>	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
 
@@ -131,12 +135,12 @@
 					<span>Contenus principaux
 					</span>
 				</div>		
-				<div class="chart-element"></div>
+				<div class="chart-element" ></div>
 			</div>			
 
 			<div class="chart">
 				<div class="viz-title">
-					<span>Sections et projets
+					<span>Sections consultées
 					</span>
 				</div>		
 				<div class="chart-element"></div>
@@ -148,8 +152,11 @@
 		<div class="viz" id="viz4">	
 			<div class="chart">
 				<div class="viz-title">
-					<span>Liens internes et externes
-					</span>
+					<span>Liens</span>
+						<select onchange="console.log('todo')">
+							<option value="i">internes</option>	
+							<option value="e">externes</option>	
+						</select>
 				</div>		
 				<div class="chart-element"></div>
 			</div>			

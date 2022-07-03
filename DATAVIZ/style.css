@@ -88,7 +88,6 @@ select {
 	width: 100%;
 	height: 100%;
 	display: block;
-
 }
 
 .affluence {
@@ -148,7 +147,7 @@ select {
 
 
 .themeViz { /*COLOR OF GRAPHS AND TEXT*/
-  color: #586784;
+  color: #586784 !important;
 }
 
 .theme { /*COLOR OF TITLES*/
@@ -193,4 +192,9 @@ body.nightmode {
 
 .single-line {
 	white-space: nowrap;
+}
+
+.jqcloud > span:hover{
+	background-color: #eeeeeea3;
+	cursor: pointer;
 }
