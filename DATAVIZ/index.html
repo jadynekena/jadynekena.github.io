@@ -23,13 +23,18 @@
 	<link rel="stylesheet" href="/assets/mobirise/css/mbr-additional.css">
 	<link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body >
 	<div style="display: none;" id="switch" class="fixed" onclick="switch_light()"><span  class="light-switch">💡</span></div>
-	<div class="themeViz"></div>
+	<div class="themeViz viz-choice">
+		<select id="chosen" onchange="load_group(this.value)">
+			<!--<option value="group2">Résumé des clics</option>-->
+			<option value="group1">Vision globale</option>
+		</select>
+	</div>
 	<span class="current_tooltip"></span>
 
-	<div class="grid-container conteneurDashboard">
-		<div class="viz" id="viz1">
+	<div id="group1" class="grid-container conteneurDashboard">
+		<div class="viz">
 			<div  class="labels-container">
 				<div class="viz-label">
 					<div class="viz-title"><span>IP uniques</span></div>
@@ -77,7 +82,7 @@
 			<div class="chart">
 				<div class="viz-title"><span>Evolution nombre de 
 					</span>
-					<select onchange="refresh_viz1_counters(this)" id="type_evolution">
+					<select onchange="refresh_group1_counters(this)" id="type_evolution">
 					  <option value="clic">clics</option>
 					  <option value="visite">visites</option>
 					  <option value="adresse_ip">IP</option>
@@ -90,7 +95,7 @@
 
 
 
-		<div  class="viz" id="viz2">
+		<div  class="viz">
 			<div class="viz-title"><span>Part des appareils mobiles</span></div>
 			<div class="viz-gauge"></div>
 
@@ -99,14 +104,14 @@
 			<div class="chart">
 				<div class="viz-title">
 					<span>Affluences des
-						<select onchange="refresh_viz1_counters(this)" id="type_evolution_affluences">
+						<select onchange="refresh_group1_counters(this)" id="type_evolution_affluences">
 						  <option value="clic">clics</option>
 						  <option value="visite">visites</option>
 						  <option value="adresse_ip">IP</option>
 						</select>
 					</span>
 						par
-					<select onchange="refresh_viz1_affluences()" id="type_affluence">
+					<select onchange="refresh_group1_affluences()" id="type_affluence">
 					  <option value="d">jour</option>
 					  <option value="h">heure</option>
 					  <option value="dh">jour et heure</option>
@@ -118,10 +123,45 @@
 	</div>
 
 
-	<div class="grid-container conteneurDashboard">
-		
+	<div id="group2" class="grid-container conteneurDashboard">
+
 		<div class="viz" id="viz3">
+			<div class="chart">
+				<div class="viz-title">
+					<span>Contenus principaux
+					</span>
+				</div>		
+				<div class="chart-element"></div>
+			</div>			
+
+			<div class="chart">
+				<div class="viz-title">
+					<span>Sections et projets
+					</span>
+				</div>		
+				<div class="chart-element"></div>
+			</div>		
+
 		</div>
+
+
+		<div class="viz" id="viz4">	
+			<div class="chart">
+				<div class="viz-title">
+					<span>Liens internes et externes
+					</span>
+				</div>		
+				<div class="chart-element"></div>
+			</div>			
+			<div class="chart">
+				<div class="viz-title">
+					<span>Technos
+					</span>
+				</div>		
+				<div class="chart-element"></div>
+			</div>		
+		</div>
+
 	</div>
 
 

@@ -1,0 +1,1 @@
+De la **saisie** sur formulaire au **Reporting**, Ms Access est un logiciel de la Suite Office nettement moins connnu qu'Excel, mais il permet notamment de **gérer de grandes bases de données**.

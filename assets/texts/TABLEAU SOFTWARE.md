@@ -1,0 +1,1 @@
+Les projets dataviz que je vous montre <a target="_blank" onclick="swal.close()" href="https://jadynekena.com/#projets">ici</a> utilisent ce logiciel de **reporting** très **puissant**, que <a target="_blank" onclick="swal.close()" href="https://www.tableau.com/">**je recommande** à 1000% </a>

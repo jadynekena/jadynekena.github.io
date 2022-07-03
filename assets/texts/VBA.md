@@ -1,0 +1,1 @@
+De quoi **automatiser** sur **toute la suite Microsoft** et fluidifier vos **tâches répétitives** : un gain de temps considérable !

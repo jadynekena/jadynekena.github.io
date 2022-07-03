@@ -1,0 +1,3 @@
+Vous vous doutez bien que ce site ne s'est pas créé tout seul ...
+
+L'**intégralité du site** a été faite par mes soins, soyez **indulgents** car je ne suis pas développeure web de base 😃

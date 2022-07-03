@@ -1,0 +1,1 @@
+Un langage de formatage **simple** et très utile pour **rédiger proprement**, surtout en ligne.

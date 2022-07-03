@@ -1,0 +1,1 @@
+ Les **formules**, les **tableaux**, les **TCD**... Ce logiciel domine le marché par sa simplicité d'utilisation : c'est sans doute **l'outil le plus utilisé dans l'industrie** !

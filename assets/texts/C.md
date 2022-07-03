@@ -1,0 +1,1 @@
+La **programmation en C** tourne généralement autour des **systèmes d'exploitations**, dans laquelle il faut penser à tout : la gestion des mémoires, l'optimisation, etc.

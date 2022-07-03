@@ -4,7 +4,7 @@ supabase = createClient(racine_data(),  apikey())
 
 const date_ref_site = new Date(2022, 5, 19, 8, 14, 35) // MONTH BEGINS WITH 0 ! new Date('2022-06-19T08:14:35')
 const tips = {
-  'viz1': {ip_unique: `L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
+  'group1': {ip_unique: `L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
             <strong>1 IP = 1 utilisateur unique.</strong>`,
 
           visite_unique: `Une visite représente une <strong>adresse IP</strong> qui se connecte dans une <strong>durée totale de 30 minutes</strong>.
@@ -135,11 +135,17 @@ function main(){
     document.getElementById('switch').style.display= "none"
   }
 
+
+  //only chose dataviz
+  $('.conteneurDashboard').hide()
+  $('#chosen').change()
 }
 
-function show_light_icon(){
-
+function load_group(e){
+  $('.conteneurDashboard').hide()
+  $('#'+e).show()
 }
+
 
 function check_if_collecting_datas(){
   collect_datas = !is_local_host()
@@ -148,7 +154,8 @@ function check_if_collecting_datas(){
 }
 
 function refresh_all_viz(){
-  refresh_viz1()
+  refresh_group1()
+  refresh_group2()
 }
 
 main()
@@ -161,7 +168,6 @@ function log(content,json_mode,forcing){
 function refresh_content(selector,content,index,tooltipText){
   log((selector + ',' + content +',' + index).split(','))
   $($(selector)[index]).html(content)
-  //$($(selector)[index]).attr('title',tooltipText)
 
   //on hover : set current tooltip on TEXT and its TITLE
   show_tip_on_hover($(selector)[index],tooltipText)
@@ -724,28 +730,28 @@ function count_ip_back(final_datas){
   return res.length
 }
 
-function refresh_viz1_labels(){
+function refresh_group1_labels(){
 
   let label_selector = '.viz-label > .viz-text'
 
   // nb adresses IP, visites, clics, nb moyen de clics par visites 
-  nb_ip = refresh_labelcount_viz(label_selector,'adresse_ip',0,tips['viz1']['ip_unique'])
-  nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1,tips['viz1']['visite_unique'])
-  nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['viz1']['clic_unique'])
-  ratio = refresh_content(label_selector,(nb_clics/nb_visites).toFixed(2),3,tips['viz1']['clic_par_visite'])
+  nb_ip = refresh_labelcount_viz(label_selector,'adresse_ip',0,tips['group1']['ip_unique'])
+  nb_visites = refresh_labelcount_viz(label_selector,'une_visite',1,tips['group1']['visite_unique'])
+  nb_clics = refresh_labelcount_viz(label_selector,'id_clic',2,tips['group1']['clic_unique'])
+  ratio = refresh_content(label_selector,(nb_clics/nb_visites).toFixed(2),3,tips['group1']['clic_par_visite'])
   
   // ip revenus + %
-  nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['viz1']['ip_revenu'])
+  nb_ip_back = refresh_content(label_selector,count_ip_back(final_datas),4,tips['group1']['ip_revenu'])
   part_nb_ip_back = (100*(nb_ip_back/nb_ip)).toFixed(2) 
-  refresh_content(label_selector, part_nb_ip_back +'%',5,tips['viz1']['part_ip_revenu'])
+  refresh_content(label_selector, part_nb_ip_back +'%',5,tips['group1']['part_ip_revenu'])
 
   // clics max
   clics_max = calculate_clic_max(final_datas)
-  refresh_content(label_selector,clics_max,6,tips['viz1']['clics_max'])
+  refresh_content(label_selector,clics_max,6,tips['group1']['clics_max'])
   
   // durée max visite
   duree_max_visite = max_duration_visit(final_datas)
-  refresh_content(label_selector,duree_max_visite,7,tips['viz1']['duree_max_visite'])
+  refresh_content(label_selector,duree_max_visite,7,tips['group1']['duree_max_visite'])
 
   // elapsed time: only once
   if(no_elapsed_time_yet(label_selector)){
@@ -763,7 +769,7 @@ function refresh_viz1_labels(){
   date_premiere_visite = very_first_visit(final_datas)
   date_premiere_visite_str = display_date_dd_mm_yy_hh_min(date_premiere_visite)
   duree_attente = display_as_long_duration(duration_in_seconds(date_ref_site,date_premiere_visite))
-  refresh_content(label_selector,date_premiere_visite_str,9,tips['viz1']['date_premiere_visite'].replace('#durée_attente',duree_attente))
+  refresh_content(label_selector,date_premiere_visite_str,9,tips['group1']['date_premiere_visite'].replace('#durée_attente',duree_attente))
 
 }
 
@@ -781,7 +787,7 @@ function very_first_visit(final_datas){
 }
 
 function refresh_time_elapsed(label_selector){
-  refresh_content(label_selector,elapsed_time(),8,tips['viz1']['elapsed_time'])
+  refresh_content(label_selector,elapsed_time(),8,tips['group1']['elapsed_time'])
 }
 
 function no_elapsed_time_yet(label_selector){
@@ -904,7 +910,7 @@ function get_specific_category_count(nb_original,category_name,categories_to_ign
   return res
 }
 
-function refresh_viz1_part_mobiles(){
+function refresh_group1_part_mobiles(){
 
   //pourcentage de mobiles
   let category_value_to_count = 'Mobile'
@@ -925,16 +931,16 @@ function refresh_viz1_part_mobiles(){
               }
 
   log({gauge_datas})
-  tip = tips['viz1']['part_mobiles']
+  tip = tips['group1']['part_mobiles']
   refreshEchart(tip, 'gauge','.viz-gauge',0,gauge_datas)
 
 }
 
-function refresh_viz1_evolutions(){
+function refresh_group1_evolutions(){
 
   //evolution nb visites | clics
   let type_evolution = $("#type_evolution").val()
-  tip = tips['viz1']['evolutions'].replaceAll('#type_evolution',type_evolution)
+  tip = tips['group1']['evolutions'].replaceAll('#type_evolution',type_evolution)
   field_to_count = evolution_field_to_count(type_evolution)
 
   log(field_to_count)
@@ -947,10 +953,10 @@ function order_days(){
 
 }
 
-function refresh_viz1_affluences(){
+function refresh_group1_affluences(){
 
   //affluences
-  tip = tips['viz1']['affluences']
+  tip = tips['group1']['affluences']
   let categ = $('#type_affluence').val() === "d" ? "jour_visite" :
               $('#type_affluence').val() === "h" ? "heure_visite" :
               $('#type_affluence').val() === "dh" ? "jour_heure_visite" 
@@ -972,7 +978,7 @@ function the_other_list_id(me){
   return res
 }
 
-function refresh_viz1_counters(ceci){
+function refresh_group1_counters(ceci){
 
   if(ceci){
 
@@ -982,17 +988,22 @@ function refresh_viz1_counters(ceci){
 
   }
 
-  refresh_viz1_evolutions()
-  refresh_viz1_affluences()
+  refresh_group1_evolutions()
+  refresh_group1_affluences()
 }
 
-function refresh_viz1(){
-  let tip = ''
+function refresh_group1(){
+  
+  refresh_group1_labels()
+  refresh_group1_part_mobiles()
+  refresh_group1_evolutions()
+  refresh_group1_affluences()
 
-  refresh_viz1_labels()
-  refresh_viz1_part_mobiles()
-  refresh_viz1_evolutions()
-  refresh_viz1_affluences()
+}
+
+function refresh_group2(){
+
+
 
 }
 
@@ -1029,15 +1040,17 @@ function creer_dataviz(){
   append_colors()
 
   
-  //viz1
-  refresh_viz1()
+  //group1 : main vision
+  refresh_group1()
 
 
-  //viz2 : 
+  //group2 : clicks
 
 
 
-  //viz3 : 
+  //viz3 : from where people come from (countries, websites, social medias)
+
+
 
   //put tooltips everywhere the mouse goes
   window.onmousemove = function (e) {
@@ -1054,7 +1067,6 @@ function creer_dataviz(){
 
 
 }
-
 
 async function get_canaux(){
   const {data, error} = await supabase.from('canaux').select('*')

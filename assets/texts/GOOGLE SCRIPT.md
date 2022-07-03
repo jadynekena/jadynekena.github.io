@@ -1,0 +1,1 @@
+C'est **comme du VBA**, mais en ligne avec **Google Sheets**. Et c'est **plus puissant** aussi.

@@ -622,6 +622,7 @@ async function main(){
 	append_details_of_vizzes() //only on tableau projects
 
 	show_number_of_votes() //only on home page
+	techno_texts() //only on home page
 	
 }
 
@@ -639,16 +640,17 @@ function parse_parameters(){
 
 	if (loc().includes(ref_project_open) || loc().includes(ref_project_perso)){
 		if(urlParams.get('id')){
-			load_script_in_head('https://cdn.jsdelivr.net/npm/showdown','md_to_html')
-			load_swal()
+			
+			load_swal_and_showdown()
 			expand_card(urlParams.get('id'))	
 		} 
 	}
 	
 }
 
-function action_when_ready(){
-
+function load_swal_and_showdown(){
+	load_script_in_head('https://cdn.jsdelivr.net/npm/showdown','md_to_html')
+	load_swal()
 }
 
 
@@ -855,17 +857,39 @@ function current_legend(){
 	return current_project() ? loc().replace('?id=','') + '.md' : ""
 }
 
-function display_in_popup(title,html_content){
-	return Swal.fire({
+function display_in_popup(title,html_content,element_target){
+	opt = {
 		title: title,
-		html: html_content
-	})
+		html: html_content,
+		position: 'center',
+		showCloseButton: true,
+		showConfirmButton: false,
+	}
+
+	if(element_target) opt['target'] = element_target
+	return Swal.fire(opt)
 }
 
-function display_md_in_popup(title,md_content){
+function techno_texts(){
+	if(!is_home_page()) return false
+	load_swal_and_showdown()
+
+	// main tech + second ones
+	let main_technos = document.querySelectorAll("#technos .btn,  a.btn-white")
+    main_technos.forEach(function(techno){
+    	techno.addEventListener('click', async function(){
+    		console.log(techno)
+    		current_tech = techno.innerText.trim().replaceAll('/',' ')
+    		explanations = await readFiles('/assets/texts/'+current_tech+'.md')
+    		display_md_in_popup(current_tech,explanations,techno.ParentNode)
+    	})
+    })
+}
+
+function display_md_in_popup(title,md_content,element_target){
 	let converter = new showdown.Converter()
 	let html_content = converter.makeHtml(md_content);
-	return display_in_popup(title,html_content)
+	return display_in_popup(title,html_content,element_target)
 }
 
 function readFiles(local_link){

@@ -1,0 +1,1 @@
+Qui dit **base de données** dit **SQL**, langage principal pour gérer la data stockée dans **MySQL**, **PostgreSQL**, **SQL server**, etc.

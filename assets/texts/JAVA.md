@@ -1,0 +1,2 @@
+La **Programmation Orientée Objet** comme celle en **Java** consiste à se focaliser sur la nature des données qu'on va manipuler.  
+C'est d'ailleurs le **tout premier langage** que j'ai appris pendant ma première année d'école d'ingé !

@@ -1,0 +1,1 @@
+Github, Gitlab, ... Le **versioning** est vraiment important pour pouvoir **revenir en arrière** et avoir l'**historique** des fonctionnalités.
