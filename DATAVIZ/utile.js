@@ -577,6 +577,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
     if(optional_object_filtering_on_categories){
       //reverse X axis
       option['xAxis']['data'] = option['xAxis']['data'].reverse()
+      displayed_series[0]['data']  =  displayed_series[0]['data'].reverse()
 
       tmp = option['xAxis']
       option['xAxis'] = option['yAxis']
