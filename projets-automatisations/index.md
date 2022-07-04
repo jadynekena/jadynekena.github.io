@@ -8,13 +8,7 @@ published: true
 ---
 
 
-<div class="container-fluid" id="explanation">
-<div class="row justify-content-center">
-<div class="col-md-12 col-lg-10">
-	<h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-7">Retrouvez ici des automatisations que j'ai mis en place pour une meilleure productivité 😀</h4>
-</div>
-</div>
-</div>
+<h2 class="align-center">Retrouvez ici des automatisations que j'ai mis en place pour une meilleure productivité 😀</h2>
 
 
 <div class="listing">

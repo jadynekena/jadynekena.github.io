@@ -29,7 +29,7 @@ h3 {
 	filter: invert(0) !important;
 }
 
-.night #title-page, .night #page-content, .night a, .night #navbarSupportedContent {
+.night #title-page, .night #page-content, .night a, .night #navbarSupportedContent, .night .foot-menu {
 	filter: invert(1);
 }
 .night section {
