@@ -19,6 +19,6 @@ published: true
 	<a href="renvoyer-la-date-et-l-heure-locale-via-postgresql">Renvoyer la date et l'heure locale via postgreSQL</a>
 	</details>
 	<details><summary>#VBA</summary>
-	<a href="optimisez-vos-executions-VBA-avec-ces-quatre-astuces">Optimisez vos exécutions VBA avec ces 4 astuces</a>
+	<a href="optimisez-vos-executions-vba-avec-ces-quatre-astuces">Optimisez vos exécutions VBA avec ces 4 astuces</a>
 	</details>
 </div>
