@@ -18,7 +18,7 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqcloud/1.0.3/jqcloud.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqcloud/1.0.3/jqcloud.min.css">
+	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqcloud/1.0.3/jqcloud.min.css">-->
 
 	<script src="https://cdn.jsdelivr.net/npm/alasql"></script>	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
@@ -31,8 +31,8 @@
 	<div style="display: none;" id="switch" class="fixed" onclick="switch_light()"><span  class="light-switch">💡</span></div>
 	<div class="themeViz viz-choice">
 		<select id="chosen" onchange="load_group(this.value)">
-			<!--<option value="group2">Résumé des clics</option>-->
 			<option value="group1">Vision globale</option>
+			<option value="group2">Résumé des clics</option>
 		</select>
 	</div>
 	<span class="current_tooltip"></span>
@@ -87,8 +87,8 @@
 				<div class="viz-title"><span>Evolution nombre de 
 					</span>
 					<select onchange="refresh_group1_counters(this)" id="type_evolution">
-					  <option value="clic">clics</option>
 					  <option value="visite">visites</option>
+					  <option value="clic">clics</option>
 					  <option value="adresse_ip">IP</option>
 					</select>
 				</div>		
@@ -109,8 +109,8 @@
 				<div class="viz-title">
 					<span>Affluences des
 						<select onchange="refresh_group1_counters(this)" id="type_evolution_affluences">
-						  <option value="clic">clics</option>
 						  <option value="visite">visites</option>
+						  <option value="clic">clics</option>
 						  <option value="adresse_ip">IP</option>
 						</select>
 					</span>
@@ -129,14 +129,7 @@
 
 	<div id="group2" class="grid-container conteneurDashboard">
 
-		<div class="viz" id="viz3">
-			<div class="chart">
-				<div class="viz-title">
-					<span>Contenus principaux
-					</span>
-				</div>		
-				<div class="chart-element" ></div>
-			</div>			
+		<div class="viz" id="viz3">		
 
 			<div class="chart">
 				<div class="viz-title">
@@ -146,6 +139,13 @@
 				<div class="chart-element"></div>
 			</div>		
 
+			<div class="chart">
+				<div class="viz-title">
+					<span>Projets explorés
+					</span>
+				</div>		
+				<div class="chart-element" ></div>
+			</div>	
 		</div>
 
 
@@ -153,9 +153,9 @@
 			<div class="chart">
 				<div class="viz-title">
 					<span>Liens</span>
-						<select onchange="console.log('todo')">
-							<option value="i">internes</option>	
-							<option value="e">externes</option>	
+						<select id="type_link" onchange="refresh_group2_links()">
+							<option value="est_lien_interne">internes</option>	
+							<option value="est_lien_externe">externes</option>	
 						</select>
 				</div>		
 				<div class="chart-element"></div>
@@ -168,11 +168,11 @@
 				<div class="chart-element"></div>
 			</div>		
 		</div>
-
 	</div>
 
 
 	<script type="text/javascript" src="/assets/js/common-elements.js"></script>
+	<script src="./common.js"></script>
 	<script src="./utile.js"></script>
 	<div id="current_page"></div>
 </div>

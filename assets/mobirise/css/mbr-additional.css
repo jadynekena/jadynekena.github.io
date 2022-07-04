@@ -3231,7 +3231,8 @@ a {
 .night .alert,
 .night .remark,
 .night #swal2-content,
-.night .dropdown-menu{
+.night .dropdown-menu,
+.night .jqcloud > span {
   filter: invert(0.95) !important;
 }
 

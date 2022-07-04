@@ -570,7 +570,6 @@ function iframe_resize(id){
 			adapt_iframe_height(id)
 		})
 		$(window).on('resize',function(){adapt_iframe_height(id)})
-
 	}
 }
 

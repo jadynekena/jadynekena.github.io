@@ -45,7 +45,15 @@ const tips = {
           <br/>Les dates sont affichées selon l'<strong>UTC+002</strong>, en référence aux horaires en France.
           
           `
-          }
+          },
+
+
+  'group2': {
+    sections: `Les sections sont les éléments de la <strong>barre de navigation</strong> tout en haut de la page.`,
+    categ_projets: `Il y a <strong>3 catégories</strong> de projets, dont le <strong>détail</strong> de chacune sera résumé dans une <strong>prochaine dataviz</strong>.`,
+    liens: `Il y a <strong>2 types de liens</strong> reportés sur ce site. <strong>A vous de décider</strong> ce que vous souhaitez voir !`,
+    technos: `Les technos ont chacune une <strong>description</strong> au clic. On voit que <strong>Tableau Software</strong> sort du lot !`
+  }
 }
     
 
@@ -113,14 +121,25 @@ async function get_donnees_site(){
   creer_dataviz()
 }
 
+function current_text(node_element){
+  return $(node_element)
+    .clone()    //clone the element
+    .children() //select all the children
+    .remove()   //remove all the children
+    .end()  //again go back to selected element
+    .text()
+    .trim();
+}
+
 function main(){
 
   subscribe_supabase()
 
-  $(document).on('click',function(){
+  $(document).on('click',function(e){
     initial_value = DEBUGGING_MODE
-    DEBUGGING_MODE = false
-    refresh_all_viz()
+    DEBUGGING_MODE = false    
+    log('refreshing group 1')
+    refresh_group1() //todo for all groups
     DEBUGGING_MODE = initial_value
   })
 
@@ -137,14 +156,17 @@ function main(){
 
 
   //only chose dataviz
-  $('.conteneurDashboard').hide()
-  $('#chosen').change()
+  load_group($('#chosen').val())
 }
 
 function load_group(e){
   $('.conteneurDashboard').hide()
   $('#'+e).show()
-  $(window).resize()
+
+  $(window).resize() //for group 1 & 2 
+
+  //if in iframe ---> adapt it
+  if(inIframe()) window.top.adapt_iframe_height('DATAVIZ')
 }
 
 
@@ -160,7 +182,7 @@ function refresh_all_viz(){
   refresh_group1()
 
   //group2 : clicks
-  //refresh_group2()
+  refresh_group2()
 
   //group3 : from where people come from (countries, websites, social medias) --> todo
 }
@@ -185,11 +207,12 @@ function refresh_content(selector,content,index,tooltipText){
 }
 
 function show_tip_on_hover(nodes,tooltipText){
-  $(nodes).hover(
-    function(){
+  $(nodes).on('mouseover',function(e){
       show_tip(true,tooltipText)
-  },function(){    
-      show_tip(false)
+  })
+
+  $(nodes).on('click',function(e){
+    show_tip(true,tooltipText)
   })
 
 }
@@ -197,11 +220,15 @@ function show_tip_on_hover(nodes,tooltipText){
 function show_tip(yes,tooltipText){
 
     if(yes){
-    $(".current_tooltip").html(tooltipText)  
+
+      $(".current_tooltip").html(tooltipText)  
       $(".current_tooltip").show()
+
     } else{
-    $(".current_tooltip").html('')  
+
+      $(".current_tooltip").html('')  
       $(".current_tooltip").hide()
+
     }
 }
 
@@ -433,7 +460,7 @@ function week_day_orders(){
   return ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
 }
 
-function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only,ignore_evolution_for_tooltip) {
+function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData,title,xFieldName,xFieldOrderBy,xFieldType,seriesFieldNameToCount,with_cumulate,with_percentage_only,ignore_evolution_for_tooltip,optional_object_filtering_on_categories) {
   log('\n\n\n\n\n')
 
   set_up_tool_tips_for_graphs(typeChart,parentSelector,parentSelectorIndex,tip)
@@ -447,15 +474,29 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   log(typeChart)
   if(typeChart !== 'gauge'){
 
-
+    field_to_filter = optional_object_filtering_on_categories ? optional_object_filtering_on_categories['field_to_filter'] : ''
+      
     //let temp = unique(keep_fields(JsonData,xFieldName,xFieldOrderBy,seriesFieldNameToCount)); //keep only the 3 fields we need
-    let temp = keep_unique_records(JsonData,xFieldName,xFieldOrderBy,seriesFieldNameToCount)
+    let temp = keep_unique_records(JsonData,xFieldName,xFieldOrderBy,seriesFieldNameToCount,field_to_filter)
     temp = sort_by(temp,xFieldOrderBy) // order by xFieldOrderBy
-    log(temp)
+    log({temp})
 
+    //filter if needed
+    if(optional_object_filtering_on_categories){
+      field_to_filter = optional_object_filtering_on_categories['field_to_filter']
+      value_filter = optional_object_filtering_on_categories['value_filter']
+      temp = temp.filter(e => e[field_to_filter] === value_filter)
+      log({temp})
+    }
 
     xDatas = get_elements(temp, xFieldName, true, xFieldOrderBy, false, true) //unique(temp.map(row => row[xFieldName])) // get unique X elements
-    log(xDatas)
+    log({xDatas})
+
+    //ignore nulls
+    xDatas = xDatas.filter(e => e)
+    log({xDatas})
+
+
 
     //if weekdays -> rearrange from monday to sunday
     xDatas = rearrange_if_week_days(xDatas)
@@ -510,40 +551,41 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
       xAxis: {
         type: xFieldType,//'category',
         data: xDatas,
+        axisLabel: {
+          formatter: '{value}'
+        }
       },
       yAxis: {
+        type: 'value',
         axisLabel: {
           formatter: '{value}' + (with_percentage_only ? ' %' : '')
         },
 
       },
 
-      /*
-      visualMap: {
-        type: 'piecewise',
-        dimension: 0,
-        seriesIndex: 0,
-        pieces: [{
-            gt: 1,
-            lt: 5,
-            color: 'rgba(0, 180, 0, 0.5)'
-        }, {
-            gt: 8,
-            lt: 7,
-            color: 'rgba(0, 180, 0, 0.5)'
-        }]
-      },
-      */
-
       grid: {
+        top: 30,
         left: 50,
+        right: 0,
         bottom: 30
       }
     };
-  
+
+
+    //INVERTED AXIS if category is kinda long
+    if(optional_object_filtering_on_categories){
+      tmp = option['xAxis']
+      option['xAxis'] = option['yAxis']
+      option['yAxis'] = tmp
+
+      //some padding on left
+      option['grid']['left'] = optional_object_filtering_on_categories['grid_left']
+
+      option['xAxis']['axisLabel']['confine'] = true
+    }
+
   }
 
-  //todo: formatter: function(params){return TOUTES_LES_DONNEES_UNIQUES_JsonData par rapport à une visite}
   option['tooltip'] = {
     trigger: typeChart === 'gauge' ? 'item': 'axis' ,
     formatter: function(params){
@@ -571,14 +613,31 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
   return myChart
 }
 
-function test(){
-  alert('yo')
+function xData_column_length(xDatas){
+  return $('.chart:visible').width() / xDatas.length
 }
+
+function wrap_value_in_few_pixels(xDatas){
+
+  //calucate length of 1 column of 1 xData
+  let column_length = xData_column_length(xDatas)
+  console.log({column_length}) 
+
+
+
+  return '{value}'
+}
+
 function css_tooltip(){
   return `
     border-width:0;
     white-space: initial;
-    max-width:` + $('.current_tooltip').css('max-width') + ';'
+    max-width:` + $('.current_tooltip').css('max-width') + ';'+ `
+    overflow-wrap: break-word;
+
+
+
+    `
 }
 
 function tooltipFormatter(params, src_datas){
@@ -591,7 +650,6 @@ function tooltipFormatter(params, src_datas){
   log({params})
   log(src_datas['typeChart'] )
   if(src_datas['typeChart'] !== 'gauge'){
-    log("todo: prendre le premier element")
     params=params[0]
   }
   log({params})
@@ -665,7 +723,7 @@ function tooltipFormatter(params, src_datas){
   }
 
   log(current_data)
-  return '<div class="test">' + current_data +'</div>'
+  return '<div class="echarts_tooltip">' + current_data +'</div>'
 }
 
 
@@ -701,10 +759,10 @@ function slice_if_needed(value){
   return final_display
 }
 
-function display(infos,with_tab){
+function display(infos,with_tab,no_cut){
   let res = ""
   $.each(infos, function( k, value  ) {
-    res +=  (with_tab ? '&ensp;&ensp;' : '') + '<strong>' + k + '</strong>: ' + slice_if_needed(value)  + '<br/>\n' 
+    res +=  (with_tab ? '&ensp;&ensp;' : '') + '<strong>' + k + '</strong>: ' + (no_cut ? value : slice_if_needed(value))  + '<br/>\n' 
   });
 
   return res
@@ -1007,31 +1065,81 @@ function get_words(final_datas,fieldName_to_count,fieldName_to_display){
 
 function refresh_group2(){
 
-  refresh_group2_contents()
   refresh_group2_sections()
+  refresh_group2_projects()
   refresh_group2_links()
   refresh_group2_techs()
 
-  $('.jqcloud > span').on('click, hover', function() {alert('oui')});
 }
+
 
 function generateWords(element_node,final_list){
+  if(final_list.length === 0) return false
+
+  log('\n\n\n')
   log({element_node})
-  console.log({final_list})
+  log({final_list})
+
+
+  let all_percents = final_list.map(e => e['html']['weight_percent'])
+  let min_value = Math.floor( Math.min(... all_percents) ) /100
+  log({min_value})
+
+  let max_value = Math.ceil( Math.max(... all_percents) ) /100
+  log({max_value})
+
+  
+  let node_height = $($('#group2 .chart')[1]).height()
+  let node_width = $($('#group2 .chart')[1]).width()
+
+  log(node_width + ' x ' + node_height)
 
   let opt = {
-    autoResize: true,
     removeOverflowing: true,
-    delay: 10
+    delayedMode: false, 
+    autoresize: true,
+    height: node_height, 
+    width: node_width,
+    fontSize: {
+      from: min_value,
+      to: max_value
+    },
+    afterCloudRender : function(){
+      //each element
+      $(element_node).children().get().forEach(function(node){
+        
+        //tooltip on hover and clicks
+        show_tip_on_hover(node,node.getAttribute('tooltipText'))
+
+        //link open on double click
+        node.addEventListener('dblclick', function(){
+          if(node.getAttribute('link')){
+            window.open(node.getAttribute('link'), '_blank').focus();  
+          }
+          
+        })
+
+      })
+
+      //reload if resizing
+      $(window).resize(function() {
+          clearTimeout(window.resizedFinished);
+          window.resizedFinished = setTimeout(function(){
+              //console.log('Resized finished.');
+              refresh_group2()
+          }, 50);
+      });
+
+    }
   }
 
+  $(element_node).html("");
   $(element_node).jQCloud(final_list, opt)    
-  
 
 
 }
 
-function get_clicks_of(datas_original,fieldName,percentage_mode,optional_field_name_to_filter,optional_field_value_filter){
+function get_clicks_of(datas_original,fieldName,optional_field_name_to_filter,optional_field_value_filter){
   datas = datas_original
 
   //if we need to filter before counting
@@ -1048,14 +1156,40 @@ function get_clicks_of(datas_original,fieldName,percentage_mode,optional_field_n
 
   //for each content, count id_clic
   final_contents = all_contents.map(function(content){    
+      let res = {}
+      let final_html = {}
 
       val = unique(datas.filter(d => d[fieldName] === content).map(e => e['id_clic'])).length
-      if(percentage_mode) val = 100*(val/total_local_clics).toFixed(2)
+      val_percent =(100*(val/total_local_clics)).toFixed(2) 
+      val_percent_str = val_percent + '%'
+      terminaison = fieldName.charAt(fieldName.length-1) === 's' ? '' : 's'
+      titre_part = 'Part de clics parmi les '+fieldName +terminaison
 
-      return {
-        text: content,
-        weight: val
+      to_display = {
+        Clic : content,
+        'Nombre de clics' : val,
+        [titre_part] : val_percent_str,
       }
+
+      curr_link = ''
+      if(is_a_link(content)){
+        curr_link = content.replace('./',window.location.origin + '/')
+        to_display['Double-cliquez pour aller au lien associé'] = curr_link
+      }
+      
+      tooltipText = display(to_display,false,true)
+      final_html['weight'] = val
+      final_html['weight_percent'] = val_percent
+      final_html['tooltipText'] = tooltipText
+      if(curr_link) final_html['link'] = curr_link
+
+
+      res['text'] = content 
+      res['weight'] = val 
+      res['html'] = final_html 
+
+      log(res['text'] + ','+res['weight'])
+      return res
   })
 
   //display
@@ -1063,29 +1197,60 @@ function get_clicks_of(datas_original,fieldName,percentage_mode,optional_field_n
     
 }
 
-
-function refresh_group2_contents(){  
-  
-  let res = get_clicks_of(final_datas,'premiers_mots')
-  generateWords($('#group2 .chart-element')[0],res)
-  return res;
+function is_a_link(content){
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(content) || content.includes('./');
 }
 
 function refresh_group2_sections(){
-  let res = get_clicks_of(final_datas,'premiers_mots',false,'est_section',true)
-  generateWords($('#group2 .chart-element')[1],res)
+  let res = get_clicks_of(final_datas,'section_page_clic','est_section',true)
+  generateWords($('#group2 .chart-element')[0],res)
+  show_tip_on_hover($('#group2 .viz-title')[0],tips['group2']['sections'])
   return res;
+}
+
+function refresh_group2_projects(){  
+
+  //projects
+  tip = tips['group2']['categ_projets']
+  let categ = 'categorie_projet'
+  let categ_str = categ
+  let myFilter = {
+    field_to_filter: 'est_projet_categorie',
+    value_filter: true,
+    grid_left: '150px'
+  }
+  refreshEchart(tip,'bar','#group2 .chart-element',1,final_datas,'',categ_str,categ,'category','id_clic',false, true,true,myFilter)
+
+
+
+
 }
 
 function refresh_group2_links(){
-  let res = get_clicks_of(final_datas,'lien')
-  generateWords($('#group2 .chart-element')[2],res)
-  return res;
+
+  //links
+  tip = tips['group2']['liens']
+  let categ = 'lien'
+  let categ_str = categ
+  let myFilter = {
+    field_to_filter: $('#type_link').val(),
+    value_filter:  true,
+    grid_left: '50%'
+  }
+  refreshEchart(tip,'bar','#group2 .chart-element',2,final_datas,'',categ_str,categ,'category','id_clic',false, true,true,myFilter)
+
 }
 
 function refresh_group2_techs(){
-  let res = get_clicks_of(final_datas,'premiers_mots',false,'est_techno',true)
+  let res = get_clicks_of(final_datas,'techno','est_techno',true)
   generateWords($('#group2 .chart-element')[3],res)
+  show_tip_on_hover($('#group2 .viz-title')[3],tips['group2']['technos'])
   return res;
 }
 
@@ -1130,30 +1295,53 @@ function creer_dataviz(){
 
 
 
-  //put tooltips everywhere the mouse goes
+  //put tooltips everywhere the mouse goes, and show it if we need to
   window.onmousemove = function (e) {
-
-    var x = e.clientX,
-        y = e.clientY;
-        max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
-
-    $(".current_tooltip")[0].style.top = (y + 20) + 'px';
-    $(".current_tooltip")[0].style.left = Math.max(0, Math.min( (x + 20),max_left_position)) + 'px';
-
-
+    place_tooltip(e)
   };
 
+  //for me in /DATAVIZ/ + iframe
+  $(document).scroll(hide_all_tooltips);
+  $(window.parent.document).scroll(hide_all_tooltips);
+
 
 }
 
-async function get_canaux(){
-  const {data, error} = await supabase.from('canaux').select('*')
-  log({data})
+function hide_all_tooltips(){
+    show_tip(false)    
+    $('.echarts_tooltip').hide()
 
-  return data
 }
 
+function is_mobile(){
+  return window.innerHeight > window.innerWidth
+}
 
+function place_tooltip(e){
+    log(e)
+    var x = is_mobile() ? e.clientX :  e.pageX
+        y =  is_mobile() ? e.clientY :  e.pageY
+        max_left_position =  window.innerWidth - $('.current_tooltip')[0].offsetWidth - 30 
+        max_top_position =  window.innerHeight - $('.current_tooltip')[0].offsetHeight - 30 
+        
+    var final_x = Math.max(0, Math.min( (x + 20),max_left_position)) + 'px';
+    var final_y = Math.max(0, Math.min( (y + 20),max_top_position)) + 'px';
+
+    $(".current_tooltip")[0].style.top = final_y
+    $(".current_tooltip")[0].style.left = final_x
+
+    log('\n\n\n')
+    log('from '+x+' '+y)
+    log('to '+final_x+' '+final_y)
+
+    current_target_text =current_text(e.target)
+    if(current_target_text.length === 0){
+      show_tip(false)
+    }else{
+      log(current_target_text)
+    }
+
+}
 
 
 
@@ -1161,145 +1349,3 @@ async function get_canaux(){
 
 
 final_datas = []
-
-async function select_all(name_table){
-  const {data, error} = await supabase.from(name_table).select('*')
-  return data
-}
-
-
-function unique(array){
-  return [...new Set(array)];
-}
-
-function unique_objects_array(a,identifier){
-  return [...new Map(a.map(item =>  [item[identifier], item])).values()].filter(e => e[identifier]);
-}
-
-
-async function number_of_rows(tab,field_count){
-  
-  url =racine_data() + '/rest/v1/rpc/number_of_rows?apikey=' + apikey()
-  return await post_resultat_asynchrone(url, {"tab":tab, "field_count":field_count})
-
-}
-
-
-function post_resultat_asynchrone(url,data_json){
-
-  objet_envoi = {
-    type: 'POST',
-    url: url,
-    data: data_json
-  }
-
-  objet_envoi = rajouter_apijey_ajax(url,objet_envoi)
-
-
-  return $.ajax(objet_envoi).done(function(data) {
-    //console.log(data)
-    return data
-  });
-
-}
-
-
-
-
-function rajouter_apijey_ajax(url,objet_envoi){
-
-
-  objet_envoi.headers = {'apikey': apikey().replaceAll("apikey=","")}
-
-  return objet_envoi;
-}
-
-function sort_by(array,field_name,invert){
-  return array.sort(GetSortOrder(field_name,invert));
-}
-
-//Comparer Function    
-function GetSortOrder(prop,invert) {    
-    return function(a, b) {    
-        if (a[prop] > b[prop]) {    
-            return invert ? -1 : 1;    
-        } else if (a[prop] < b[prop]) {    
-            return invert ? 1 :-1;    
-        }    
-
-        return 0;    
-    }    
-}   
-
-function get_fields_values(array,fields){
-  let res = []
-
-  for(my_index = 0;my_index<fields.length;my_index++){
-    res.push(array.map(e => e[fields[my_index]]))
-  }
-
-  return res
-}
-
-function get_elements(array,fields,only_unique,sortby_fieldname,invert,ignore_null){
-
-  if(sortby_fieldname) array = sort_by(array,sortby_fieldname,invert)
-
-  fields = fields.split(',')
-  let fields_val = get_fields_values(array,fields)
-  //console.log({fields_val})
-
-
-  fields_val = fields.length === 1 ? fields_val[0] : fields_val
-  //console.log({fields_val})
-
-  let res = only_unique ? unique(fields_val) : fields_val
-  //console.log({res})
-
-  if(ignore_null) res = res.filter(e => e !== null)
-
-  return res
-}
-
-function count_elements(array,fields,only_unique,ignore_null, fixed_field_name,fixed_field_value){
-  if(fixed_field_name && fixed_field_value){
-    array = array.filter(e => e && e[fixed_field_name] === fixed_field_value)
-    return count_elements(array,fields,only_unique,ignore_null)
-  }
-
-  let els = get_elements(array,fields,only_unique,false,false,ignore_null)
-  return els.length
-}
-
-const accumulate = arr => arr.map((sum => value => sum += value)(0));
-const sum_array = arr => accumulate(arr).pop()
-const percentage_of_total = (arr,nb_of_decimals) => arr.map(e => Number((100*(Number(e)/accumulate(arr).pop())).toFixed(   (nb_of_decimals ? nb_of_decimals : 1) ))  )
-const countOccurrences = (a,b) => b.map(e => a.filter(c => c['type_appareil'] === e).length)
-const zip = (x, y) => Array.from(Array(Math.max(x.length, y.length)), (_, i) => [x[i], y[i]])
-
-
-function keep_fields(obj, ...keys){
-  return sort_by(obj.map(e => pick(e, ...keys)),keys[0])
-}
-
-function keep_unique_records(obj, ...keys){
-  return unique( keep_fields(obj, ...keys))
-}
-
-
-const pick = (obj, ...keys) => Object.fromEntries(
-  keys
-  .filter(key => key in obj)
-  .map(key => [key, obj[key]])
-);
-
-const inclusivePick = (obj, ...keys) => Object.fromEntries(
-  keys.map(key => [key, obj[key]])
-);
-
-const omit = (obj, ...keys) => Object.fromEntries(
-  Object.entries(obj)
-  .filter(([key]) => !keys.includes(key))
-);
-
-
