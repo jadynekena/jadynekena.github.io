@@ -3,7 +3,7 @@ layout: default
 title: Projets d'automatisation
 ---
 
-### <center>Page en cous de construction, merci de votre patience !</center>
+### <center>Page en cours de construction, merci de votre patience !</center>
 
 <!--
 <div class="container-fluid" id="explanation">
