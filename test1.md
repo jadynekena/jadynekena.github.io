@@ -1,10 +1,5 @@
 ---
 layout: default
-permalink: /test1.html
-title: 'Comment faire une sauvegarde d'une table Supabase ?'
-date: '2022-07-04 05:29:20 +0200'
-categories: sql postgresql supabase backup data données
-published: false
 ---
 
 # Comment faire une sauvegarde d'une table Supabase ?

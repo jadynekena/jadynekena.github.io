@@ -9,34 +9,33 @@
   <meta name="twitter:title" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <link rel="shortcut icon" href="../assets/images/logo-128x125.png" type="image/x-icon">
-  <meta name="description" content="">
-
+  <meta name="description" content="{{ page.description }}">
+  <meta name="author" content="{{ page.author }}">
+  <meta name="layout" content="{{ page.layout }}" >
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 
   <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-grid.min.css">
-  <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap-reboot.min.css">
   <link rel="stylesheet" href="../assets/dropdown/css/style.css">
-  <link rel="stylesheet" href="../assets/socicon/css/styles.css">
   <link rel="stylesheet" href="../assets/theme/css/style.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700,400i,500i,600i,700i&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700,400i,500i,600i,700i&display=swap"></noscript>
-  <link rel="preload" as="style" href="../assets/mobirise/css/mbr-additional.css"><link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+  <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
+  
+  <link rel="stylesheet" href="/assets/default/default.css" type="text/css">
   <title> {{ page.title }} </title>
 </head>
 
-<body>
+<body id="body_default">
   
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5HJ4RVH"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-
-
-
+    
+    <h1 id="title-page"><strong>{{ page.title }}</strong></h1>
     <section data-bs-version="5.1" class="content4 cid-t198aXoXp2X .mbr-section--full-height" id="page-content">
-      <div style="padding:30px;">
+      <div>
         {{ content }}
       </div>
     </section>

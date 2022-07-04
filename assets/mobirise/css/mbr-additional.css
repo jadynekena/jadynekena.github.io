@@ -3189,7 +3189,7 @@ a {
   color: black !important;
 }
 
-.night .nav-link:hover {
+.night .nav-link:hover, .night .nav-link:active, .night .nav-link:focus {
   color: #b74a3c !important;
 }
 

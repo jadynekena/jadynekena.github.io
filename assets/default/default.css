@@ -1,0 +1,35 @@
+body{
+	font-size: 1.2rem;
+}
+section {
+	padding: 0 20vw;
+}
+a:hover {
+	filter: brightness(0.8);
+}
+h2 {
+	padding-top: 50px;
+	font-size: 3rem;
+	font-weight: bold;
+	color: #1a4b53;
+}
+.night h2 {
+	filter: invert(1)
+}
+h3 {
+	font-size: 2rem;
+}
+.top{
+	margin-top: 150px;
+}
+.night#body_default{
+	background: black;
+}
+#title-page {
+	font-size: 4rem !important;
+	padding-top: 18vh;
+	text-align: center;
+}
+#page-content {
+	padding-top: 1rem;
+}

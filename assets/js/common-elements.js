@@ -259,6 +259,10 @@ function is_home_page(){
 	return !(location.pathname !== '/' && location.pathname !== '/index' && location.pathname !== '/index.html')
 }
 
+function is_default(){
+	return document.head.querySelector('[name="layout"]') && document.head.querySelector('[name="layout"]').getAttribute('content') === 'default'
+}
+
 async function insert_supabase(nametable,datas,upsert_mode){
 	//console.log('inserting to '+nametable,datas)
 	if(is_local_host()) return ;
@@ -763,7 +767,7 @@ function script_load_google_tag(){
 
 
 function page_name(){
-	return document.title ? document.title.split('|')[1].trim() : ""
+	return document.title && document.title.includes('|') ? document.title.split('|')[1].trim() : ""
 }
 
 function title_project(){
@@ -783,7 +787,7 @@ function get_subtitle(loc){
 		return "J'ai récupéré mes données depuis différentes plateformes et j'ai découvert des indicateurs très intéressants sur mes activités."
 
 	}if(loc.includes(ref_project_auto)){
-		return ""
+		return ''
 
 	}if(loc.includes(ref_project_linkedin)){
 		return `<h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-7">N'hésitez pas à consulter les publications directement <a href="https://www.linkedin.com/in/data-analyst-vba/" target="_blank">sur LinkedIn</a> !</h4>`
@@ -1021,7 +1025,7 @@ function subtitle_of_project(subtitle){
 }
 
 function titles(){
-	if (!is_home_page()){
+	if (!is_home_page() && !is_default()){
 		add_element(title_project(), 'title-section', document.getElementById('page-content'), 1)
 		add_element(subtitle_of_project(get_subtitle(loc())), 'explanation', document.getElementById('page-content'), 2)
 	}
@@ -1146,7 +1150,7 @@ function personal_datas(){
 }
 
 function automates(){
-	return '' //loading()
+	return loading()
 }
 
 
