@@ -3207,15 +3207,11 @@ a {
   color: #de6553;
 }
 
-.night.dataviz {
-  background-color: black;
-}
-
 #cookiesdirective {
   z-index: 999999;
 }
 
-.night iframe,
+.night iframe#DATAVIZ,
 .night .swal2-confirm,
 .night .info,
 .night .btn,
