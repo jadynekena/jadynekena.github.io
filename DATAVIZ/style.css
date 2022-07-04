@@ -89,13 +89,11 @@ select {
 	height: 520px;
 }
 
-
-/*max height on big screen*/
+/*min width on big screen*/
 @media (min-width:500px)  {
-	.chart {
-		min-height: 520px;
-		max-height: 30vh;
-	} 
+	.shrinked-chart {
+		height: 40vh !important;
+	}
 }
 
 .chart-element {
