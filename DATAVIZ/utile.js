@@ -92,7 +92,8 @@ async function subscribe_supabase(){
 
 
           final_datas.push(last_tout)
-          refresh_all_viz()
+          refresh_all_viz(true)
+
 
 
         //update or delete ---> get ALL
@@ -104,7 +105,7 @@ async function subscribe_supabase(){
         
           
         log({final_datas})
-        refresh_all_viz()
+        refresh_all_viz(true)
 
       }
 
@@ -177,8 +178,13 @@ function check_if_collecting_datas(){
   return collect_datas
 }
 
-function refresh_all_viz(){
+function refresh_all_viz(update){
 
+  if(update){
+    console.log('only updating current datas')
+    return $(window).resize()
+  } 
+  
   //group1 : main vision
   refresh_group1()
 
@@ -186,6 +192,9 @@ function refresh_all_viz(){
   refresh_group2()
 
   //group3 : from where people come from (countries, websites, social medias) --> todo
+  
+
+  
 }
 
 main()
