@@ -1,4 +1,20 @@
 
+function display_date_dd_mm_yy_hh_min(date){
+  return two_digits(date.getDate()) + '/' + 
+          two_digits(date.getMonth() + 1) + '/' + 
+          two_digits(date.getFullYear().toString().substring(2)) + ' ' + 
+
+          two_digits(date.getHours()) + ':' +
+          two_digits(date.getMinutes())
+}
+
+function two_digits(val){
+  if(val.toString().length === 1) return '0' + val
+
+  return val
+}
+
+
 async function select_all(name_table){
   const {data, error} = await supabase.from(name_table).select('*')
   return data

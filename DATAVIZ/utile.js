@@ -849,15 +849,6 @@ function refresh_group1_labels(){
 
 }
 
-function display_date_dd_mm_yy_hh_min(date){
-  return date.getDate() + '/' + 
-          (date.getMonth() + 1) + '/' + 
-          date.getFullYear().toString().substring(2) + ' ' + 
-
-          date.getHours() + ':' +
-          date.getMinutes() 
-}
-
 function very_first_visit(final_datas){
   return new Date(Math.min(... final_datas.map(e => new Date(e['date_visite']))))
 }

@@ -23,6 +23,8 @@
   <link rel="stylesheet" href="../assets/mobirise/css/mbr-additional.css" type="text/css">
   
   <link rel="stylesheet" href="/assets/default/default.css" type="text/css">
+  <link rel="stylesheet" href="/assets/theme/css/dracula.css"></script>
+  
   <title> {{ page.title }} </title>
 </head>
 
@@ -32,9 +34,10 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5HJ4RVH"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
+  <a class="back btn btn-black display-4" href="./">Retour</a>
     
     <h1 id="title-page" class="title mbr-section-title align-center mb-4 mbr-fonts-style display-2" id="title-section"><strong>{{ page.title }}</strong></h1>
-    <section data-bs-version="5.1" class="content4 cid-t198aXoXp2X .mbr-section--full-height" id="page-content">
+    <section data-bs-version="5.1" class="content4 .mbr-section--full-height" id="page-content">
       <div>
         {{ content }}
       </div>
@@ -46,8 +49,10 @@
 
 
       <script type="text/javascript" src="/assets/js/common-elements.js"></script>
-      
+      <script type="text/javascript" src="/DATAVIZ/common.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
 
+      <script>hljs.highlightAll();</script>
 
 </body>
 </html>

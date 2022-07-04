@@ -252,7 +252,7 @@ function local_if_dataviz_not_iframe(){
 }
 
 function is_local_host(){
-	return local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.')
+	return local_if_dataviz_not_iframe() || window.location.href.toLowerCase().includes('localhost') || window.location.href.toLowerCase().includes('127.0.0.') || window.location.href.toLowerCase().includes('192.168.1.')
 }
 
 function is_home_page(){
