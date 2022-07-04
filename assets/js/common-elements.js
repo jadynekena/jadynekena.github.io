@@ -1704,6 +1704,8 @@ function switch_light(){
 function apply_light(){
 	switch_light()
 	switch_light()
+
+	if(document.querySelector('iframe')) document.querySelector('iframe').contentWindow.apply_light()
 }
 
 function next_light(){

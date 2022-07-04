@@ -3215,6 +3215,7 @@ a {
   z-index: 999999;
 }
 
+.night iframe,
 .night .swal2-confirm,
 .night .info,
 .night .btn,

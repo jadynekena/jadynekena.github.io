@@ -144,13 +144,14 @@ function main(){
   })
 
   get_donnees_site()
-  let theme_to_keep = local_if_dataviz_not_iframe()
-  if(theme_to_keep){
+  let imlocal = local_if_dataviz_not_iframe()
+  if(imlocal){
     console.warn('showing icon')
     apply_light()
     document.getElementById('switch').style.display= ""
   } else{
     console.warn('hiding icon')
+    apply_light()
     document.getElementById('switch').style.display= "none"
   }
 
