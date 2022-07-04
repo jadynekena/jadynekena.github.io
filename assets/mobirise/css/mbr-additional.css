@@ -3211,6 +3211,10 @@ a {
   z-index: 999999;
 }
 
+.night.dataviz.local {
+  background: black;
+}
+
 .night iframe#DATAVIZ,
 .night .swal2-confirm,
 .night .info,
