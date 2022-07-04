@@ -1,6 +1,9 @@
 body{
 	font-size: 1.2rem;
 }
+center {
+	text-align: center;
+}
 section {
 	padding: 0 20vw;
 }
@@ -13,7 +16,7 @@ h2 {
 	font-weight: bold;
 	color: #1a4b53;
 }
-.night h2 {
+.night h2,.night h3, .night #title-page {
 	filter: invert(1)
 }
 h3 {
@@ -23,12 +26,16 @@ h3 {
 	margin-top: 150px;
 }
 .night#body_default{
-	background: black;
+	background: #0c0c0c;
+}
+.night #title-page{
+	color: white;
 }
 #title-page {
-	font-size: 4rem !important;
-	padding-top: 18vh;
+	text-transform: uppercase;
+	padding-top: 25vh;
 	text-align: center;
+	color: black;
 }
 #page-content {
 	padding-top: 1rem;

@@ -5,7 +5,7 @@ title: Comment faire une sauvegarde d'une table Supabase ?
 tags: supabase postgreSQL backup script windows bat
 description: L'option de back-up de Supabase étant payante, je vous explique dans cet article comment sauvegarder vos tables Supabase en un seul clic.
 author: Jady Nekena Ramanandray
-published: true
+published: false
 ---
 
 ## Supabase, c'est quoi ?

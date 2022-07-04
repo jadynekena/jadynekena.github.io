@@ -1150,7 +1150,7 @@ function personal_datas(){
 }
 
 function automates(){
-	return loading()
+	return '' //loading()
 }
 
 
