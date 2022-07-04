@@ -34,20 +34,20 @@ La solution ? **Stocker** les valeurs de la plage à traiter **dans une variable
 
 ## Avec et sans ces astuces : la comparaison et les résultats
 J'ai mis en place **4 types de tests** :
-- ### a) Copie de valeur :
-	![resultats-copie-avec-sans-activate-et-select](/assets/images/tests-copie.PNG)
-	Sur presque **3000** séries de tests, on s'aperçoit que ne pas utiliser **.Activate** et **.Select** divise déjà le temps d'éxecution par 2, et couplé avec l'assignation « **.Value =** » au lieu de la méthode **.Copy**, on a bien le **facteur 41 entre le plus et le moins optimal**.
-- ### b) Insertion de plusieurs valeurs
-	![resultats-insertion-plusieurs-cellules](/assets/images/tests-insertion.PNG)
-	Sur **52000 cellules insérées**, on s'aperçoit qu'il est mieux de d'abord **rassembler les données dans un tableau local** avant de les mettre dans une plage de données : c'est l'**insertion massive**. On y gagne **1.6x** plus de temps, et sur de grosses données, ça peut vraiment faire la différence.
-- ### c) Calculs simples
-	![resultats-calculs-vba-ou-fonction-excel](/assets/images/tests-calculs.PNG)
-	Les **800 calculs tests** consistaient à sommer un grand nombre de valeurs, soit en faisant les **calculs sur VBA**, soit en passant par des **formules R1C1 Excel**.  
-	Comme je l'ai dit dans l'[astuce numéro 3](#3-utilisez-les-fonctions-natives-dexcel-avec-r1c1-au-lieu-des-boucles), on voit bien ici qu'exploiter les fonctionnalités d'Excel directement est **5x** plus rapide.
-- ### d) Recherche de valeur
-	![resultats-recherche-valeur-lointaine](/assets/images/tests-recherche.PNG)
-	L'expérience est de faire chercher une valeur très loin dans la feuille de calcul. J'ai testé 3 méthodes : **fonction native de recherche** d'Excel, copie des plages de valeurs à chercher **avec Set** et **sans Set**.
-	> **Set** permet de configurer une variable pour qu'elle se mette à jour avec sa référence. <u>Exemple</u>: ```Set valeur_de_a1 = Range("A1") ``` : si on met à jour la valeur de la cellule A1 dans Excel, alors ```valeur_de_a1.Value```  va renvoyer cette nouvelle valeur.
+### a) Copie de valeur :
+![resultats-copie-avec-sans-activate-et-select](/assets/images/tests-copie.PNG)
+Sur presque **3000** séries de tests, on s'aperçoit que ne pas utiliser **.Activate** et **.Select** divise déjà le temps d'éxecution par 2, et couplé avec l'assignation « **.Value =** » au lieu de la méthode **.Copy**, on a bien le **facteur 41 entre le plus et le moins optimal**.
+### b) Insertion de plusieurs valeurs
+![resultats-insertion-plusieurs-cellules](/assets/images/tests-insertion.PNG)
+Sur **52000 cellules insérées**, on s'aperçoit qu'il est mieux de d'abord **rassembler les données dans un tableau local** avant de les mettre dans une plage de données : c'est l'**insertion massive**. On y gagne **1.6x** plus de temps, et sur de grosses données, ça peut vraiment faire la différence.
+### c) Calculs simples
+![resultats-calculs-vba-ou-fonction-excel](/assets/images/tests-calculs.PNG)
+Les **800 calculs tests** consistaient à sommer un grand nombre de valeurs, soit en faisant les **calculs sur VBA**, soit en passant par des **formules R1C1 Excel**.  
+Comme je l'ai dit dans l'[astuce numéro 3](#3-utilisez-les-fonctions-natives-dexcel-avec-r1c1-au-lieu-des-boucles), on voit bien ici qu'exploiter les fonctionnalités d'Excel directement est **5x** plus rapide.
+### d) Recherche de valeur
+![resultats-recherche-valeur-lointaine](/assets/images/tests-recherche.PNG)
+L'expérience est de faire chercher une valeur très loin dans la feuille de calcul. J'ai testé 3 méthodes : **fonction native de recherche** d'Excel, copie des plages de valeurs à chercher **avec Set** et **sans Set**.
+> **Set** permet de configurer une variable pour qu'elle se mette à jour avec sa référence. <u>Exemple</u>: ```Set valeur_de_a1 = Range("A1") ``` : si on met à jour la valeur de la cellule A1 dans Excel, alors ```valeur_de_a1.Value```  va renvoyer cette nouvelle valeur.
 
 ## LA méthode optimale à garder en tête
 Si vous devez retenir 3 choses, ce sont ces points là :
@@ -100,7 +100,7 @@ Sub apres() 'durée d'exécution : moins d'1 seconde
 End Sub
 ```
 
-... Et résultats :
+Et résultats :
 - Pas de **boucles**
 - Pas de **manipulations graphiques inutiles**
 - Code **commenté** et avec des **variables locales déclarées**

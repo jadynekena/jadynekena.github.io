@@ -34,7 +34,6 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5HJ4RVH"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-  <a class="back btn btn-black display-4" href="./">Retour</a>
     
     <h1 id="title-page" class="title mbr-section-title align-center mb-4 mbr-fonts-style display-2" id="title-section"><strong>{{ page.title }}</strong></h1>
     <section data-bs-version="5.1" class="content4 .mbr-section--full-height" id="page-content">
@@ -44,15 +43,18 @@
     </section>
 
 
+      <div class="backwrap"><a class="back btn btn-black display-4" href="./">Retourner à la liste de projets</a></div>
+
 
       <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script><script src="../assets/web/assets/cookies-alert-plugin/cookies-alert-core.js"></script>  <script src="../assets/web/assets/cookies-alert-plugin/cookies-alert-script.js"></script>  <script src="../assets/smoothscroll/smooth-scroll.js"></script>  <script src="../assets/ytplayer/index.js"></script>  <script src="../assets/dropdown/js/navbar-dropdown.js"></script>
 
 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
       <script type="text/javascript" src="/assets/js/common-elements.js"></script>
       <script type="text/javascript" src="/DATAVIZ/common.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+      <script>hljs.highlightAll();document.querySelector('.back').style.display = window.location.href.includes('/projets-automatisations/') ? 'initial' : 'none'</script>
 
-      <script>hljs.highlightAll();</script>
+
 
 </body>
 </html>

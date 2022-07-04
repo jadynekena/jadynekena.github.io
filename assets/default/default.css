@@ -82,11 +82,12 @@ h3 {
 	padding-top: 1rem;
 	margin-bottom: 100px;
 }
+.backwrap {
+	text-align: center;
+	margin-bottom: 10vh;
+}
 .back {
-	text-align: left;
-	top: 24.5vh;
-	position: absolute;
-	z-index: 5;
+	width: max-content;
 	display: none;
 }
 
