@@ -1,7 +1,7 @@
 ---
 layout: default
 permalink: /no-script
-title: 'Sans JavaScript'
+title: 'Sans JavaScript 😔'
 ---
 
 # Javascript 
