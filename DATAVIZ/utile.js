@@ -706,7 +706,7 @@ function tooltipFormatter(params, src_datas){
     detail = all[params.dataIndex]
 
 
-    detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','operateur','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_'+type_evolution,'date_'+type_evolution),field_to_count) 
+    detail = unique_objects_array(keep_unique_records(detail,'pays','region','ville','operateur','resolution',src_datas['fieldName_to_count'],'adresse_ip','date_heure_'+type_evolution,'date_'+type_evolution,'url_page_source_local'),field_to_count) 
     log('detail = ')
     log(detail)
     
