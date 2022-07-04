@@ -574,6 +574,9 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
 
     //INVERTED AXIS if category is kinda long
     if(optional_object_filtering_on_categories){
+      //reverse X axis
+      option['xAxis']['data'] = option['xAxis']['data'].reverse()
+
       tmp = option['xAxis']
       option['xAxis'] = option['yAxis']
       option['yAxis'] = tmp
