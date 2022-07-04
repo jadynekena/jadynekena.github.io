@@ -1691,11 +1691,13 @@ function switch_light(){
 	let one_more_class = loc().includes("/DATAVIZ/") ? ' dataviz' : ''
 	document.querySelector('body').className = next === "🌙" ? "night" + one_more_class : ""
 
-	if(next === '🌙'){
-		if(local_if_dataviz_not_iframe()){
-			$('body').addClass('local')
-		}else{
-			$('body').remove('local')
+	if(loc().includes("/DATAVIZ/")){
+		if(next === '🌙'){
+			if(local_if_dataviz_not_iframe()){
+				$('body').addClass('local')
+			}else{
+				$('body').remove('local')
+			}
 		}
 	}
 
