@@ -213,7 +213,7 @@ body.nightmode {
   overflow: hidden;
 }
 
-.jqcloud > span:hover{
+.jqcloud > span:hover, .jqcloud > span:active{
 	background-color: #8e8e8e38;
 	cursor: pointer;
 }
