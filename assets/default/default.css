@@ -94,6 +94,10 @@ h3 {
 #page-content details div *{
 	padding-left: 8vw;	
 }
+#page-content details a {
+	display: block;
+	margin-bottom: 20px;
+}
 .listing {
 	text-align: center;
 	margin-top: 50px;	

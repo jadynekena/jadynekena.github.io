@@ -19,12 +19,12 @@ published: true
 
 
 ## Utilité
-Lorsque vous créez une application qui nécessite une date, je recommande de **toujours** passer par une date-heure **distante** et non **celle de l'appareil de l'utilisateur**.
+Lorsque vous créez une application qui nécessite une date, je recommande de **toujours** de passer par une date-heure **distante** et non **celle de l'appareil de l'utilisateur**.
 
 En effet, voici 3 bonnes raisons de le faire :
 - **Homogénéisation** : selon les appareils de navigation, les formats diffèrent, et donc cela risque de porter à confusion lors de votre collection de données. Mieux vaut partir sur un même format imposé par votre serveur directement.
 - **Fiabilité** : si votre application se base sur la date d'aujourd'hui pour limiter/donner accès à certaines fonctionnalités, il est préférable de faire appel à votre serveur pour connaître l'heure locale.
-- **Authenticité** : le fait de changer la date et l'heure de l'appareil n'impacte en rien les fonctionnalités de votre application. Petit clien d'oeil à [l'histoire des vies illimitées sur Candy Crush](https://www.nextpit.fr/forum/562381/vies-illimitees-sur-candy-crush-android){:target="_blank"} 😉
+- **Authenticité** : le fait de changer la date et l'heure de l'appareil n'impacte en rien les fonctionnalités de votre application. Petit clien d'oeil à [l'histoire des vies illimitées sur Candy Crush](https://www.nextpit.fr/forum/562381/vies-illimitees-sur-candy-crush-android){:target="_blank"} 🤫
 
 ## Le code
 Dans **PosgreSQL**, il y a déjà la fonction native **now()** qui renvoie la date et l'heure à UTC+00. Il suffit de préciser qu'on la renvoie avec le **TIMEZONE**, comme l'indique ce code :
