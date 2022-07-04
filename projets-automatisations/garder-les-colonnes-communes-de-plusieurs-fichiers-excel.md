@@ -7,6 +7,9 @@ author: Jady Nekena Ramanandray
 published: true
 ---
 
+* toc
+{:toc}
+
 ## Demo (video)
 
 Retrouvez ci-dessous l'automatisation en question, que je vais expliquer un peu plus bas.

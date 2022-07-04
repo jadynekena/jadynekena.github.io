@@ -44,7 +44,7 @@ h3 {
 }
 
 #page-content ul {
-	margin-top: 2.3125rem;
+	margin-top: 10px;
 	list-style: none;
 	padding:0;
 }
@@ -53,7 +53,7 @@ h3 {
 }
 #page-content li {
 	padding-left: 3vw;
-	margin-bottom: 3vh;
+	margin-bottom: 5px;
 }
 #page-content details {
   margin-bottom: 10px;
@@ -68,6 +68,9 @@ h3 {
 }
 #page-content li::marker {
 	content: '• '
+}
+#page-content ul#markdown-toc li::marker {
+	content: '' !important;
 }
 .top{
 	margin-top: 150px;
@@ -102,6 +105,9 @@ h3 {
 	text-align: center;
 	margin-top: 50px;	
 	color: white;
+}
+.table-of-contents {
+
 }
 .videowrapper {
     float: none;

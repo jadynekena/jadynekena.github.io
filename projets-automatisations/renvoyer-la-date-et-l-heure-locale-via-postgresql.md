@@ -7,6 +7,9 @@ author: Jady Nekena Ramanandray
 published: true
 ---
 
+* toc
+{:toc}
+
 ## Demo
 
 • Cliquez <a class="btn btn-white display-4" onclick="alert(display_date_dd_mm_yy_hh_min(new Date))">ICI</a> pour voir date et l'heure actuelle.
