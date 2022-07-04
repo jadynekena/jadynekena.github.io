@@ -51,21 +51,66 @@ J'ai mis en place **4 types de tests** :
 
 ## LA méthode optimale à garder en tête
 Si vous devez retenir 3 choses, ce sont ces points là :
-- • Ne **PAS** (ou plus) utiliser : .**Activate**, .**Select**, .**Copy**   
-- • Favoriser les **Application.WorksheetFunction** et l'**affectation par formule R1C1** avec **Value =**   
-- • **Stocker** les **plages de données** à traiter dans une **variable locale** pour ne pas itérer directement sur les cellules, par exemple:   
+- Ne **PAS** (ou plus) utiliser : .**Activate**, .**Select**, .**Copy**   
+- Favoriser les **Application.WorksheetFunction** et l'**affectation par formule R1C1** avec **.Value =**   
+- **Stocker** les **plages de données** à traiter dans une **variable locale** pour ne pas itérer directement sur les cellules.
 
+## Exemple concret
+On veut copier la **valeur de A1 de la feuille 1** dans les **lignes A1 à A5000 de la feuille 2**, en précisant à la copie <u>le numéro de ligne de la feuille 2</u>.
+### Avant
 ```
-Dim mes_cellules as Variant
-Dim une_valeur as Variant
-mes_cellules = Thisworkbook.Worksheets(1).Range("A1:A500").value 'ne surtout pas utiliser Set mes_cellules =
+Sub avant() 'durée d'exécution : 22 secondes
+
+    Worksheets(1).Activate
+    Worksheets(1).Range("A1").Select
+    Selection.Copy
+    Worksheets(2).Activate
+    
+    For i = 1 To 5000
+        Worksheets(2).Range("A" & i).Select
+        ActiveSheet.Paste
+        ActiveCell.Value = ActiveCell.Value & " ligne " & i
+    Next
+    
+    
+End Sub
+```
+### Après
+```
+Sub apres() 'durée d'exécution : moins d'1 seconde
 	
-For each une_valeur in mes_cellules
-	'... traitements ici ...
-Next
+    'déclarer les variables locales de noms explicites
+    Dim valeur_a_copier As String
+    Dim valeur_finale As String
+    dim plage_copie as string
+
+    plage_copie = "A1:A5000"
+    
+    'stocker dans une variable sans Set
+    valeur_a_copier = Chr(34) & ThisWorkbook.Worksheets(1).Range("A1").Value & "  ligne " & Chr(34)
+
+    'utiliser la fonction native =LIGNE(cellule) d'Excel
+    valeur_finale = "=" & valeur_a_copier & " & " & "ROW(RC1)"
+    ThisWorkbook.Worksheets(2).Range(plage_copie).FormulaR1C1 = valeur_finale
+    
+    'écraser les formules par les valeurs
+    ThisWorkbook.Worksheets(2).Range(plage_copie).Value = ThisWorkbook.Worksheets(2).Range("A1:A5000").Value   
+    
+    
+End Sub
 ```
 
-## Code source
+... Et résultats :
+- Pas de **boucles**
+- Pas de **manipulations graphiques inutiles**
+- Code **commenté** et avec des **variables locales déclarées**
+- **Maintenance facile** en changeant juste la valeur de ```plage_copie```
+- **22x plus rapide**
+
+> Vous pouvez copier le classeur contenant ces 2 fonctions ```avant```/```apres``` [ici](/assets/examples/avant_apres.xlsm){:target="_blank"}.
+
+
+## Code source des tests
 J'ai automatisé tous ces tests, et je vous les mets à disposition si vous avez envie d'y jeter un coup d'oeil : [c'est par ici et c'est gratuit](https://drive.google.com/uc?export=download&id=1gpglbLfgdEhoyH2QRt0D_mQxi1CkIwMj){:target="_blank"} !
 
 

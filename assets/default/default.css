@@ -55,6 +55,20 @@ h3 {
 	padding-left: 3vw;
 	margin-bottom: 3vh;
 }
+#page-content details {
+  margin-bottom: 10px;
+} 
+#page-content summary {
+  display: list-item;
+  cursor: pointer;
+  border-style: outset;
+  border-radius: 05px;
+  border-width: 1px;
+  background-color: #111;
+}
+#page-content li::marker {
+	content: '• '
+}
 .top{
 	margin-top: 150px;
 }

@@ -8,7 +8,7 @@ published: true
 ---
 
 
-<h2 class="align-center">Retrouvez ici des automatisations que j'ai mis en place pour une meilleure productivité 😀</h2>
+Retrouvez ici des automatisations que j'ai mis en place pour une meilleure productivité 😀
 
 
 <div class="listing">
