@@ -29,6 +29,8 @@ select {
 	font-size: calc(16px + 1.5vw);
 	position: sticky;
 	top: 0;
+	border-style: hidden;
+	border-radius: 15px;
 }
 
 .grid-container {
