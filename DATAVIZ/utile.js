@@ -567,7 +567,7 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
       grid: {
         top: 30,
         left: 50,
-        right: 0,
+        right: 30,
         bottom: 30
       }
     };
