@@ -42,7 +42,7 @@ function contenu_mail(nom,citation,auteur){
     C'est beau n'est ce pas ?
     Allez, à une prochaine !<br/><br/>
 
-    <i><strong>Mail automatique issu de <a href="https://jadynekena.com/projets-automatisations/configurez-un-mail-automatique-en-moins-de-deux-minutes-avec-votre-compte-gmail">cet article</a></strong></i>.
+    <i><strong>Mail automatique issu de <a href="https://jadynekena.com/projets-automatisations/configurez-un-mail-automatique-en-moins-de-cinq-minutes-avec-votre-compte-gmail">cet article</a></strong></i>.
 
   `
 }
