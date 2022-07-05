@@ -1211,11 +1211,10 @@ legend {
 }
 
 .expanded .card-box {
-  position: fixed;
   display: block;  
   z-index: 50;
   background: #ffffff6e;
-  max-width: 96vw;
+  max-width: 80vw;
 }
 
 .expandable .tableau {
@@ -1223,5 +1222,5 @@ legend {
 }
 
 .tableau  {
-  margin-top: 100px;
+  margin-top: 0;
 }
