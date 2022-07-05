@@ -1,0 +1,26 @@
+
+<div>
+	<input type="text" placeholder="Nom" id="nom" name="nom">
+	<input type="mail" placeholder="Adresse mail" id="adresse_mail" name="adresse_mail">
+	<button type="button" onclick="check(this)">Envoyez-moi un mail</button>
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	
+	// A REMPLACER PAR LE VÔTRE 
+	const SCRIPT_URL =  'https://script.google.com/macros/s/AKfycbwOHLBF-8xm7g5kl7gDDJwnY5otKSe6U1vVpaWSW_z6EmqJgBMfzYo6v4MA152FzZcE/exec'
+
+	function check(ceci){
+		nom = $('#nom')[0].value.trim()
+		adresse_mail = $('#adresse_mail')[0].value.trim()
+		if(nom === '' || adresse_mail === ''){
+			alert('❌Merci de tout remplir.')
+		}else{
+			url = SCRIPT_URL + '?nom=' + nom + '&adresse_mail=' + adresse_mail
+			$.post(url, function( data ) {
+				alert('📨 '+data);
+				ceci.disabled=true;
+			});
+		}
+	}
+</script>
