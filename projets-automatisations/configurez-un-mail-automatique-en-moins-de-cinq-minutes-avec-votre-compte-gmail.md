@@ -101,6 +101,8 @@ A ce jour (**Juillet 2022**), un compte google <u>gratuit</u> peut envoyer :
 - **50 pièces jointes** par mail envoyé
 - des **pièces jointes** de taille totale **25Mo maximum**
 
+Sur une **durée d'exécution maximale** de **6 minutes**.
+
 Pour un simple utilisateur, c'est largement suffisant pour faire ce qu'on veut !
 
 > Vous pouvez consulter le quotas officiel sur le [site officiel de Google Script](https://developers.google.com/apps-script/guides/services/quotas){:target="blank"}.
