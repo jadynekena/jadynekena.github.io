@@ -61,6 +61,7 @@ const tips = {
 
 
 async function subscribe_supabase(){
+  last_tout = []
   return await supabase
     .from('*')
     .on('*', async function (payload){
@@ -93,14 +94,15 @@ async function subscribe_supabase(){
             log('Problème nouvelle visite.',false, true)
             return false
           }
-          last_tout = last_tout.data[0]
-          log({last_tout})
+
+          if(last_tout && last_tout.data){
+            last_tout = last_tout.data[0]
+            log({last_tout})
 
 
-          final_datas.push(last_tout)
-          refresh_all_viz(true)
-
-
+            final_datas.push(last_tout)
+            refresh_all_viz(true)
+          }
 
         //update or delete ---> get ALL
         }else {
