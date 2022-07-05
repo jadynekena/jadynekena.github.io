@@ -72,9 +72,15 @@ async function subscribe_supabase(){
 
         //insertion ---> on ajoute le dernier element de 'tout'
         if(payload.eventType === 'INSERT'){
-          
+
+          //to ignore cause local
+          if(payload.new.id_visite){
+            a = await supabase.from('all_my_visits').select('*').eq('id_visite',payload.new.id_visite);
+            if(a['data'].length > 0) return console.info('ignoring new visit')
+
+
           //with ip address ---> new visit
-          if(payload.new.adresse_ip){
+          }else if(payload.new.adresse_ip){
             last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.adresse_ip + ' ' + payload.new.id_visite)
 
           //with id clic ---> new clic
