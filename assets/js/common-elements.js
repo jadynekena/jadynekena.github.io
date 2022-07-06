@@ -1702,6 +1702,8 @@ function switch_light(){
 			}else{
 				$('body').remove('local')
 			}
+		}else{
+			$('body').remove('night')
 		}
 	}
 

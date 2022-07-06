@@ -21,17 +21,81 @@ select {
 }
 
 
-.viz-choice, .viz-choice #chosen {
+.viz-choice, .viz-choice #chosen {	
+	font-size: calc(16px + 1.5vw);
+	text-align: center;
+	background: #fff0;
+	border-width: 2px;
+	width: 100%;
+	border-radius: 15px;
+	border-style: outset;
+	border-color: #fff;
+	background-color: #9d9d9da8;
+	color: white;
+}
+
+.last-update::before {
+	content: 'Dernière mise à jour';
+	font-weight: bolder;
+}
+
+.last-update {
+	color: #62c376;
+	width: fit-content;
+	margin-left: 5px;
+	max-width: 100px;
+	display: block;
+	font-size: 10px;
+}
+
+.filter-wrapper * {	
+	cursor: pointer;
+}
+
+..viz-choice:hover {
+	filter: brightness(1.1);
+}
+
+.night .filter-wrapper { filter: invert(1); }
+.filter-wrapper {
+	display: flex;
 	z-index: 9999;
 	text-align: center;
 	font-weight: bold;
 	width: 100%;
-	font-size: calc(16px + 1.5vw);
 	position: sticky;
 	top: 0;
 	border-style: hidden;
-	border-radius: 15px;
-	background-color: #9d9d9da8;
+	background: inherit;
+}
+
+.refresh {
+	padding: 10px;
+	border-radius: 2000px;
+	border-style: outset;
+	border-width: 1px;
+	min-height: 30px;
+	min-width: 30px;
+	width: auto;
+	background: url('/assets/images/refresh.png') center center no-repeat;
+	background-size: 50%;
+	background-color: #6ee886e0;
+}
+.refresh:hover {
+	background-color: #00ff32e0;
+}
+.refresh:active {
+  border-style: inset;
+}
+
+
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 100000;
+  transform: translate(-50%, -50%);
+  width: 50px;
 }
 
 .grid-container {

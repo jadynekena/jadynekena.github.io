@@ -27,13 +27,18 @@
 	<link rel="stylesheet" href="/assets/mobirise/css/mbr-additional.css">
 	<link rel="stylesheet" href="./style.css">
 </head>
+
 <body >
+	<img class="loading" src="/assets/images/loading.gif" style="width: 50px;">
 	<div style="display: none;" id="switch" class="fixed" onclick="switch_light()"><span  class="light-switch">💡</span></div>
-	<div class="themeViz viz-choice">
-		<select id="chosen" onchange="load_group(this.value)">
+	
+	<div class="filter-wrapper">
+		<select class="viz-choice" id="chosen" onchange="load_group(this.value)">
 			<option value="group1">Vision globale</option>
 			<option value="group2">Résumé des clics</option>
 		</select>
+		<span title="Actualiser" class="refresh" onclick="get_donnees_site()"></span>
+		<span class="last-update"><br/><span id="last-update"></span></span>
 	</div>
 	<span class="current_tooltip"></span>
 
@@ -176,5 +181,6 @@
 	<script src="./utile.js"></script>
 	<div id="current_page"></div>
 </div>
+
 </body>
 </html>

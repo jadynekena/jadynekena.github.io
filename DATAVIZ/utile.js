@@ -77,11 +77,12 @@ async function subscribe_supabase(){
           //to ignore cause local
           if(payload.new.id_visite){
             a = await supabase.from('all_my_visits').select('*').eq('id_visite',payload.new.id_visite);
-            if(a['data'].length > 0) return console.info('ignoring new visit')
-
+            if(a['data'].length > 0) return log('ignoring new visit')
+          }
 
           //with ip address ---> new visit
-          }else if(payload.new.adresse_ip){
+          if(payload.new.adresse_ip){
+            log('new visit to keep',false,true)
             last_tout = await supabase.from('tout').select('*').eq('une_visite',payload.new.adresse_ip + ' ' + payload.new.id_visite)
 
           //with id clic ---> new clic
@@ -95,13 +96,16 @@ async function subscribe_supabase(){
             return false
           }
 
+          log(last_tout,false,true)
+
           if(last_tout && last_tout.data){
             last_tout = last_tout.data[0]
             log({last_tout})
 
-
+            log('new payload ' +final_datas.length)
             final_datas.push(last_tout)
             refresh_all_viz(true)
+            log('payload OK.')
           }
 
         //update or delete ---> get ALL
@@ -156,7 +160,7 @@ function main(){
   let imlocal = local_if_dataviz_not_iframe()
   if(imlocal){
     console.warn('showing icon')
-    apply_light()
+    apply_light() 
     document.getElementById('switch').style.display= ""
   } else{
     console.warn('hiding icon')
@@ -186,23 +190,29 @@ function check_if_collecting_datas(){
   return collect_datas
 }
 
-function refresh_all_viz(update){
+function refresh_all_viz(update_only){
 
-  if(update){
-    console.log('only updating current datas')
-    return $(window).resize()
-  } 
+  loading(true)
+  log('refreshing... ' + final_datas.length)
   
-  //group1 : main vision
-  refresh_group1()
+  if(update_only){
+    refresh_group1() //group 1
+    $(window).resize() //group 2
 
-  //group2 : clicks
-  refresh_group2()
+  //create for the first time
+  }else{
 
-  //group3 : from where people come from (countries, websites, social medias) --> todo
-  
+    //group1 : main vision
+    refresh_group1()
 
-  
+    //group2 : clicks
+    refresh_group2()
+
+    //group3 : from where people come from (countries, websites, social medias) --> todo
+  }
+
+  loading(false)
+  log('refreshing done.')
 }
 
 main()
@@ -272,7 +282,7 @@ function refresh_labelcount_viz(label_selector,fields_to_display,index,tooltipTe
 
 function seriesOf(typeChart,datas){
   let res = []
-  let colorValue = $('.themeViz').css('color')
+  let colorValue = $('.themeViz.viz-title').css('color')
 
   log('\n\n\n\n'+typeChart,false)
 
@@ -637,17 +647,6 @@ function refreshEchart(tip,typeChart,parentSelector,parentSelectorIndex,JsonData
 
 function xData_column_length(xDatas){
   return $('.chart:visible').width() / xDatas.length
-}
-
-function wrap_value_in_few_pixels(xDatas){
-
-  //calucate length of 1 column of 1 xData
-  let column_length = xData_column_length(xDatas)
-  console.log({column_length}) 
-
-
-
-  return '{value}'
 }
 
 function css_tooltip(){
@@ -1292,17 +1291,20 @@ function append_colors(){
 
 }
 
+function loading(yes){
+  if(yes){
+    $('.loading').show()
+  }else{
+    $('.loading').hide()
+    $('#last-update').text((new Date).toLocaleString())
+  }
+}
+
 
 function creer_dataviz(){
   log(final_datas)
-
-
-  append_colors()
-
-  
+  append_colors()  
   refresh_all_viz()
-
-
 
 
 
@@ -1316,7 +1318,6 @@ function creer_dataviz(){
   //for me in /DATAVIZ/ + iframe
   $(document).scroll(hide_all_tooltips);
   $(window.parent.document).scroll(hide_all_tooltips);
-
 
 }
 
