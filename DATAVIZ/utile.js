@@ -189,6 +189,8 @@ async function send_ip_ignore(){
                }
   const {data, error} = await supabase.from('ip_ignore')
                       .insert([my_ip])
+  $('#myip').text(adresse_ip)
+  $('#current_page').show()
   return {data,error}
 }
 

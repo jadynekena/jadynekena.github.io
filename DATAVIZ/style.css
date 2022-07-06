@@ -255,17 +255,13 @@ body.nightmode {
 	overflow-wrap: break-word;
 }
 
-#current_page {	
+#current_page {
   display: none;
-  position: fixed;
   height: 50px;
   width: 100%;
-  bottom: 0;
-  font-size: 25px;
+  font-size: 11px;
   text-align: center;
-  justify-content: center;
-  background: #ffffff36;
-
+  color: #b5b5b5;
 }
 
 .single-line {
