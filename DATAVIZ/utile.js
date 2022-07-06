@@ -162,6 +162,10 @@ function main(){
     console.warn('showing icon')
     apply_light() 
     document.getElementById('switch').style.display= ""
+    console.warn('ignoring IP')
+    //send only if local (not in iframe)
+    send_ip_ignore()
+  
   } else{
     console.warn('hiding icon')
     apply_light()
@@ -171,6 +175,18 @@ function main(){
 
   //only chose dataviz
   load_group($('#chosen').val())
+}
+
+async function send_ip_ignore(){ 
+  const adresse_ip = get_item('adresse_ip') ? get_item('adresse_ip') : 'inconnue'
+  const ville = JSON.parse(get_item('my_datas'))['ville'] ? JSON.parse(get_item('my_datas'))['ville'] : 'inconnue'
+  const my_ip = {
+                 adresse_ip: adresse_ip,
+                 ville: ville
+               }
+  const {data, error} = await supabase.from('ip_ignore')
+                      .insert([my_ip])
+  return {data,error}
 }
 
 function load_group(e){
