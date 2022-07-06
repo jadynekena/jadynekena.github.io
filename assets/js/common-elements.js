@@ -1438,7 +1438,8 @@ async function data_client(forcing,url){
 
 	if(!url) url = 'https://ipapi.co/json/'
 
-	if(!is_local_host()){
+	//if(!is_local_host()){
+
 		//no local datas OR we force pulling new datas
 		if(!get_item('my_datas') || forcing){
 
@@ -1461,10 +1462,11 @@ async function data_client(forcing,url){
 		} else{
 			return get_item('my_datas',true)
 		}
+		/*
 	}else {
 		return {}
 	}
-	
+	*/
 }
 
 async function get_result(url){
@@ -1556,7 +1558,7 @@ async function post_when_clicked(e){
 
 	var a_clic = {
 		'id_visite':get_item('id_visite'),
-		'url_page_source':window.location.href,
+		'url_page_source': window.top.location.href,
 		'tag':element.tagName,
 		'contenu_clic': textContent || '',
 		'lien_clic': link,

@@ -178,11 +178,14 @@ function main(){
 }
 
 async function send_ip_ignore(){ 
-  const adresse_ip = get_item('adresse_ip') ? get_item('adresse_ip') : 'inconnue'
-  const ville = JSON.parse(get_item('my_datas'))['ville'] ? JSON.parse(get_item('my_datas'))['ville'] : 'inconnue'
+  await visit_details(true)
+  const adresse_ip = get_item('adresse_ip')   || ''
+  const ville = JSON.parse(get_item('my_datas'))['ville'] || ''
+  const url_page_source = top.location.href
   const my_ip = {
                  adresse_ip: adresse_ip,
-                 ville: ville
+                 ville: ville,
+                 url_page_source: url_page_source
                }
   const {data, error} = await supabase.from('ip_ignore')
                       .insert([my_ip])
