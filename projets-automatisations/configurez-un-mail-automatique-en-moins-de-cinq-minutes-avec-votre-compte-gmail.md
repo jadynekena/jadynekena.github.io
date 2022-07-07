@@ -2,7 +2,7 @@
 layout: default
 title: Configurez un mail automatique en moins de 5 minutes avec votre compte gmail
 tags: google appscript sheets mail automatisation
-description: Vous savez que vous pouvez générer des mails automatiques ave votre compte gmail ? Je vous montre comment en moins de 5 minutes.
+description: Vous savez que vous pouvez générer des mails automatiques avec votre compte gmail ? Je vous montre comment en moins de 5 minutes.
 author: Jady Nekena Ramanandray
 published: true
 ---
@@ -12,10 +12,6 @@ published: true
 
 ### Demo
 {% include_relative codes/mail.html %}
-
-J'ai créé une adresse mail publique pour cette démo : [jenvoieunmail2022@gmail.com](mailto:jenvoieunmail2022@gmail.com)
-
-> Oui je ne me suis pas compliqué la vie...
 
 Au clic du bouton d'envoi de mail, une **citation aléatoire** vous est envoyée dans votre boîte mail.
 
