@@ -361,8 +361,9 @@ div.jqcloud span.w1 { font-size: 1vw; }
 }
 
 .swal2-container {
-	height: 100vh;
+	height: 25vh;
 }
+
 
 .night {
 	background-color: black;
