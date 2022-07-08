@@ -6,7 +6,7 @@ refresh_likes_and_share();
 async function send_like_or_share(type_engagement){
 
 	if(type_engagement === 'partage'){
-		copy(window.location.href)
+		copy(window.location.href.split('#')[0])
 	}
 
 	const tmp = {
