@@ -17,8 +17,12 @@ async function send_like_or_share(type_engagement){
 	}
 	const {data, error} = await supabase.from('likes').insert([tmp],{upsert: false}) 
 
-	if(error && type_engagement === 'like'){
-		custom_alert('✅ Vous avez déjà liké ce contenu.')
+	if(type_engagement=== 'like'){		
+		if(error ){
+			custom_alert('✅ Vous avez déjà liké ce contenu.')
+		}else{
+			custom_alert('❤️ Votre like a bien été comptabilisé. MERCI !')
+		}
 	}
 
 	await refresh_likes_and_share()
@@ -41,7 +45,7 @@ async function refresh_likes_and_share(){
 }
 
 function copy(input) {
-	
+
 	custom_alert('Vous pouvez partager le lien du contenu directement.')
 
 	if (navigator.clipboard) {
