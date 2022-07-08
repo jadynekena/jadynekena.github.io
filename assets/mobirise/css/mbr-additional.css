@@ -3177,79 +3177,11 @@ a {
 }
 
 
-.night {
-  filter: invert(0.95);
-}
-
-.night body {
-  background: black;
-}
-
-.night .nav-link {
-  color: black !important;
-}
-
-.night .nav-link:hover, .night .nav-link:active, .night .nav-link:focus {
-  color: #b74a3c !important;
-}
-
-.night .btn-primary {
-  background-color: #353535 !important;
-}
-
-.night .timeline__card, .night .time  {
-  background-color: #000000ba !important;
-  color: white;
-}
-
-
-.night a {
-  color: #de6553;
-}
-
 #cookiesdirective {
   z-index: 999999;
 }
 
-.night.dataviz.local {
-  background: black;
-}
-
-.night iframe#DATAVIZ,
-.night .swal2-confirm,
-.night .info,
-.night .btn,
-.night img,
-.night .mbr-iconfont,
-.night .timeline,
-.night .linktr__goal,
-.night .theme,
-.night #footer-site,
-.night input,
-.night textarea,
-.night select ,
-.night a img,
-.night .alert,
-.night .remark,
-.night #swal2-content,
-.night .dropdown-menu,
-.night .jqcloud > span {
-  filter: invert(0.95) !important;
-}
-
-.night #swal2-content {
-  filter: invert(1);
-  color: white;
-}
-
-
-.night select, .night input, .night textarea, .night .form-control:focus, .night .dropdown-item {
-    background-color: #1c1c1c;
-    color: white !important;
-}
-
-
-.fixed, .night .fixed {
+.fixed {
   position: fixed; /*relative;*/
   bottom: 0;
   -webkit-transform: translate3d(0,0,0);
@@ -3275,15 +3207,6 @@ a {
   right: 0;
 }
 
-.swal-wide{/*
-    width:100vw !important;
-    height:50vh !important;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    margin: 0;*/
-}
-
 .maintenance, .maintenance * {
   background:black;
   color:white;
@@ -3307,3 +3230,32 @@ a {
 section {
   overflow-x: hidden;
 }
+
+
+/****** DEFAULT AND HOME PAGES ******/
+
+/*
+
+.night,
+.night .cid-t98vDxC9FZ .navbar,
+.night section,
+.night .dropdown-item ,
+.night .card {
+  background-color: #000000ed; 
+}
+
+.night .nav-link,
+.night .navbar-caption,
+.night .dropdown-item,
+.night ul,
+.night p,
+.night #title-page {
+  color: white !important;
+}
+
+.night section[background-image*="url"]{
+  filter: invert(1);
+}
+
+
+*/

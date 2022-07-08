@@ -35,28 +35,32 @@ select {
 }
 
 .last-update::before {
-	content: 'Dernière mise à jour';
+	content: 'Dernière mise à jour le ';
 	font-weight: bolder;
 }
 
 .last-update {
-	color: #62c376;
-	width: fit-content;
-	margin-left: 5px;
-	max-width: 100px;
-	display: block;
-	font-size: 10px;
+  color: grey;
+  display: block;
+  font-size: 10px;
+  text-align: end;
+  width: 100%;
+  font-style: italic;
+  padding-top: 5px;
+}
+
+#last-update {
+	margin-right: 5px;
 }
 
 .filter-wrapper * {	
 	cursor: pointer;
 }
 
-..viz-choice:hover {
+.viz-choice:hover {
 	filter: brightness(1.1);
 }
 
-.night .filter-wrapper { filter: invert(1);}
 .filter-wrapper {
 	display: flex;
 	z-index: 9999;
@@ -69,23 +73,36 @@ select {
 	background: inherit;
 }
 
-.refresh {
+.viz-btn {
 	padding: 10px;
 	border-radius: 2000px;
 	border-style: outset;
 	border-width: 1px;
 	min-height: 30px;
 	min-width: 30px;
-	width: auto;
+	width: auto;	
+}
+.viz-btn:active {
+  border-style: inset;
+}
+
+.refresh {
 	background: url('/assets/images/refresh.png') center center no-repeat;
-	background-size: 50%;
 	background-color: #6ee886e0;
+	background-size: 50%;
 }
 .refresh:hover {
 	background-color: #00ff32e0;
 }
-.refresh:active {
-  border-style: inset;
+
+.filters {
+	background: url('/assets/images/filter.png') center center no-repeat;
+	background-color: #ffffffe0;
+	background-size: 50%;	
+	position: relative;
+}
+.filters:hover {
+	background-color: #fff;
 }
 
 
@@ -232,14 +249,6 @@ select {
   color: white;
 }
 
-.night .theme, .night .themeViz, .night canvas{
-	filter: invert(1);
-}
-
-body.nightmode {
-	background: #182c33;
-}
-
 .current_tooltip{
 	display: none;
 	z-index: 5;
@@ -308,3 +317,59 @@ div.jqcloud span.w2 { font-size: 2vw; }
 div.jqcloud span.w1 { font-size: 1vw; }
 
 }
+
+.swal2-container {
+  opacity: 90%;
+  z-index: 10000 !important;
+  padding: 0 !important;
+}
+.swal2-content{
+  padding: 0 !important;
+}
+.swal2-styled.swal2-confirm {
+  color: #000 !important;
+}
+
+.filter_choice {
+	width: 100%;
+}
+.a_filter {
+
+}
+
+.with_filters::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #f00;
+}
+
+.no-filter {
+	text-align: center;
+	display: flex;
+	color: red  !important;	
+	margin: 25px 10px;
+	cursor: pointer;
+}
+
+.no-filter:hover {
+	background: #ffffff1f;
+}
+
+.swal2-container {
+	height: 100vh;
+}
+
+.night {
+	background-color: black;
+	color: white;
+}
+.night .swal2-popup, .night .current_tooltip {
+	background-color: #000000f0;
+	color: white;
+}
+

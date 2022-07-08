@@ -2,6 +2,9 @@
 let DEBUGGING_MODE = false
 supabase = createClient(racine_data(),  apikey())
 
+final_datas = []
+original_final_datas = []
+
 const date_ref_site = new Date(2022, 5, 19, 8, 14, 35) // MONTH BEGINS WITH 0 ! new Date('2022-06-19T08:14:35')
 const tips = {
   'group1': {ip_unique: `L'adresse IP représente l'identité de votre appareil lorsqu'il est connecté à un réseau.<br/>
@@ -52,7 +55,7 @@ const tips = {
     sections: `Les sections sont les éléments de la <strong>barre de navigation</strong> tout en haut de la page.`,
     categ_projets: `Il y a <strong>3 catégories</strong> de projets, dont le <strong>détail</strong> de chacune sera résumé dans une <strong>prochaine dataviz</strong>.`,
     liens: `Il y a <strong>2 types de liens</strong> reportés sur ce site. <strong>A vous de décider</strong> ce que vous souhaitez voir !`,
-    technos: `Les technos ont chacune une <strong>description</strong> au clic. On voit que <strong>Tableau Software</strong> sort du lot !`
+    technos: `Les technos ont chacune une <strong>description</strong> au clic. Considérant tous les pays confondus, on remarque que <strong>Tableau Software</strong> sort du lot !`
   }
 }
     
@@ -131,7 +134,193 @@ async function subscribe_supabase(){
     
 async function get_donnees_site(){
   final_datas = await select_all('tout')
+  original_final_datas = final_datas
   creer_dataviz()
+}
+
+function one_filter(filter_name,html){
+  return `<div class="a_filter"><strong>`+filter_name+`</strong>
+          <br/>
+          `+html+`
+          </div>
+
+  `
+}
+
+function selected_if_default(id_select,a){
+  return a === previous_filter_value(id_select) ? ' selected="selected" ' : ''
+}
+
+function select_list_from_array(arr,id_select){
+  const final_list = '<option value="(TOUT)">(TOUT)</option>' + arr.map(a => `<option  `+selected_if_default(id_select,a)+` value="`+(a ? a : '(inconnu)')+`">`+(a ? a : '(inconnu)')+`</option>`).join('')
+  return `<select class="filter_choice" id="choix_`+id_select+`">` +  final_list+ `</select><br/>`
+}
+
+function previous_filter_value(id_filter){
+
+  let default_value = false
+  const current_filters_str = get_item('current_filters')
+  if(current_filters_str){
+    current_filters = JSON.parse(current_filters_str)
+    if(current_filters[id_filter]){
+      default_value = current_filters[id_filter]
+    }
+  }
+
+  return default_value
+}
+
+function applicable_filters(){
+  return  one_applicable_filter('pays','Pays') 
+}
+
+function no_filters(){
+  return get_item('current_filters',true) ? ` <span class="no-filter" onclick="reset_filters()">❌ Supprimer tous les filtres</span> ` : ""
+}
+
+function reset_filters(){
+  $('.filter_choice').val('(TOUT)')
+}
+
+function one_applicable_filter(id_filter,displayed_name_filter){
+
+  let my_list = unique(original_final_datas.map(e => e[id_filter]))
+  my_list = my_list.sort()
+  return one_filter(displayed_name_filter,select_list_from_array(my_list,id_filter))
+
+}
+
+function filters(){
+
+  // RIGHT SIDEBAR
+  Swal.fire({
+    title: 'Filtres',
+    html: applicable_filters() + no_filters(),
+    position: 'top-end',
+    showClass: {
+      popup: `
+        animate__animated
+        animate__fadeInRight
+        animate__faster
+      `
+    },
+    hideClass: {
+      popup: `
+        animate__animated
+        animate__fadeOutRight
+        animate__faster
+      `
+    },
+    grow: 'column',
+    width: 300,
+    showConfirmButton: true,
+    confirmButtonText: `<span class="apply_filters">Appliquer</span>`,
+    confirmButtonColor: '#cacaca',
+    showCloseButton: false,
+    preConfirm: apply_filters_with_swal
+  })
+
+}
+
+function apply_filters_with_swal(){
+  apply_filters(false)
+  refresh_all_viz()
+}
+
+function with_or_without_filters(current_filters){
+  if(current_filters && Object.keys(current_filters).length > 0){
+    $('#filters-btn').addClass('with_filters')
+  }else{
+    $('#filters-btn').removeClass('with_filters')        
+  }
+}
+
+function apply_filters(without_swal){
+  log(original_final_datas)
+
+  final_datas = original_final_datas
+  log('--------- original:\n')
+  log(final_datas)
+
+  //very first time with some filters already
+  if(without_swal){
+    log('without swal!')
+    if(get_item('current_filters')){
+      current_filters = get_item('current_filters',true)
+      with_or_without_filters(current_filters)
+      Object.keys(current_filters).map((key) => {
+        final_datas = final_datas.filter(e => e[key] === current_filters[key])
+      })
+    }
+  //with swal
+  }else{
+    log('with swal!')
+
+    log('current choices:')
+    $('.filter_choice').get().forEach(function(e){
+      choice_to_make = e.id.replace('choix_','')
+      value_to_keep = e.value === '(inconnu)' ? null : e.value
+      log(choice_to_make)
+      log(value_to_keep)
+
+      if(value_to_keep === '(TOUT)'){      
+        current_filters = remove_filter(choice_to_make)    
+      }else{
+        final_datas = final_datas.filter(e => e[choice_to_make] === value_to_keep)
+        current_filters = save_current_filters({[choice_to_make]: value_to_keep})
+      }
+      
+
+    })
+
+    with_or_without_filters(current_filters)
+
+  }
+
+
+  log('--------- FINAL:\n')
+  log(final_datas)
+  log('\n\n\n\n\n')
+  
+}
+
+function save_current_filters(new_element){
+  //very first filter to apply
+  if(!get_item('current_filters')){
+    return save_item('current_filters',JSON.stringify(new_element))
+  
+  //new one in addition to what existed
+  } else{
+    current_filters = get_item('current_filters',true)
+    new_key = Object.keys(new_element)[0]
+    new_value = new_element[new_key]
+    current_filters[new_key] = new_value
+    return save_item('current_filters',JSON.stringify(current_filters))
+  }
+
+  
+}
+
+function remove_filter(id_filter){
+  if(get_item('current_filters')) {
+    current_filters = get_item('current_filters',true)
+    delete current_filters[id_filter]
+    log(current_filters)
+
+    //still some filters to apply
+    if(Object.keys(current_filters).length > 0){
+      save_item('current_filters',JSON.stringify(current_filters))
+      
+    //no filters anymore
+    }else{
+      del_item('current_filters')
+    }
+
+    return current_filters
+
+  }else {
+    return {}
+  }
 }
 
 function current_text(node_element){
@@ -146,6 +335,7 @@ function current_text(node_element){
 
 function main(){
 
+  load_swal()
   subscribe_supabase()
 
   $(document).on('click',function(e){
@@ -168,7 +358,8 @@ function main(){
   
   } else{
     console.warn('hiding icon')
-    apply_light()
+    //apply_light()
+    if(current_light()=== '🌙') switch_light() //todo : not forcing light
     document.getElementById('switch').style.display= "none"
   }
 
@@ -178,6 +369,7 @@ function main(){
 }
 
 async function send_ip_ignore(){ 
+  if(is_local_host()) return false
   await visit_details(true)
   const adresse_ip = get_item('adresse_ip')   || ''
   const ville = JSON.parse(get_item('my_datas'))['ville'] || ''
@@ -214,7 +406,10 @@ function check_if_collecting_datas(){
 function refresh_all_viz(update_only){
 
   loading(true)
-  log('refreshing... ' + final_datas.length)
+
+  apply_filters(true)
+  console.info('refreshing... ' + final_datas.length)
+
   
   if(update_only){
     refresh_group1() //group 1
@@ -923,7 +1118,7 @@ function display_as_long_duration(duration_in_seconds){
 function display_as_duration(duration_in_seconds){
   let min = (duration_in_seconds/60).toFixed(0)
   let sec = (duration_in_seconds%60).toFixed(0)
-  return  '00:'+ min+ ':' + sec + ''
+  return  '00:'+ two_digits(min)+ ':' + two_digits(sec) + ''
 }
 
 
@@ -933,7 +1128,7 @@ function calculate_clic_max(final_datas){
   nb_clics_per_visit = all_visits.map(vis => count_all(final_datas,'id_clic','une_visite = "'+vis['(une_visite)']+'"'))
   log(nb_clics_per_visit)
 
-  let res = Math.max(...nb_clics_per_visit)
+  let res = nb_clics_per_visit.length > 0 ? Math.max(...nb_clics_per_visit) : 0
   log(res)
   
   return res
@@ -960,7 +1155,7 @@ function max_duration_visit(final_datas){
     //deduce min and max
     mindate = (Math.min(...all_dates));
     maxdate = (Math.max(...all_dates));
-  
+
     //calculate dur = (max-min) IN SECONDS
     durDate = (maxdate-mindate)/1000
     
@@ -975,9 +1170,9 @@ function max_duration_visit(final_datas){
     
   }).filter(e => e !== null)//keep non null values
 
-  log(durs)
+  log({durs})
 
-  let res = Math.max(... durs)
+  let res = durs.length > 0 ? Math.max(... durs) : 0
   return display_as_duration(res) //'19:22'
 }
 
@@ -1016,6 +1211,7 @@ function refresh_group1_part_mobiles(){
 
   part_mobile = get_specific_category_count(nb_appareils_total,category_value_to_count,'Resolution inconnue',true)
   log({part_mobile})
+  if(isNaN(part_mobile)) part_mobile = 0
   
   gauge_datas = { min: 0,
                 max:100,
@@ -1107,7 +1303,6 @@ function refresh_group2(){
 
 
 function generateWords(element_node,final_list){
-  if(final_list.length === 0) return false
 
   log('\n\n\n')
   log({element_node})
@@ -1167,7 +1362,11 @@ function generateWords(element_node,final_list){
   }
 
   $(element_node).html("");
-  $(element_node).jQCloud(final_list, opt)    
+
+  if(final_list.length > 0){
+    $(element_node).jQCloud(final_list, opt)      
+  }
+  
 
 
 }
@@ -1333,7 +1532,7 @@ function creer_dataviz(){
 
   //put tooltips everywhere the mouse goes, and show it if we need to
   window.onmousemove = function (e) {
-    place_tooltip(e)
+    if(e) place_tooltip(e)
   };
 
   //for me in /DATAVIZ/ + iframe
@@ -1369,11 +1568,13 @@ function place_tooltip(e){
     log('from '+x+' '+y)
     log('to '+final_x+' '+final_y)
 
-    current_target_text =current_text(e.target)
-    if(current_target_text.length === 0){
-      show_tip(false)
-    }else{
-      log(current_target_text)
+    if(e){
+      current_target_text =current_text(e.target)
+      if(current_target_text.length === 0){
+        show_tip(false)
+      }else{
+        log(current_target_text)
+      }      
     }
 
 }
@@ -1383,4 +1584,3 @@ function place_tooltip(e){
 // ---------------------------------------------------------------- USEFUL FUNCTIONS ----------------------------------------------------------------
 
 
-final_datas = []

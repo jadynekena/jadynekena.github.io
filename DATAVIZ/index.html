@@ -7,7 +7,7 @@
 	  <meta name="twitter:image:src" content="">
 	  <meta property="og:image" content="">
 	  <meta name="twitter:title" content="Jady Nekena | Data Analyst">
-	  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	  <link rel="shortcut icon" href="/assets/images/logo-128x125.png" type="image/x-icon">
 	  <meta name="description" content="Bienvenue sur les statistiques du site !">
 
@@ -28,7 +28,7 @@
 	<link rel="stylesheet" href="./style.css">
 </head>
 
-<body >
+<body>
 	<img class="loading" src="/assets/images/loading.gif" style="width: 50px;">
 	<div style="display: none;" id="switch" class="fixed" onclick="switch_light()"><span  class="light-switch">💡</span></div>
 	
@@ -37,9 +37,10 @@
 			<option value="group1">Vision globale</option>
 			<option value="group2">Résumé des clics</option>
 		</select>
-		<span title="Actualiser" class="refresh" id="refresh-btn" onclick="get_donnees_site()"></span>
-		<span class="last-update"><br/><span id="last-update"></span></span>
+		<span title="Filtrer" class="viz-btn filters" id="filters-btn" onclick="filters()"></span>
+		<span title="Actualiser" class="viz-btn refresh" id="refresh-btn" onclick="get_donnees_site()"></span>
 	</div>
+	<div class="last-update"><span id="last-update"></span></div>
 	<span class="current_tooltip"></span>
 
 	<div id="group1" class="grid-container conteneurDashboard">

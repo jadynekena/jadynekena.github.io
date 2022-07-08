@@ -613,8 +613,8 @@ async function main(){
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
 
-	add_switch() //all
-	apply_light()
+	//add_switch() //all
+	//apply_light() (todo later)
 
 	titles() //on ALL PROJECTS
 	contents() //on ALL PROJECTS
@@ -1692,10 +1692,10 @@ function inIframe () {
 
 
 function switch_light(){
-
+	const night_class = 'night'
 	let next = next_light()
 	let one_more_class = loc().includes("/DATAVIZ/") ? ' dataviz' : ''
-	document.querySelector('body').className = next === "🌙" ? "night" + one_more_class : ""
+	document.querySelector('body').className = next === "🌙" ? night_class + one_more_class : ""
 
 	if(loc().includes("/DATAVIZ/")){
 		if(next === '🌙'){
@@ -1705,15 +1705,12 @@ function switch_light(){
 				$('body').remove('local')
 			}
 		}else{
-			$('body').remove('night')
+			$('body').remove(night_class)
 		}
 	}
 
-	try {
-		document.querySelector('.light-switch').innerText = next
-	}catch(err){
-		console.error(err)
-	}
+	if(document.querySelector('.light-switch')) document.querySelector('.light-switch').innerText = next
+
 	
 	save_item('curr_light',next)
 	return next

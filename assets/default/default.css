@@ -28,9 +28,7 @@ center {
 a:hover {
 	filter: brightness(0.8);
 }
-.night a:hover {
-	filter: invert(1) brightness(1.5);
-}
+
 h2 {
 	padding-top: 50px;
 	font-size: 3rem;
@@ -42,22 +40,6 @@ h3 {
 	color: #2c8c9b;
 }
 
-.night img {
-	filter: invert(0) !important;
-}
-.night #title-page, .night #page-content, .night a,.night button, .night #navbarSupportedContent, .night .foot-menu {
-	filter: invert(1);
-}
-.night section {
-  background: black;
-  color: white;
-}
-.night#body_default{
-	background: #0c0c0c;
-}
-.night #title-page{
-	color: white;
-}
 #page-content button {
 	border-style: outset;
 	border-width: 1px;
