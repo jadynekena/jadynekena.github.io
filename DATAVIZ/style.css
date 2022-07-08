@@ -8,6 +8,7 @@ body {
 	min-width: 320px;
 	overflow: auto;
 	margin-bottom: 50px;
+	background-color: white;
 }
 
 select {
