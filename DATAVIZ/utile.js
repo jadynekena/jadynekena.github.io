@@ -367,7 +367,7 @@ function main(){
 }
 
 async function send_ip_ignore(){ 
-  if(is_local_host()) return false
+  if(loc().includes('localhost') || loc().includes('192.168.1.') ) return false
   await visit_details(true)
   const adresse_ip = get_item('adresse_ip')   || ''
   const ville = JSON.parse(get_item('my_datas'))['ville'] || ''
