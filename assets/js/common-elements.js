@@ -1667,7 +1667,8 @@ async function show_number_of_votes(){
 
 		//for each possible choice
 		return all_choices.map(function (a_choice){
-			nb_votes = data.filter(e => e['intitule_choix'] === a_choice).length //count votes
+
+			nb_votes = !data ? 0 : data.filter(e => e['intitule_choix'] === a_choice).length //count votes
 			res = {[a_choice] : nb_votes}
 
 			$('label:contains("'+a_choice+'")').siblings('span').text('('+nb_votes+')')
