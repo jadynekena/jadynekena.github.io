@@ -211,7 +211,7 @@ function filters(){
         animate__faster
       `
     },
-    grow: 'column',
+    grow: false,
     width: 300,
     showConfirmButton: true,
     confirmButtonText: `<span class="apply_filters">Appliquer</span>`,
