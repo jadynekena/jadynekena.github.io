@@ -37,7 +37,7 @@ Retrouvez le <strong>rendu final de la demo [ici](/projets-automatisations/codes
 
 ### Explications
 - La première ligne permet de **changer** tout ce qui est **fond blanc à écriture noire** en **fond noir à écriture blanche**, tout en **gardant toutes les autres couleurs**.  
-- La deuxième ligne permet d'**ignorer ce changement sur des éléments précis**, en réappliquant le même filtre : une filtre appliqué deux fois s'annule. 
+- La deuxième ligne permet d'**ignorer ce changement sur des éléments précis**, en réappliquant le même filtre : un même filtre appliqué deux fois s'annule. 
 
 ### Remarque importante
 Appliquez le ```filter``` sur l'élement **```html```** et non l'élement **```body```** : autrement, des éléments positionnés fixes changent de repères et vous ne pourrez plus avoir des éléments fixes dans votre page. Plus d'informations sur le sujet, en anglais, disponibles [ici](https://stackoverflow.com/questions/52937708/why-does-applying-a-css-filter-on-the-parent-break-the-child-positioning){:target='_blank'}.

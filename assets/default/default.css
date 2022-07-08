@@ -134,3 +134,29 @@ h3 {
     width: 100%;
     height: 100%;
 }
+
+.like-section {
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	margin-bottom: inherit;
+	font-style: italic;
+	color: gray;
+}
+.likewrap {
+	top: -10px;
+	position: relative;
+	display: flex;
+}
+
+.social-button{
+	height: 50px;
+	width: 50px;
+	margin-left: 5px;
+}
+.likewrap::after{
+	content: '(0)';
+}
+.social-button:hover{
+
+}
