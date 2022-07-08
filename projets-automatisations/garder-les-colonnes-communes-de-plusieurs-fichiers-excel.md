@@ -12,7 +12,7 @@ published: true
 
 ## Demo (video)
 
-Retrouvez ci-dessous l'automatisation en question, que je vais expliquer un peu plus bas.
+Retrouvez ci-dessous l'automatisation en question.
 <div class="videowrapper">	
 	<iframe src="https://www.youtube.com/embed/DKNH3amzqZ0?autoplay=1&fs=1&loop=0&rel=0&showinfo=0&modestbranding=1&listType=playlist&playlist=DKNH3amzqZ0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>

@@ -613,8 +613,8 @@ async function main(){
 	add_nav_items_events()
 	add_element(footer(), 'footer-site', body, -1)
 
-	//add_switch() //all
-	//apply_light() (todo later)
+	add_switch() //all
+	apply_light()
 
 	titles() //on ALL PROJECTS
 	contents() //on ALL PROJECTS
@@ -1695,7 +1695,7 @@ function switch_light(){
 	const night_class = 'night'
 	let next = next_light()
 	let one_more_class = loc().includes("/DATAVIZ/") ? ' dataviz' : ''
-	document.querySelector('body').className = next === "🌙" ? night_class + one_more_class : ""
+	document.querySelector('html').className = next === "🌙" ? night_class + one_more_class : ""
 
 	if(loc().includes("/DATAVIZ/")){
 		if(next === '🌙'){
@@ -1719,10 +1719,6 @@ function switch_light(){
 function apply_light(){
 	switch_light()
 	switch_light()	
-}
-
-function apply_light_iframe(){
-	if($('iframe')[0]) $('iframe')[0].contentWindow.apply_light()
 }
 
 function next_light(){

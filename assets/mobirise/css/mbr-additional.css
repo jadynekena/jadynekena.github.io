@@ -3230,32 +3230,11 @@ a {
 section {
   overflow-x: hidden;
 }
-
-
-/****** DEFAULT AND HOME PAGES ******/
-
-/*
-
-.night,
-.night .cid-t98vDxC9FZ .navbar,
-.night section,
-.night .dropdown-item ,
-.night .card {
-  background-color: #000000ed; 
+/*ALL INVERTED*/
+.night  {
+  filter: invert(1) hue-rotate(180deg);
 }
-
-.night .nav-link,
-.night .navbar-caption,
-.night .dropdown-item,
-.night ul,
-.night p,
-.night #title-page {
-  color: white !important;
+/*EXCEOTUIBS*/
+.night .videowrapper, .night .highlight, .night .highlighter-rouge {
+  filter: invert(1) hue-rotate(180deg);
 }
-
-.night section[background-image*="url"]{
-  filter: invert(1);
-}
-
-
-*/

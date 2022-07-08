@@ -364,14 +364,3 @@ div.jqcloud span.w1 { font-size: 1vw; }
 	min-height: 100vh;
 	max-height: 100%;
 }
-
-
-.night {
-	background-color: black;
-	color: white;
-}
-.night .swal2-popup, .night .current_tooltip {
-	background-color: #000000f0;
-	color: white;
-}
-

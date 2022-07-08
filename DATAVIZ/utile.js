@@ -358,8 +358,6 @@ function main(){
   
   } else{
     console.warn('hiding icon')
-    //apply_light()
-    if(current_light()=== '🌙') switch_light() //todo : not forcing light
     document.getElementById('switch').style.display= "none"
   }
 
@@ -1568,7 +1566,7 @@ function place_tooltip(e){
     log('from '+x+' '+y)
     log('to '+final_x+' '+final_y)
 
-    if(e){
+    if(e && e !== null){
       current_target_text =current_text(e.target)
       if(current_target_text.length === 0){
         show_tip(false)
