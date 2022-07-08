@@ -1,6 +1,6 @@
 hljs.highlightAll();
-document.querySelector('.back').style.display = window.location.href.includes('/projets-automatisations/') ? 'initial' : 'none'
-document.querySelector('.like-section').style.display = window.location.href.includes('/projets-automatisations/') ? 'flex' : 'none'
+document.querySelector('.back').style.display = window.location.href.includes('/projets-automatisations/') && loc().split('/')[2] ? 'initial' : 'none'
+document.querySelector('.like-section').style.display = window.location.href.includes('/projets-automatisations/') && loc().split('/')[2] ? 'flex' : 'none'
 refresh_likes_and_share();
 
 async function send_like_or_share(type_engagement){
