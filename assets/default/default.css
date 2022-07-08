@@ -148,15 +148,63 @@ h3 {
 	position: relative;
 	display: flex;
 }
+.likewrap::after{
+	content: attr(clicks);
+}
 
 .social-button{
 	height: 50px;
 	width: 50px;
 	margin-left: 5px;
 }
-.likewrap::after{
-	content: '(0)';
-}
 .social-button:hover{
 
 }
+
+.snackwrap {
+	text-align: center;
+	position: fixed;
+	bottom: 5vh;
+	z-index: 100;
+	width: 100vw;
+}
+
+#snackbar {
+	color: #000;
+	text-align: center;
+	padding: 16px;
+	background: #5fff7fc4;
+	border-radius: 10px;
+	margin: auto 30%;
+	visibility: hidden;
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+} 

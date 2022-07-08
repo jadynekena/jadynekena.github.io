@@ -46,9 +46,9 @@
 
 
       <div class="backwrap">
-        <div id="like" class="like-section" style="display: none;">Vous avez aimez ce contenu ? Faites le savoir
-          <a title="Aimer" class="likewrap"><img class="social-button" alt="like button" src="/assets/images/like.png" id="like-button"></a>
-          <a title="Partager" class="likewrap"><img class="social-button" alt="share button" src="/assets/images/share.png" id="share-button"></a>
+        <div id="like" class="like-section">Vous avez aimez ce contenu ? Faites le savoir
+          <a title="Aimer" class="likewrap" onclick="send_like_or_share('like')" clicks="0"><img class="social-button" alt="like button" src="/assets/images/like.png" id="like-button"></a>
+          <a title="Partager" class="likewrap" onclick="send_like_or_share('partage')" clicks="0"><img class="social-button" alt="share button" src="/assets/images/share.png" id="share-button"></a>
         </div>
 
         <a class="back btn btn-black display-4" href="./">Retourner à la liste de projets</a>
@@ -60,9 +60,11 @@
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
       <script type="text/javascript" src="/assets/js/common-elements.js"></script>
-      <script type="text/javascript" src="/DATAVIZ/common.js"></script>
-      <script>hljs.highlightAll();document.querySelector('.back').style.display = window.location.href.includes('/projets-automatisations/') ? 'initial' : 'none'</script>
+      <script type="text/javascript" src="/assets/js/default.js"></script>
+      <script></script>
 
+
+      <div class="snackwrap"><div id="snackbar"></div></div>
 
 
 </body>
