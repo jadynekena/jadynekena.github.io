@@ -41,15 +41,23 @@ async function refresh_likes_and_share(){
 }
 
 function copy(input) {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(input).then(() => {
-      custom_alert('✅ Lien copié !\n\n\n' + input);
-    }, (err) => {
-      custom_alert('❌ Impossibile de copier le lien.\n\n\n' + err);
-    });
-  } else if (window.clipboardData) {
-    window.clipboardData.setData("Text", input);
-  }
+	
+	custom_alert('Vous pouvez partager le lien du contenu directement.')
+
+	if (navigator.clipboard) {
+		navigator.clipboard.writeText(input).then(() => {
+		custom_alert('✅ Lien copié !\n\n\n' + input);
+	}, (err) => {
+			custom_alert('❌ Impossibile de copier le lien.\n\n\n' + err);
+		});
+	
+	} else if (window.clipboardData) {
+		window.clipboardData.setData("Text", input);
+		custom_alert('✅ Lien copié !\n\n\n' + input);
+	} else {
+		custom_alert('❌ Impossibile de copier le lien.\n\n\n' + err);
+	}
+
 }
 
 function custom_alert(content){

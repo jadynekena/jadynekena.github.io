@@ -175,7 +175,8 @@ h3 {
 	padding: 16px;
 	background: #5fff7fc4;
 	border-radius: 10px;
-	margin: auto 30%;
+	max-width: 500px;
+	margin: auto;
 	visibility: hidden;
 }
 
