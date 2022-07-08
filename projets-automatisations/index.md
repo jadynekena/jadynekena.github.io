@@ -25,4 +25,7 @@ Retrouvez ici des automatisations que j'ai mis en place pour une meilleure produ
 	<details><summary>#GOOGLE SCRIPT</summary>
 	<a href="configurez-un-mail-automatique-en-moins-de-cinq-minutes-avec-votre-compte-gmail">Configurez un mail automatique <strong>en moins de 5 minutes</strong> avec votre <strong>compte gmail</strong></a>
 	</details>
+	<details><summary>#HTML/CSS/JavaScript</summary>
+	<a href="mettre-le-mode-nuit-en-deux-lignes-css">Mettez le <strong>mode nuit</strong> sur votre site <strong>en deux lignes CSS</strong></a>
+	</details>
 </div>

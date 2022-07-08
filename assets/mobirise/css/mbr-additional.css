@@ -3235,6 +3235,6 @@ section {
   filter: invert(1) hue-rotate(180deg);
 }
 /*EXCEOTUIBS*/
-.night .videowrapper, .night .highlight, .night .highlighter-rouge {
+.night .videowrapper, .night .highlight, .night .highlighter-rouge, .night .ignore-night {
   filter: invert(1) hue-rotate(180deg);
 }

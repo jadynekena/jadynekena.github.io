@@ -1,0 +1,2 @@
+.nuit { filter: invert(1) hue-rotate(180deg) ; }
+.nuit img, .nuit #ignore { filter: invert(1) hue-rotate(180deg) ; }

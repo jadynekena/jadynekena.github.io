@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mode nuit</title>
+	 <!-- INCLURE VOTRE FICHIER CSS DE MODE NUIT ICI -->
+	<link rel="stylesheet" href="./nuit.css">
+</head>
+<body>
+	 <!-- STYLES PAR DEFAUT -->
+	<style type="text/css">
+		* {font-family: arial;text-align: center;}
+		#ignore{background-color: black; color: white;	border-width: 1px;	border-color: #ff8c8c;	border-style: outset;}
+	</style>
+
+
+	<section id="conteneur">
+		<h1>Ceci est un titre</h1>
+		<div id="contenu">
+			<p>Ceci est le contenu. Et ci dessous une image à garder telle qu'elle, même en mode nuit.</p>
+			<img alt="image-random" src="https://picsum.photos/200">
+		</div>
+	</section >
+
+	<section id="ignore">
+		<p>Ceci aussi est à laisser comme tel en mode nuit.</p>
+	</section>
+
+	<div>
+		<label for="light-switch">
+			<input id="light-switch" type="checkbox" onchange="appliquer_theme()">Mode nuit
+		</label>
+	</div>
+
+	<script type="text/javascript">
+		function appliquer_theme(){document.querySelector('html').className=(document.getElementById('light-switch').checked ? 'nuit' : '')}
+		appliquer_theme()
+	</script>
+
+</body>
+</html>
