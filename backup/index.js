@@ -112,7 +112,7 @@ function download(res,tablename){
 }
 
 function save_visites_et_clics(){
-	let list = ['visites','clics']
+	let list = ['visites','clics','ip_ignore','likes','prod','votes','canaux']
 
 	list.forEach(function(tablename){
 		document.getElementById('TABLE_NAMES').value = tablename
