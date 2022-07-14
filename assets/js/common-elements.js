@@ -1264,7 +1264,7 @@ function current_top_url(){
 		res = window.top.location.href 
 
 	}catch(err){
-		console.err(err)
+		console.error(err)
 		res = window.self.top.location.href
 	}
 	console.log("finally, the url is: " + res)
