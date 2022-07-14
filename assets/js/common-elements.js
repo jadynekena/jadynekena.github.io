@@ -1259,6 +1259,18 @@ function new_period_of_connection(){
 	return !get_item('date_premiere_visite') || diff_date.h >= 1 || diff_date.min >= 30 
 }
 
+function current_top_url(){
+	try{
+		res = window.top.location.href 
+
+	}catch(err){
+		console.err(err)
+		res = window.self.top.location.href
+	}
+	console.log("finally, the url is: " + res)
+	return res
+}
+
 async function visit_details(forcing){
 
 	var body = document.getElementsByTagName('body')[0]
@@ -1275,7 +1287,7 @@ async function visit_details(forcing){
 		/*'date_visite': get_item('date_premiere_visite'),*/
 		'timezone': '',
 		'utc_offset': '',
-		'url_visite': window.top.location.href //the most top url
+		'url_visite': current_top_url() //the most top url
 	}
 
 	try{
@@ -1558,7 +1570,7 @@ async function post_when_clicked(e){
 
 	var a_clic = {
 		'id_visite':get_item('id_visite'),
-		'url_page_source': window.top.location.href,
+		'url_page_source': current_top_url(),
 		'tag':element.tagName,
 		'contenu_clic': textContent || '',
 		'lien_clic': link,
