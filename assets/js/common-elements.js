@@ -1275,7 +1275,7 @@ async function visit_details(forcing){
 		/*'date_visite': get_item('date_premiere_visite'),*/
 		'timezone': '',
 		'utc_offset': '',
-		'url_visite': document.referrer //the most top url
+		'url_visite': window.top.location.href //the most top url
 	}
 
 	try{
