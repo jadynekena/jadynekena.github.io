@@ -1265,7 +1265,7 @@ function current_top_url(){
 
 	}catch(err){
 		console.error(err)
-		res = window.self.top.location.href
+		res = document.referrer || document.domain
 	}
 	console.log("finally, the url is: " + res)
 	return res
