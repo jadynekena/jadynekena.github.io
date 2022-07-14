@@ -593,7 +593,7 @@ function add_switch(){
 }
 
 function is_loc_without_nav_bar(){
-	return loc().includes("/DATAVIZ/") || loc().includes("/backup/")
+	return loc().includes("/DATAVIZ/") || loc().includes("/backup/")  || (window.origin !== 'http://localhost:4000' && window.origin !== 'https://jadynekena.com' )
 }
 
 async function main(){
